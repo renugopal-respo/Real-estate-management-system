@@ -1,0 +1,97 @@
+// models/userModel.js
+const db = require("../config/db");
+
+// ✅ Create user
+const createUser = async (data) => {
+  try {
+    const sql = `
+      INSERT INTO users (name, email, password_hash, phone, role)
+      VALUES (?, ?, ?, ?, ?)
+    `;
+    const [res] = await db.query(sql, [
+      data.name,
+      data.email,
+      data.password,
+      data.phnnumber,
+      data.role,
+    ]);
+
+    return {
+      id: res.insertId,
+      email: data.email,
+      name: data.name,
+      role: data.role,
+    };
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ Verify user (Login)
+const verifyUser = async (data) => {
+  try {
+    const [rows] = await db.query(
+      "SELECT user_id, name, email, role, status FROM users WHERE email = ? AND password_hash = ?",
+      [data.email, data.password]
+    );
+
+    if (rows.length > 0) {
+      return rows[0]; // return user record
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ Update user
+const updateUser = async (data, id) => {
+  try {
+    const sql = `
+      UPDATE users
+      SET name = ?, password_hash = ?, phone = ?, status = ?, role = ?
+      WHERE user_id = ?
+    `;
+    const [rows] = await db.query(sql, [
+      data.name,
+      data.password_hash,
+      data.phone,
+      data.status,
+      data.role,
+      id,
+    ]);
+
+    return rows.affectedRows > 0;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ Get user by ID
+const getUserByID = async (id) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM users WHERE user_id = ?", [id]);
+    return rows.length > 0 ? rows[0] : null;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// ✅ Delete user
+const deleteUser = async (id) => {
+  try {
+    const [rows] = await db.query("DELETE FROM users WHERE user_id = ?", [id]);
+    return rows.affectedRows > 0;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = {
+  createUser,
+  verifyUser,
+  updateUser,
+  getUserByID,
+  deleteUser
+};
