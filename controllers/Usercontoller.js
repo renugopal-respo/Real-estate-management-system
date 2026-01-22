@@ -1,94 +1,82 @@
-// controllers/userController.js
-const userModel=require('../Models/Usermodel');
-
-// Create new user
-exports.createUser = async (req, res) => {
-  console.log(req);
-  console.log(req.body);
+import { getUser as modelGetUser, addUser as modelAddUser } from '../Models/Usermodel.js';
+import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
+import { generateToken } from "../utils/jwt.js";
+import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
+// Controller to create a user
+export const createUser = async (req, res) => {
+  const { password, email, user_role } = req.body.user;
   try {
-    const data = req.body;
-    const result = await userModel.createUser(data);
-    res.status(201).json({
-      success: true,
-      message: "User created successfully",
-      id:result.id
-    });
-  } catch (error) {
-    console.error("Error creating user:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
-  }
-};
+    const hashedPassword = await hashPassword(password);
 
-// Verify user (login)
-exports.verifyUser = async (req, res) => {
-  console.log(req)
-  try {
-    const data = req.body;
-    const user = await userModel.verifyUser(data);
+    const dbResult = await modelAddUser({
+      ...req.body.user},
+       hashedPassword
+    );
 
-    if (!user) {
-      return res.status(401).json({ success: false, message: "Invalid email or password" });
-    }
+    if (dbResult.affectedRows > 0) {
+      const user = {
+        id: dbResult.insertId,
+        email,
+        role: user_role,
+      };
 
-    res.status(200).json({
-      status: true,
-      message: "Login successful",
-      user,
-    });
-  } catch (error) {
-    console.error("Error verifying user:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
-  }
-};
-
-// Update user
-exports.updateUser = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const data = req.body;
-    const updated = await userModel.updateUser(data, id);
-
-    if (updated) {
-      res.status(200).json({ success: true, message: "User updated successfully" });
+      const token = generateToken(user);
+      console.log(token);
+      return res.json({ token, message: "User created successfully ✅" });
     } else {
-      res.status(404).json({ success: false, message: "User not found" });
-    }
-  } catch (error) {
-    console.error("Error updating user:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
-  }
-};
-
-// Get user by ID
-exports.getUserByID = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const user = await userModel.getUserByID(id);
-
-    if (!user || user.length === 0) {
-      return res.status(404).json({ success: false, message: "User not found" });
+      return res.status(400).json({ message: "Failed to create user" });
     }
 
-    res.status(200).json({ success: true, user });
   } catch (error) {
-    console.error("Error fetching user:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
-  }
-};
-
-// Delete user
-exports.deleteUser = async (req, res) => {
-  try {
-    const id = req.params.id;
-    const deleted = await userModel.deleteUser(id);
-
-    if (deleted) {
-      res.status(200).json({ success: true, message: "User deleted successfully" });
+    console.log(error);
+    if (error.code === "ER_DUP_ENTRY") {
+        const column=getDuplicateColumn(error);
+        if(column==='email'){
+            return res.status(400).
+            json({ message: "Email already exists ",
+                field:'email' });
+        }
+        else{
+             return res.status(400).
+            json({ message: "Mobile Number already exists ",
+                field:'contact' });
+        }
+      
+    } else if (error.code === "ER_BAD_NULL_ERROR") {
+      return res.status(400).json({ message: "Required field is missing ❌" ,field:"null"});
     } else {
-      res.status(404).json({ success: false, message: "User not found" });
+      return res.status(500).json({ message: "Database error, please try again later" });
     }
+  }
+  }
+
+
+// Controller for login / get user
+export const loginUser = async (req, res) => {
+  const { email, password } = req.body.user;
+
+  try {
+    const rows = await modelGetUser(email);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const userFromDb = rows[0];
+    const isValid = await isPasswordValid(password, userFromDb.password_hash);
+
+    if (!isValid) return res.status(401).json({ message: "Invalid password" });
+
+    const user = {
+      user_id: userFromDb.user_id,
+      email: userFromDb.email,
+      role: userFromDb.role,
+    };
+
+    const token = generateToken(user);
+    return res.json({ token, message: "Login successful ✅" });
+
   } catch (error) {
-    console.error("Error deleting user:", error);
-    res.status(500).json({ success: false, message: "Server error", error: error.message });
+    console.error(error);
+    return res.status(500).json({ message: "System failure" });
   }
 };

@@ -1,33 +1,20 @@
-const express = require('express');
-const cors= require('cors');
-const db=require('./config/db');
-const app=express();
-const userRoutes=require('./Routes/userRoute');
-const propertyRoutes=require('./Routes/propertyroutes')
-const path = require('path'); app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+import express from 'express';
+import { hashPassword } from './Middleware/PasswordHash.js';
+import db from './config/db.js';
+import userRoutes from './Routes/userRoute.js'
+import cors from 'cors'
+const app = express();
 app.use(cors());
 app.use(express.json());
+// Middleware example
 app.use('/users',userRoutes);
-app.use('/properties',propertyRoutes)
-async function sampledb(){
-   const sql=` SELECT 
-        p.property_id,
-        p.addressline,
-        p.price,
-        l.city,   
-        type.type_name,
-        sts.status_name
-      FROM properties p
-      JOIN locations l ON p.location_id = l.location_id
-      JOIN property_type type ON p.type_id = type.type_id
-      JOIN property_status sts ON p.status_id = sts.status_id
-      
-      `;
-      const sql1=`show databases`
-      const [rows]=await db.query(sql);
-      console.log(rows[1].property_id);
-}
-app.listen(5000,()=>{ 
-    console.log("server is running");
-    sampledb();
-})
+
+// A simple route to test
+app.get('/', (req, res) => {
+  res.send('Password hash logged in console ✅');
+});
+
+app.listen(5000, () => {
+  console.log('Server is running on port 5000');
+  
+});
