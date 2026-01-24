@@ -5,9 +5,10 @@ import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
 // Controller to create a user
 export const createUser = async (req, res) => {
   const { password, email, user_role } = req.body.user;
+  console.log(req.body.user);
   try {
     const hashedPassword = await hashPassword(password);
-
+      
     const dbResult = await modelAddUser({
       ...req.body.user},
        hashedPassword
@@ -54,17 +55,21 @@ export const createUser = async (req, res) => {
 // Controller for login / get user
 export const loginUser = async (req, res) => {
   const { email, password } = req.body.user;
+  console.log("requset body:",req.body);
 
   try {
     const rows = await modelGetUser(email);
+    console.log(rows);
     if (rows.length === 0) {
       return res.status(404).json({ message: "User not found" });
     }
-
+     
     const userFromDb = rows[0];
-    const isValid = await isPasswordValid(password, userFromDb.password_hash);
+    const isValid = await isPasswordValid( userFromDb.password_hash,password);
 
-    if (!isValid) return res.status(401).json({ message: "Invalid password" });
+    if (!isValid){
+      return res.status(401).json({ message: "Invalid password" });
+    } 
 
     const user = {
       user_id: userFromDb.user_id,
@@ -76,7 +81,7 @@ export const loginUser = async (req, res) => {
     return res.json({ token, message: "Login successful ✅" });
 
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return res.status(500).json({ message: "System failure" });
   }
 };

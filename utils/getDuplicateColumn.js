@@ -1,23 +1,29 @@
 // utils/sqlErrors.js
-
-/**
- * Returns the column name that caused a duplicate entry error
- * @param {Error} error - MySQL error object
- * @returns {string|null} - column name or null if not found
- */
 export const getDuplicateColumn = (error) => {
-  if (error.code !== "ER_DUP_ENTRY") return null;
+  // Only process real MySQL duplicate key errors
+  if (!error || error.code !== "ER_DUP_ENTRY" || !error.sqlMessage) return null;
 
-  // Extract the key/index name from sqlMessage
-  const match = error.sqlMessage.match(/for key '(.+)'/);
+  const msg = error.sqlMessage;
+
+  // Ensure the message starts with or contains the expected duplicate pattern
+  // Example: "Duplicate entry 'value' for key 'users.unique_email'"
+  if (!/Duplicate entry/i.test(msg)) return null;
+
+  // Capture the index name safely
+  const match = msg.match(/for key ['`"]?([^'"`]+)['`"]?/i);
   if (!match) return null;
 
-  let column = match[1];
+  let key = match[1]; // e.g. "users.unique_email"
 
-  // If the key includes table.column, just get the column
-  if (column.includes('.')) {
-    column = column.split('.').pop();
-  }
+  // Extract part after dot if table prefix exists
+  if (key.includes(".")) key = key.split(".").pop();
 
-  return column;
+  // Normalize possible unique constraint naming patterns
+  if (/^unique_/i.test(key)) key = key.replace(/^unique_/i, "");
+  if (/_unique$/i.test(key)) key = key.replace(/_unique$/i, "");
+
+  // Clean extra quotes/backticks
+  key = key.replace(/["'`]/g, "");
+
+  return key.trim() || null;
 };

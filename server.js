@@ -2,12 +2,17 @@ import express from 'express';
 import { hashPassword } from './Middleware/PasswordHash.js';
 import db from './config/db.js';
 import userRoutes from './Routes/userRoute.js'
+import adminRoutes from './Routes/adminroutes.js'
 import cors from 'cors'
 const app = express();
 app.use(cors());
 app.use(express.json());
 // Middleware example
 app.use('/users',userRoutes);
+//Admin Routes
+app.use('/admin',adminRoutes);
+//file Acces
+app.use('/uploads', express.static('uploads'));
 
 // A simple route to test
 app.get('/', (req, res) => {
