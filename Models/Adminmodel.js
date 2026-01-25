@@ -1,6 +1,6 @@
 import db from "../config/db.js";
-
-export const addProperty = async (imagePaths, data, owner_ID) => {
+import { addOwner } from "./Usermodel.js";
+export const addProperty = async (imagePaths, data) => {
   const connection = await db.getConnection();
   try {
     const {
@@ -33,7 +33,8 @@ export const addProperty = async (imagePaths, data, owner_ID) => {
 
     // Begin transaction
     await connection.beginTransaction();
-
+    //Create Owner
+    
     // --- Fetch amenity IDs ---
     for (const name of activeAmenities) {
       const [rows] = await connection.query(
@@ -75,8 +76,8 @@ export const addProperty = async (imagePaths, data, owner_ID) => {
       `INSERT INTO properties 
       (user_id, bedromms, bathromms, price, addressline, description, area_sqft, road_acces, type_id, status_id, location_id)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [
-        owner_ID,
+      [   
+        ownerID,
         bedrooms,
         bathrooms,
         price,
