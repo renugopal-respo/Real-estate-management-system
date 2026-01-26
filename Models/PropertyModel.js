@@ -1,5 +1,5 @@
 import db from "../config/db.js";
-
+//ADMIN BASED
 export const addProperty = async (imagePaths, data,ownerID) => {
   const connection = await db.getConnection();
   try {
@@ -139,13 +139,83 @@ export const recentlyAdded = async (limit, offset, date, location, pincode) => {
     JOIN locations l ON p.location_id = l.location_id
     JOIN property_status ps ON p.status_id = ps.status_id
     JOIN property_type pt ON p.type_id = pt.type_id
-    WHERE p.created_at BETWEEN ? AND CURDATE()
-    AND (LOWER(l.city)=LOWER(?) OR LOWER(?)=' ') 
+    WHERE (p.created_at BETWEEN ? AND CURDATE())
+    OR DATE(P.created_at)=CURDATE()
+    AND (LOWER(l.city)=? OR ?=' ') 
     AND (l.pincode=LOWER(?) OR LOWER(?)=' ')
     ORDER BY p.created_at DESC
     LIMIT ? OFFSET ?
   `;
 
-  const [rows] = await db.query(sql, [date, location.toLowerCase(),location.toLowerCase(), pincode, pincode,limit, offset]);
+  const [rows] = await db.query(sql, [date,location.toLowerCase(),location.toLowerCase(), pincode, pincode,limit, offset]);
+  
   return rows;
 };
+export const deleteProperty=async(property_id)=>{
+  const sql=`DELETE FROM properties where property_id =?`;
+  try {
+     const [rows]=await db.query(sql,property_id);
+   if(rows.affectedRows>0){
+     
+    return rows.affectedRows;
+   }
+   
+  } catch (error) {
+     throw error;
+  }
+  
+}
+export const getPropertyImages=async(propertyId)=>{
+   const sql=`SELECT image_url from property_images pi
+   JOIN properties p ON pi.property_id=p.property_id
+   where pi.property_id=? `;
+   try {
+    const[rows]=await db.query(sql,propertyId);
+
+      return rows;
+    
+   } catch (error) {
+    console.log("fetching error");
+       throw error;
+   }
+}
+export const getPropertyById=async(propertyId)=>{
+  const sql=`select name,phone,email,bedromms, 
+  bathromms, price, addressline, description, 
+  area_sqft,road_acces, city,status_name,type_name 
+  FROM properties p
+  JOIN property_type pt ON  p.type_id=pt.type_id
+  JOIN property_status ps ON p.status_id=ps.status_id
+  JOIN locations l ON p.location_id=l.location_id
+  Where p.property_id=?
+   `;
+   try {
+    const [rows]=await db.query(sql,[propertyId]);
+    return rows[0]||null;//if fetch on property always return single object
+   } catch (error) {
+     console.log("error in fecth properties");
+   }
+}
+export const getPropertyImageById=async(propertyId)=>{
+  const sql=`select image_url from properties 
+  where property_id=?`;
+  try {
+    const [images]=await db.query(sql,[propertyId]);
+    return images;
+  } catch (error) {
+    console.log("error in fecth properties:")
+    throw error;
+  }
+}
+export const getPropertyAmentiesById=async(propertyId)=>{
+  const sql=`select amenties_name from amenties a 
+  JOIN property_with_amenties pwa ON a.amenties_id=pwa.amenties_id
+  where pwa.property_id=?`
+  try {
+    const[amenties]=await db.query(sql,[propertyId]);
+    return amenties;
+  } catch (error) {
+    console.log("error in amenties fetch ");
+    throw error;
+  }
+}

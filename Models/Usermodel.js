@@ -25,11 +25,11 @@ export const addUser = async (data, hashedPassword) => {
 export const getUser = async (email) => {
   const sql = `
     SELECT role,email,user_id,password_hash FROM users 
-    WHERE email = ?
+    WHERE email =?
   `;
   try {
     const [rows] = await db.query(sql, email);
-    return rows;
+    return rows[0].user_id;
   } catch (error) {
     console.log("sql message:",error.sql_message);
     throw error;
