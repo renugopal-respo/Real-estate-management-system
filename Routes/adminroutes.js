@@ -8,5 +8,5 @@ const router=express.Router();
 router.post('/addProperties',upload.array("images",5),addProperties)
 router.get('/getRecentProperties',recents); 
 router.get('/deleteProperties',deleteProperties);  
-router.put('/getPropertyForUpdate/:propertyId',getPropertyForUpdate);
+router.get('/getPropertyForUpdate',getPropertyForUpdate);
 export default router;

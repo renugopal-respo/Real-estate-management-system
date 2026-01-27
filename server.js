@@ -5,8 +5,10 @@ import userRoutes from './Routes/userRoute.js'
 import adminRoutes from './Routes/adminroutes.js'
 import cors from 'cors'
 const app = express();
+let  count=0;
 app.use(cors());
 app.use(express.json());
+console.log("hiii")
 // Middleware example
 app.use('/users',userRoutes);
 //Admin Routes

@@ -139,8 +139,7 @@ export const recentlyAdded = async (limit, offset, date, location, pincode) => {
     JOIN locations l ON p.location_id = l.location_id
     JOIN property_status ps ON p.status_id = ps.status_id
     JOIN property_type pt ON p.type_id = pt.type_id
-    WHERE (p.created_at BETWEEN ? AND CURDATE())
-    OR DATE(P.created_at)=CURDATE()
+    WHERE DATE(p.created_at)BETWEEN ? AND CURDATE()
     AND (LOWER(l.city)=? OR ?=' ') 
     AND (l.pincode=LOWER(?) OR LOWER(?)=' ')
     ORDER BY p.created_at DESC
@@ -155,9 +154,8 @@ export const deleteProperty=async(property_id)=>{
   const sql=`DELETE FROM properties where property_id =?`;
   try {
      const [rows]=await db.query(sql,property_id);
-   if(rows.affectedRows>0){
-     
-    return rows.affectedRows;
+   if(rows.affectedRows>0){   
+    return 1;
    }
    
   } catch (error) {
@@ -180,15 +178,27 @@ export const getPropertyImages=async(propertyId)=>{
    }
 }
 export const getPropertyById=async(propertyId)=>{
-  const sql=`select name,phone,email,bedromms, 
-  bathromms, price, addressline, description, 
-  area_sqft,road_acces, city,status_name,type_name 
-  FROM properties p
-  JOIN property_type pt ON  p.type_id=pt.type_id
-  JOIN property_status ps ON p.status_id=ps.status_id
-  JOIN locations l ON p.location_id=l.location_id
-  Where p.property_id=?
-   `;
+  const sql=`SELECT 
+  p.user_id,
+  u.name,
+  u.email,
+  u.phone,
+  p.bedromms,
+  p.bathromms,
+  p.price,
+  p.addressline,
+  p.description,
+  p.area_sqft,
+  p.road_acces,
+  l.city,
+  ps.status_name,
+  pt.type_name
+FROM properties p
+JOIN property_type pt ON p.type_id = pt.type_id
+JOIN property_status ps ON p.status_id = ps.status_id
+JOIN locations l ON p.location_id = l.location_id
+JOIN users u ON p.user_id=u.user_id
+WHERE p.property_id = ? `;
    try {
     const [rows]=await db.query(sql,[propertyId]);
     return rows[0]||null;//if fetch on property always return single object
@@ -197,7 +207,7 @@ export const getPropertyById=async(propertyId)=>{
    }
 }
 export const getPropertyImageById=async(propertyId)=>{
-  const sql=`select image_url from properties 
+  const sql=`select image_url from property_images
   where property_id=?`;
   try {
     const [images]=await db.query(sql,[propertyId]);
@@ -208,7 +218,7 @@ export const getPropertyImageById=async(propertyId)=>{
   }
 }
 export const getPropertyAmentiesById=async(propertyId)=>{
-  const sql=`select amenties_name from amenties a 
+  const sql=`select a.amenties_name from amenties a 
   JOIN property_with_amenties pwa ON a.amenties_id=pwa.amenties_id
   where pwa.property_id=?`
   try {

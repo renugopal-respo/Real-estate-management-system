@@ -12,6 +12,7 @@ import { recentlyAdded ,
   from "../Models/PropertyModel.js";
 import path from 'path';
 import { error } from "console";
+import { console } from "inspector";
 export const addProperties = async (req, res) => {
      let ownerID;
   try {
@@ -36,6 +37,8 @@ export const addProperties = async (req, res) => {
      console.log("User Id:",ownerID);   
       
     }
+    
+
     const propertyID = await addProperty(imagePaths, req.body,ownerID);
 
     res.status(201).json({
@@ -64,6 +67,7 @@ export const recents = async (req, res) => {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
     newdate = d.toISOString().slice(0, 19).replace("T", " ");
+    console.log(d);
   }
   if(pincode!==''){
      newPinCode=parseInt(pincode);
@@ -107,22 +111,19 @@ export const deleteProperties = async (req, res) => {
 
   try {
     // Get property images
-    const [images] = await getPropertyImages(newProperty_Id);
+    const images = await getPropertyImages(newProperty_Id);
     // TODO: delete images with multer here
     console.log(images);
     // Delete property from DB
     const response = await deleteProperty(newProperty_Id);
     
     // Filter out deleted property
-    if(response.affectedRows>0){
+    if(response>0){
            return res
       .status(200)
       .json({ message: "Property Deleted Successfully"});
     }
-    
-    
-   
-    
+     
   } catch (error) {
     console.log(error);
      
@@ -131,12 +132,32 @@ export const deleteProperties = async (req, res) => {
   }
 };
 export const getPropertyForUpdate=async(req,res)=>{
-    const property_id=req.params.propertyId;
-    if(property_id===parseInt(property_id)){
-      console.log("true");
+    const {propertyId}=req.query;
+    const newPropertyId=parseInt(propertyId);
+    console.log("requst reached:",newPropertyId);
+    let properties;
+    let images;
+    let amenities;
+    try {
+      const [
+  property,
+  images,
+  amenities
+] = await Promise.all([
+  getPropertyById(newPropertyId),
+  getPropertyImageById(newPropertyId),
+  getPropertyAmentiesById(newPropertyId)
+]);
+console.log("image paths:",images);
+console.log("Properties:",property);
+console.log("amneties:",amenities);
+console.log(newPropertyId);
+res.status(200).json({message:"feched succesfully",property,amenities,images})
     }
-    else{
-      console.log("false");
 
+     catch (error) {
+      console.log(error);
+      res.status(400).json({message:"issue in fetching properits"})
+    
     }
-}
+};
