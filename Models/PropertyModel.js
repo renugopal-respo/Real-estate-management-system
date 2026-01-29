@@ -1,5 +1,6 @@
 import db from "../config/db.js";
 //ADMIN BASED
+
 export const addProperty = async (imagePaths, data,ownerID) => {
   const connection = await db.getConnection();
   try {
@@ -120,8 +121,59 @@ export const addProperty = async (imagePaths, data,ownerID) => {
     throw error;
   }
 };
+// Insert amenities
+export const insertAmenities = async (amenitiesArray) => {
+  const sql = "INSERT INTO property_with_amenties (property_id, amenties_id) VALUES ?";
+  const [result] = await db.query(sql, [amenitiesArray]);
+  return result;
+};
 
-export const recentlyAdded = async (limit, offset, date, location, pincode) => {
+// Insert property images
+export const insertPropertyImages = async (imageArray) => {
+  const sql = "INSERT INTO property_images (property_id, image_url) VALUES ?";
+  const [result] = await db.query(sql, [imageArray]);
+  return result;
+};
+
+
+export const getStatusByName=async(statusName)=>{
+   const sql=`SELECT status_id FROM property_status
+   WHERE LOWER(status_name)=LOWER(?)`;
+   try {
+    const [rows]= await db.query(sql,[statusName]);
+    return rows;
+   } catch (error) {
+      console.log("errror in staus fetch");
+      throw error;
+   }
+}
+export const getLocationByName=async(LocationName)=>{
+  const sql=`SELECT location_id,city FROM locations 
+  WHERE LOWER(city)=?`;
+  try {
+    const [rows]=await db.query(sql,[LocationName.toLowerCase()]);
+    console.log("location:",rows);
+    return rows;
+  } catch (error) {
+    console.log('error in location fetching:');
+    throw error;
+  }
+}
+export const getAllAmenties=async()=>{
+  const sql=`SELECT * FROM amenties`;
+  try {
+    const [rows]=await db.query(sql);
+    if(rows.length>0){
+      return rows;
+    }
+  } catch (error) {
+    console.log("error in fetching amenties");
+     throw error;
+  }
+}
+
+
+export const recentlyAdded = async (limit, offset, date, location, pincode,totalPages) => {
   const sql = `
     SELECT 
       u.name,
@@ -145,22 +197,18 @@ export const recentlyAdded = async (limit, offset, date, location, pincode) => {
     ORDER BY p.created_at DESC
     LIMIT ? OFFSET ?
   `;
-
   const [rows] = await db.query(sql, [date,location.toLowerCase(),location.toLowerCase(), pincode, pincode,limit, offset]);
   
   return rows;
 };
-export const deleteProperty=async(property_id)=>{
-  const sql=`DELETE FROM properties where property_id =?`;
-  try {
-     const [rows]=await db.query(sql,property_id);
-   if(rows.affectedRows>0){   
-    return 1;
+export const getTotalPage=async()=>{ 
+   const sql=`SELECT COUNT(*) as total FROM properties`;
+   try {
+     const[rows]=await db.query(sql);
+     return rows;
+   } catch (error) {
+     console.log()
    }
-   
-  } catch (error) {
-     throw error;
-  }
   
 }
 export const getPropertyImages=async(propertyId)=>{
@@ -190,6 +238,7 @@ export const getPropertyById=async(propertyId)=>{
   p.description,
   p.area_sqft,
   p.road_acces,
+  p.property_id,
   l.city,
   ps.status_name,
   pt.type_name
@@ -229,3 +278,85 @@ export const getPropertyAmentiesById=async(propertyId)=>{
     throw error;
   }
 }
+export const deleteImageById=async(propertyId,image_url)=>{
+   const sql=`DELETE FROM property_images
+   WHERE property_id=? AND image_url=?`;
+   try {
+    const [result]=await db.query(sql,[propertyId,image_url]);
+    return result;
+
+   } catch (error) {
+      console.log("Error in property image delte");
+      throw error;
+   }
+}
+export const deleteProperty=async(property_id)=>{
+  const sql=`DELETE FROM properties where property_id =?`;
+  try {
+     const [result]=await db.query(sql,property_id);
+   if(result.affectedRows>0){   
+    return 1;
+   }
+   
+  } catch (error) {
+     throw error;
+  }  
+}
+export const deleteAllImagesByID=async(propertyId)=>{
+  const sql=`DELETE FROM property_images 
+  WHERE property_id=?`;
+  try {
+    const [result]=await db.query(sql,[propertyId]);
+    return result;
+  } catch (error) {
+     console.log("Error deltee all images",error);
+  }
+}
+export const deleteOldAmenities = async (propertyId) => {
+  try {
+    await db.query("DELETE FROM property_with_amenties WHERE property_id = ?", [propertyId]);
+  } catch (error) {
+    console.log("error in amenties deltee:",error);
+  }
+  
+};
+export const updatePropertyDetails = async (setClause,values) => {
+  const sql = `UPDATE properties SET ${setClause.join(", ")} WHERE property_id = ?`;
+  try {
+    const [result] = await db.query(sql, values);
+    return result;
+  } catch (error) {
+     console.log("error in update properties");
+     throw error;
+  }  
+};
+export const updatePropertyTransaction=async(data)=>{
+  const {setClause,filteredData,filterAmenties,propertyWithImages,propertyId}=data;
+   const connection= await db.getConnection();
+   let result=0;
+   try {
+      await connection.beginTransaction();
+    await updatePropertyDetails(setClause,filteredData);
+
+    if(propertyWithImages.length>0){
+     await  deleteAllImagesByID(propertyId);
+      await insertPropertyImages(propertyWithImages);
+   } 
+
+   await deleteOldAmenities(propertyId);
+   await insertAmenities(filterAmenties);
+
+   await connection.commit();
+   connection.release();
+
+   return true;
+  }catch (error) {
+    console.log(error);
+    await connection.rollback();
+    connection.release();
+    throw error;
+   }
+     
+    }
+    
+

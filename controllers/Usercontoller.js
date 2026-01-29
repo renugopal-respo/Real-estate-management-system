@@ -1,4 +1,4 @@
-import { getUser as modelGetUser, addUser as modelAddUser } from '../Models/Usermodel.js';
+import { getUserByEmail as modelGetUser, addUser as modelAddUser } from '../Models/Usermodel.js';
 import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
 import { generateToken } from "../utils/jwt.js";
 import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
