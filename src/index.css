@@ -1,0 +1,24 @@
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  font-family: 'Poppins';
+  font-size: 16px;
+  font-weight: 400;
+  color: #333;
+  background-color: #f0f2f5;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Optional: headings and paragraphs */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  color: #222;
+}
+
+p {
+  margin: 0.5em 0;
+}

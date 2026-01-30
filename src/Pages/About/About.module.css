@@ -1,0 +1,162 @@
+.aboutPage {
+  background-color: #f9f9f9;
+  padding: 4rem 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== HERO SECTION ===== */
+.aboutHero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 3rem;
+  flex-wrap: wrap;
+  margin-bottom: 4rem;
+}
+
+.heroText {
+  flex: 1;
+  min-width: 300px;
+}
+
+.heroText h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+.heroText p {
+  color: #555;
+  line-height: 1.6;
+  font-size: 1.05rem;
+}
+
+.heroImage {
+  flex: 1;
+  min-width: 280px;
+}
+
+.heroImage img {
+  width: 100%;
+  max-width: 550px;
+  border-radius: 12px;
+  object-fit: cover;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== INFO SECTION ===== */
+.infoSection {
+  text-align: center;
+  margin-bottom: 4rem;
+}
+
+.infoSection h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.introText {
+  max-width: 750px;
+  margin: 0 auto 2rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.infoGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.infoCard {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  width: 300px;
+  transition: transform 0.3s ease;
+}
+
+.infoCard:hover {
+  transform: translateY(-5px);
+}
+
+.infoCard h3 {
+  color: #0078ff;
+  margin-bottom: 0.8rem;
+}
+
+.infoCard p {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* ===== TEAM SECTION ===== */
+.teamSection {
+  text-align: center;
+}
+
+.teamSection h2 {
+  font-size: 2rem;
+  margin-bottom: 2rem;
+  color: #222;
+}
+
+.teamGrid {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+}
+
+.teamCard {
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  width: 230px;
+}
+
+.teamCard img {
+  width: 100%;
+  height: 200px;
+  border-radius: 10px;
+  object-fit: cover;
+  margin-bottom: 1rem;
+}
+
+.teamCard h4 {
+  color: #0078ff;
+  margin-bottom: 0.3rem;
+}
+
+.teamCard p {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 900px) {
+  .aboutHero {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .heroText h1 {
+    font-size: 2rem;
+  }
+
+  .heroImage img {
+    max-width: 100%;
+  }
+
+  .infoGrid,
+  .teamGrid {
+    flex-direction: column;
+    align-items: center;
+  }
+}

@@ -1,0 +1,170 @@
+.tableContainer {
+  padding: 2rem;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 2rem;
+  font-family: "Poppins", sans-serif;
+}
+
+.heading {
+  font-size: 1.6rem;
+  color: #285e61;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* ========================
+   🔍 Search Filter Bar
+======================== */
+.searchBar {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.searchBar input {
+  padding: 0.7rem 1rem;
+  border: 1px solid #285e61;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 220px;
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.searchBar input:focus {
+  border-color: #38b2ac;
+  box-shadow: 0 0 5px rgba(56, 178, 172, 0.4);
+}
+
+/* ========================
+   🧾 Property Table
+======================== */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table thead {
+  background-color: #285e61;
+  color: #fff;
+}
+
+.table th,
+.table td {
+  text-align: left;
+  padding: 0.9rem 1rem;
+  font-size: 0.95rem;
+  border-bottom: 1px solid #ddd;
+}
+
+.table tbody tr:hover {
+  background-color: #f1fdfd;
+  transition: background 0.3s ease;
+}
+
+/* Action Buttons */
+.actionBtns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.updateBtn,
+.deleteBtn {
+  border: none;
+  padding: 0.4rem 0.8rem;
+  font-size: 0.9rem;
+  border-radius: 5px;
+  cursor: pointer;
+  color: #fff;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.updateBtn {
+  background-color: #38b2ac;
+}
+
+.updateBtn:hover {
+  background-color: #319795;
+  transform: scale(1.05);
+}
+
+.deleteBtn {
+  background-color: #e53e3e;
+}
+
+.deleteBtn:hover {
+  background-color: #c53030;
+  transform: scale(1.05);
+}
+
+/* Responsive Layout */
+@media (max-width: 900px) {
+  .searchBar {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .searchBar input {
+    width: 90%;
+  }
+
+  .tableContainer {
+    padding: 1rem;
+    margin: 1rem;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td {
+    display: block;
+    width: 100%;
+  }
+
+  .table tr {
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    padding: 1rem;
+  }
+
+  .table td {
+    text-align: right;
+    position: relative;
+    padding-left: 50%;
+    border-bottom: none;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    top: 0.8rem;
+    font-weight: 600;
+    color: #285e61;
+  }
+
+  .actionBtns {
+    justify-content: flex-end;
+  }
+}
+
+.noData {
+  text-align: center;
+  color: #555;
+  font-size: 1rem;
+  padding: 2rem;
+}

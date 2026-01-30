@@ -1,0 +1,81 @@
+.features {
+  text-align: center;
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
+}
+
+.features h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #222;
+  margin-bottom: 2rem;
+}
+
+/* Main flex container */
+.featureContainer {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 2rem;
+  flex-wrap: wrap; /* allows responsiveness */
+}
+
+/* Each card */
+.featureCard {
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 350px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  text-align: left;
+}
+
+.featureCard:hover {
+ 
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+/* Image styling */
+.featureCard img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Text */
+.featureCard h3 {
+  font-size: 1.2rem;
+  color: #222;
+  margin-bottom: 0.3rem;
+}
+
+.featureCard p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* Responsive behavior */
+@media (max-width: 768px) {
+  .featureContainer {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .featureCard {
+    width: 90%;
+    text-align: center;
+    flex-direction: column;
+  }
+
+  .featureCard img {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+  }
+}

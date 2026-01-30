@@ -1,0 +1,158 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+  background-color: #f9f9f9;
+  font-family: "Poppins", sans-serif;
+  min-height: 100vh;
+}
+
+.form {
+  background: #fff;
+  padding: 3rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 1rem;
+}
+
+/* Global message (top) */
+.error {
+  color: #ff4d4f;
+  background: rgba(255, 77, 79, 0.1);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+.success {
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+}
+
+/* Input group wrapper for field + label + error text */
+.input1,
+.input2,
+.inputGroup {
+  margin-bottom: 1.2rem;
+  text-align: left;
+}
+
+/* Labels */
+label {
+  display: block;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.4rem;
+}
+
+/* Inputs — black border for uniform look */
+.input {
+  width: 100%;
+  padding: 0.9rem;
+  border: 1px solid #000;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: #222;
+  outline: none;
+  transition: border 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* On focus */
+.input:focus {
+  border-color: #0078ff;
+  box-shadow: 0 0 5px rgba(0, 120, 255, 0.4);
+}
+
+/* Error input state */
+.errorBorder {
+  border-color: #ff4d4f !important;
+}
+
+/* Reserved space for field-level errors */
+.errorWrapper {
+  min-height: 18px; /* Keeps layout stable */
+  margin-top: 2px;
+}
+
+/* Inline field error text */
+.fieldError {
+  color: #ff4d4f;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.2;
+  transition: opacity 0.3s ease;
+}
+
+/* Submit Button */
+.button {
+  background-color: #0078ff;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.9rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.button:hover {
+  background-color: #005fcc;
+}
+
+.button:disabled {
+  background-color: #9bbcf7;
+  cursor: not-allowed;
+}
+
+/* Text and Links */
+p {
+  color: #555;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+p span a {
+  color: #0078ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+p span a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+  .form {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.8rem;
+  }
+
+  .input {
+    font-size: 0.95rem;
+  }
+
+  .button {
+    font-size: 0.95rem;
+  }
+}

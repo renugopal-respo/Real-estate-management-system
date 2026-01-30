@@ -1,0 +1,246 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #285e61;
+  color: #fff;
+  padding: 0.8rem 2rem;
+  flex-wrap: wrap;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Logo */
+.logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #b2f5ea;
+}
+
+/* Hamburger (Mobile Only) */
+.hamburger {
+  display: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  color: #fff;
+}
+
+/* Center Section (links) */
+.centerSection {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  transition: right 0.3s ease;
+}
+
+.navLinks {
+  display: flex;
+  gap: 1.2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navButton {
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  transition: color 0.3s ease;
+  font-weight: 500;
+}
+
+.navButton:hover {
+  color: #b2f5ea;
+}
+
+/* Dropdown menus */
+.dropdown {
+  position: relative;
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 2.2rem;
+  left: 0;
+  background: #1f3f42;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  list-style: none;
+  padding: 0.5rem 0;
+  z-index: 999;
+  animation: fadeIn 0.2s ease;
+}
+
+.dropdownMenu li {
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  color: #eee;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.3s ease;
+}
+
+.dropdownMenu li:hover {
+  background-color: #38b2ac;
+  color: #111;
+}
+
+/* Search + Logout (Desktop Only) */
+.rightSection {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.searchBtn {
+  background: #38b2ac;
+  color: #111;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.searchBtn:hover {
+  background: #319795;
+}
+
+.logoutBtn {
+  background: #e53e3e;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
+
+.logoutBtn:hover {
+  background: #c53030;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Mobile-only buttons (hidden on desktop) */
+.mobileLogout,
+.mobileSearch {
+  display: none;
+}
+
+/* ========== MOBILE ========== */
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+
+  .centerSection {
+    position: fixed;
+    top: 98px;
+    right: -100%;
+    width: 220px;
+    height: 100vh;
+    background: #1f3f42;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 2rem 1rem;
+    transition: right 0.3s ease;
+  }
+
+  .centerSection.activeMenu {
+    right: 0;
+  }
+
+  .navLinks {
+    flex-direction: column;
+    width: 100%;
+  }
+  .navLink{
+    text-decoration: none;
+    color: #fff;
+  }
+  .activeLink{
+    text-decoration: none;
+    color: blue; 
+    
+  }
+
+  .navButton {
+    width: 100%;
+    justify-content: flex-start;
+    font-size: 1rem;
+    padding: 0.5rem 0;
+  }
+
+  .dropdownMenu {
+    position: static;
+    background: transparent;
+    box-shadow: none;
+    padding-left: 1rem;
+  }
+
+  .dropdownMenu li {
+    padding: 0.4rem 0;
+    color: #b2f5ea;
+  }
+
+  .dropdownMenu li:hover {
+    background: none;
+    color: #fff;
+  }
+
+  .rightSection {
+    display: none;
+  }
+
+  .mobileSearch {
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .mobileSearch .searchBtn {
+    width: 100%;
+    justify-content: center;
+    background: #38b2ac;
+    color: #111;
+  }
+
+  .mobileSearch .searchBtn:hover {
+    background: #319795;
+  }
+
+  .mobileLogout {
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+  }
+
+  .mobileLogout .logoutBtn {
+    width: 100%;
+    justify-content: center;
+  }
+}
