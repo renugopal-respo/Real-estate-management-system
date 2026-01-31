@@ -16,12 +16,12 @@ export const deleteImages = async (images) => {
           const fullPath = resolvePath(img);
           try {
             await fs.unlink(fullPath);
-            console.log("✅ Deleted:", fullPath);
+            console.log(" Deleted:", fullPath);
           } catch (err) {
             if (err.code === "ENOENT") {
-              console.warn("⚠️ File not found, skipping:", fullPath);
+              console.warn(" File not found, skipping:", fullPath);
             } else {
-              console.error("❌ Error deleting:", fullPath, err.message);
+              console.error("Error deleting:", fullPath, err.message);
             }
           }
         })
@@ -30,10 +30,10 @@ export const deleteImages = async (images) => {
       // Single path
       const fullPath = resolvePath(images);
       await fs.unlink(fullPath);
-      console.log("✅ Deleted:", fullPath);
+      console.log(" Deleted:", fullPath);
     }
 
-    console.log("🗑️ All delete operations completed");
+    console.log("All delete operations completed");
   } catch (error) {
     console.error("Controller error:", error);
   }

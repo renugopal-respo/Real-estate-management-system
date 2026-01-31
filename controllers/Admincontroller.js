@@ -91,11 +91,12 @@ export const recents = async (req, res) => {
   // calculate fallback date (default: one month ago)
   let newdate = date;
   let newPinCode;
+  let newTotal;
   if (!date || date.trim() === "") {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
     newdate = d.toISOString().slice(0, 19).replace("T", " ");
-    console.log(d);
+    
   }
   if(pincode!==''){
      newPinCode=parseInt(pincode);
@@ -103,13 +104,16 @@ export const recents = async (req, res) => {
   else{
     newPinCode=pincode;
   }
+  
+  console.log("Computed date:",newdate);
+  
   try {
     const rows = await recentlyAdded(limitNum, offset, newdate, location, newPinCode);
     console.log(rows);
     if(parseInt(totalPages)===0||totalPages===''){
       const rows=await getTotalPage();
-      total=rows[0].total;
-      console.log("totalPages:",total);
+      newTotal=rows[0].total;
+      console.log("totalPages:",newTotal);
     }
     res.status(200).json({
       message: "Recent properties fetched successfully",
@@ -118,7 +122,7 @@ export const recents = async (req, res) => {
       pagination: {
         page: Number(page),
         limit: Number(limit),
-        totalPages:Number(Math.ceil(total/limit))
+        totalPages:newTotal
       },
     });
   } catch (error) {
@@ -220,16 +224,16 @@ export const updateProperty = async (req, res) => {
     const imagePaths = files.map((f) => f.path);
     let filterAmenties=[];
     let propertyWithImages=[];
-    let userDetails=[];
+    
     console.log("path:", imagePaths);
     console.log("Parsed amenities:", parsedAmenities);
     console.log("status name:",data.status_name);
     // Get reference data
-    const [allAmenities, loc, st,userId] = await Promise.all([
+    const [allAmenities, loc, st] = await Promise.all([
       getAllAmenties(),
       getLocationByName(data.city),
       getStatusByName(data.status_name),
-      getUserByEmail(data.email)
+    
     ]);
     console.log("All amenties:",allAmenities);
     const locationId = loc[0]?.location_id || 0;
@@ -238,7 +242,8 @@ export const updateProperty = async (req, res) => {
     // ✅ Build set clause dynamically
     const setClause = [];
     const filteredData = [];
-
+    let userDetails=[];
+    const userDetailsSetClause=[];
     Object.keys(data).forEach((key) => {
       if (
         key !== "propertyId" &&
@@ -257,23 +262,24 @@ export const updateProperty = async (req, res) => {
           filteredData.push(data[key]);
         }else{
            if(
-            key==='name'&&
-            key ==='email'&&
+            key==='name'||
+            key ==='email'||
             key ==='phone' ){
              userDetails.push(data[key]);
+             userDetailsSetClause.push(`${key}=?`)
         }
-        }                
-      
+        }                  
     });
-
+    userDetails.push(data.user_id);
     // Add location & status IDs
     setClause.push("location_id = ?", "status_id = ?","user_id=?");
-    filteredData.push(locationId, statusId,userId[0].user_id);
+    filteredData.push(locationId, statusId,data.user_id);
     // Add propertyId for WHERE clause
     filteredData.push(propertyId);
     console.log("SET CLAUSE:", setClause.join(", "));
     console.log("DATA:", filteredData);
     console.log("user details:",userDetails);
+    console.log("user details set clause:",userDetailsSetClause);
     allAmenities.forEach(amnety=>{
         const name=amnety.amenties_name;
         const id=amnety.amenties_id;
@@ -293,12 +299,18 @@ export const updateProperty = async (req, res) => {
       filteredData,
       filterAmenties,
       propertyWithImages,
-      propertyId});
+      propertyId,
+    userDetails,
+    userDetailsSetClause});
     if(response===true){
       console.log("transaction succesfull hpy hpy hpyy...");
-      
+      res.status(200).
+      json({message:"property SuccessFully Updated"});
     }
   }catch(error){
       console.log(error);
   }
+}
+export const bookingList=async(req,res)=>{
+   console.log("request:",req);
 }

@@ -330,33 +330,47 @@ export const updatePropertyDetails = async (setClause,values) => {
      throw error;
   }  
 };
-export const updatePropertyTransaction=async(data)=>{
-  const {setClause,filteredData,filterAmenties,propertyWithImages,propertyId}=data;
-   const connection= await db.getConnection();
-   let result=0;
-   try {
-      await connection.beginTransaction();
-    await updatePropertyDetails(setClause,filteredData);
+export const updatePropertyTransaction = async (data) => {
+  const { setClause, filteredData, filterAmenties, propertyWithImages, propertyId ,userDetails,userDetailsSetClause} = data;
+  const connection = await db.getConnection();
+  console.log(userDetailsSetClause,userDetails);
+  try {
+    await connection.beginTransaction();
 
-    if(propertyWithImages.length>0){
-     await  deleteAllImagesByID(propertyId);
-      await insertPropertyImages(propertyWithImages);
-   } 
+    // 1️ Update property details
+    const sqlUpdate = `UPDATE properties SET ${setClause.join(", ")} WHERE property_id = ?`;
+    await connection.query(sqlUpdate, [...filteredData, propertyId]);
 
-   await deleteOldAmenities(propertyId);
-   await insertAmenities(filterAmenties);
+    // 2️ Update images (if any)
+    if (propertyWithImages.length > 0) {
+      const sqlDeleteImages = `DELETE FROM property_images WHERE property_id = ?`;
+      await connection.query(sqlDeleteImages, [propertyId]);
 
-   await connection.commit();
-   connection.release();
-
-   return true;
-  }catch (error) {
-    console.log(error);
-    await connection.rollback();
-    connection.release();
-    throw error;
-   }
-     
+      const sqlInsertImages = `INSERT INTO property_images (property_id, image_url) VALUES ?`;
+      await connection.query(sqlInsertImages, [propertyWithImages]);
     }
-    
 
+    // 3️ Update amenities
+    const sqlDeleteAmenities = `DELETE FROM property_with_amenties WHERE property_id = ?`;
+    await connection.query(sqlDeleteAmenities, [propertyId]);
+
+    const sqlInsertAmenities = `INSERT INTO property_with_amenties (property_id, amenties_id) VALUES ?`;
+    await connection.query(sqlInsertAmenities, [filterAmenties]);
+
+    //4 Update Owner
+    const sql= `UPDATE users SET ${userDetailsSetClause.join(", ")}
+    WHERE user_id=?`;
+    await connection.query(sql,userDetails);
+
+    // 4️ Commit everything
+    await connection.commit();
+
+    return true;
+  } catch (error) {
+    console.error("❌ Transaction failed:", error);
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
