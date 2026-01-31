@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import styles from "../AdminComponents/AdminNavbar/AdminNavbar.module.css";
+import styles from './AdminNavbar.module.css'
 import { FaChevronDown, FaBars, FaTimes, FaSearch } from "react-icons/fa";
 import { NavLink, useNavigate } from "react-router-dom";
 
@@ -8,6 +8,7 @@ const AdminNavbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
   const navRef = useRef(null);
+  const paths=[];
 
   const toggleDropdown = (menu) => {
     setActiveDropdown(activeDropdown === menu ? null : menu);
@@ -47,7 +48,7 @@ const AdminNavbar = () => {
     <nav className={styles.navbar} ref={navRef}>
       {/* Logo */}
       <div className={styles.leftSection}>
-        <h2 className={styles.logo}>🏠 Admin Panel</h2>
+        <h2 className={styles.logo}>Admin Panel</h2>
       </div>
 
       {/* Hamburger (Mobile Only) */}
@@ -65,9 +66,10 @@ const AdminNavbar = () => {
           {/* Dashboard */}
           <li>
             <NavLink
-              className={styles.navButton}
+              
               to="/admin"
               onClick={handleNavLinkClick}
+              className={styles.dashBoard}
             >
               Dashboard
             </NavLink>
@@ -106,18 +108,6 @@ const AdminNavbar = () => {
                     Recently Added
                   </NavLink>
                 </li>
-
-                <li>
-                  <NavLink
-                    to="/admin/update"
-                    className={({ isActive }) =>
-                      isActive ? styles.activeLink : styles.navLink
-                    }
-                    onClick={handleNavLinkClick}
-                  >
-                    Update
-                  </NavLink>
-                </li>
               </ul>
             )}
           </li>
@@ -132,8 +122,27 @@ const AdminNavbar = () => {
             </button>
             {activeDropdown === "bookings" && (
               <ul className={styles.dropdownMenu}>
-                <li onClick={handleNavLinkClick}>Recently Sold Out</li>
-                <li onClick={handleNavLinkClick}>Booking List</li>
+                <li> 
+                  <NavLink
+                    to='/'
+                    className={({ isActive }) =>
+                      isActive ? styles.activeLink : styles.navLink
+                    }
+                    onClick={handleNavLinkClick}
+                  >
+                    Recently Sold Out
+                  </NavLink> </li>
+                 <li> 
+                  <NavLink
+                    to="/admin/bookinglist"
+                    className={({ isActive }) =>
+                      isActive ? styles.activeLink : styles.navLink
+                    }
+                    onClick={handleNavLinkClick}
+                  >
+                    Booking List
+                  </NavLink> </li>
+                
               </ul>
             )}
           </li>

@@ -18,7 +18,18 @@
   font-weight: 600;
   color: #b2f5ea;
 }
-
+.dashBoard{
+  text-decoration: none;
+  color:  #fff;
+  margin-top: 2px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 4px;
+  position: relative;
+  right: 10px;
+ 
+}
 /* Hamburger (Mobile Only) */
 .hamburger {
   display: none;
@@ -43,6 +54,18 @@
   padding: 0;
 }
 
+  .navLink{
+    text-decoration: none;
+    color: #fff;
+  }
+  .activeLink{
+    text-decoration: none;
+    color: blue; 
+    
+  }
+  .navLink :hover{
+    color: blue;
+  } 
 .navButton {
   background: none;
   border: none;

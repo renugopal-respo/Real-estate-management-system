@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import styles from './RecentlyAdded.module.css';
 import { useNavigate } from 'react-router-dom';
+import { FaHome } from 'react-icons/fa';
 const RecentlyAdded = ({path}) => {
   const [properties, setProperties] = useState([]);
   const [errors, setErrors] = useState(false);
@@ -11,6 +12,7 @@ const RecentlyAdded = ({path}) => {
     date: "",
     location: "",
     pincode: "",
+    status:""
   });
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -43,6 +45,7 @@ const RecentlyAdded = ({path}) => {
   };
 
   const handleSubmit = () => {
+       
     fetchProperties();
     setFilters({ date: "", location: "", pincode: "" });
     setPage(1);   
@@ -77,7 +80,7 @@ const RecentlyAdded = ({path}) => {
   return (
     <div className={styles.container}>
       {errors && <h1>{errmessage}</h1>}
-      <h2 className={styles.title}>🏠 Property Details</h2>
+      <h2 className={styles.title}><span style={{position:"relative", right:"0.4rem"}}><FaHome/></span> Property Details</h2>
 
       {/* Filters */}
       <div className={styles.filters}>
@@ -101,6 +104,14 @@ const RecentlyAdded = ({path}) => {
           name="pincode"
           placeholder="Search by pincode"
           value={filters.pincode}
+          onChange={handleFilterChange}
+          className={styles.input}
+        />
+         <input
+          type="text"
+          name="status"
+          placeholder="Search by status"
+          value={filters.status}
           onChange={handleFilterChange}
           className={styles.input}
         />

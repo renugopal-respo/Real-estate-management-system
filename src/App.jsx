@@ -13,6 +13,7 @@ import AddPropertyForm from "./AdminComponents/AddPropertyForm/AddPropertyForm";
 import PropertyTable from "./AdminComponents/PropertyTable/PropertyTable";
 import RecentlyAdded from "./AdminComponents/RecentlyAdded/RecentlyAdded";
 import UpdateForm from "./AdminComponents/UpdateForm/UpdateForm";
+import BookingList from "./AdminComponents/BookingList/BookingList";
 // Layouts
 import UserLayout from "./Components/UserLayout"
 import AdminLayout from "./Components/AdminLayout";
@@ -53,6 +54,7 @@ function App() {
           <Route path="/admin/propertytable" element={<PropertyTable/>}/>
           <Route path="/admin/recentlyadded" element={<RecentlyAdded/>}/>
           <Route path="/admin/update/" element={<UpdateForm/>}/>
+          <Route path='/admin/bookinglist' element={<BookingList/>}/>
           {/* Add more admin pages later */}
         </Route>
 
