@@ -22,6 +22,7 @@ insertPropertyImages,
 updatePropertyDetails,
 updatePropertyTransaction,
 getTotalPage,
+getToatalPagesByStatus,
 getAllPropertyVisits}
   from "../Models/PropertyModel.js";
  import path from 'path';
@@ -331,5 +332,10 @@ export const bookingList=async(req,res)=>{
    console.log("page:",page);  
    const object=whereClauseBuilder(where,condition,data);
    console.log(object);
+   try {
+    await getToatalPagesByStatus(object.whereClause,object.values);
+   } catch (error) {
+    
+   }
    
 }

@@ -404,10 +404,16 @@ LIMIT ? OFFSET ?`;
 };
 export const getToatalPagesByStatus=async(whereClause,data)=>{
    const sql=`SELECT COUNT(*)as total FROM  properties p
-   JOIN location l ON p.location_id=location_id
+   JOIN locations l ON p.location_id=l.location_id
    JOIN property_visits pv ON p.property_id=pv.property_id
    JOIN property_status ps  ON p.status_id=ps.status_id
    JOIN property_type pt ON p.type_id= pt.type_id
    ${whereClause}
    `
+   try {
+    const [rows]=await db.query(sql,data);
+    console.log(rows);
+   } catch (error) {
+      console.log(error);
+   }
 }
