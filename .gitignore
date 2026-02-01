@@ -1,31 +1,73 @@
-# Node.js dependencies
-node_modules/
-
-# Environment variables (keep secrets out of Git)
-.env
-
 # Logs
+logs
 *.log
-logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Build output (if you use build tools)
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs/
+*.log
+
+# Environment variables
+.env
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build output
 dist/
 build/
 
-# Uploaded files (user images, docs, etc.)
+# Uploads folder (images, files)
 uploads/
 
-# Database dumps
-*.sql
-*.sqlite
+# dependencies
+/node_modules
 
-# OS-specific files
+# build output
+/build
+
+# misc
 .DS_Store
-Thumbs.db
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# testing
+/coverage
 
 # IDE/editor settings
 .vscode/
 .idea/
+*.swp
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# optional: ignore uploads or custom folders
+/uploads

@@ -23,7 +23,11 @@ const BookingList = () => {
 });
  const fetchBookingList=async()=>{
   console.log("function Booking list called");
-      const newFilters={created_at:filters.date,city:filters.location,type_name:filters.type_name,status_name:filters.status_name}
+      const newFilters=
+      {visited_date:filters.date,
+        city:filters.location,
+        type_name:filters.type_name,
+        status_name:filters.status_name}
         try {
           const res= await axios.get('http://localhost:5000/admin/getbookings',{
             params:{ filters:JSON.stringify(newFilters),
