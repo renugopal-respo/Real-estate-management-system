@@ -374,3 +374,40 @@ export const updatePropertyTransaction = async (data) => {
     connection.release();
   }
 };
+export const getAllPropertyVisits=async(limit,offset,status)=>{
+       const sql=`SELECT 
+    pv.property_id,
+    pt.type_name,
+    pl.city,
+    ps.status_name,
+    pv.user_id,
+    u.name,
+    u.phone,
+    pv.visited_date,
+    pv.visited_time,
+    pv.status
+FROM property_visits pv
+JOIN properties p ON pv.property_id = p.property_id
+JOIN property_types pt ON p.type_id = pt.type_id
+JOIN locations pl ON p.location_id = pl.location_id 
+JOIN property_status ps ON p.status_id = ps.status_id
+JOIN users u ON pv.user_id = u.user_id
+WHERE (pv.status = ? OR ? = '')
+LIMIT ? OFFSET ?`;
+  try {
+   const [rows]=await db.query(sql,[status,status,limit,offset]);
+           return rows;
+        } catch (error) {
+          console.log("Error in Getting property Visits");
+            throw error;
+        }
+};
+export const getToatalPagesByStatus=async(whereClause,data)=>{
+   const sql=`SELECT COUNT(*)as total FROM  properties p
+   JOIN location l ON p.location_id=location_id
+   JOIN property_visits pv ON p.property_id=pv.property_id
+   JOIN property_status ps  ON p.status_id=ps.status_id
+   JOIN property_type pt ON p.type_id= pt.type_id
+   ${whereClause}
+   `
+}

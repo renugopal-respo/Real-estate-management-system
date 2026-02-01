@@ -11,7 +11,7 @@ export const  normalizeMultiFormData=(body)=>{
 }
 export const parseJson = (input) => {
   try {
-    if (typeof input === "string" && input.trim().startsWith("[")) {
+    if (typeof input === "string" &&( input.trim().startsWith("[") || input.trim().startsWith('{'))){
       const parsed = JSON.parse(input);
       return parsed;
     } else if (Array.isArray(input)) {

@@ -10,6 +10,7 @@ const hashPassword = async (plainPassword) => {
 const isPasswordValid=async(storedHash,enteredPassword)=>{
     const isPasswordValid = await bcrypt.compare(enteredPassword, storedHash);
     console.log("password comaprison is working");
+    
 if (isPasswordValid) {
   return true;
 } else {

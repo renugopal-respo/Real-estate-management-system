@@ -2,6 +2,7 @@ import db from "../config/db.js";
 import { getDuplicateColumn } from "../utils/getDuplicateColumn.js";
 import { deleteImages } from "../utils/deleteImages.js";
 import { normalizeMultiFormData,parseJson } from "../utils/normalizeMultiFormData.js";
+import {whereClauseBuilder} from '../utils/WhereClauseBuilder.js'
 import { getUserByEmail } from "../Models/Usermodel.js";
 import { addOwner } from "../Models/Usermodel.js";
 import { recentlyAdded ,
@@ -20,7 +21,8 @@ insertAmenities,
 insertPropertyImages,
 updatePropertyDetails,
 updatePropertyTransaction,
-getTotalPage}
+getTotalPage,
+getAllPropertyVisits}
   from "../Models/PropertyModel.js";
  import path from 'path';
 export const addProperties = async (req, res) => {
@@ -74,7 +76,7 @@ export const addProperties = async (req, res) => {
       propertyID,
     });
   } catch (error) {   
-    console.error("Controller error:", error);
+   console.error("Controller error:", error);
     res.status(500).json({ message: "Failed to add property", error: error.message });
   }
 };
@@ -300,8 +302,8 @@ export const updateProperty = async (req, res) => {
       filterAmenties,
       propertyWithImages,
       propertyId,
-    userDetails,
-    userDetailsSetClause});
+      userDetails,
+      userDetailsSetClause});
     if(response===true){
       console.log("transaction succesfull hpy hpy hpyy...");
       res.status(200).
@@ -312,5 +314,22 @@ export const updateProperty = async (req, res) => {
   }
 }
 export const bookingList=async(req,res)=>{
-   console.log("request:",req);
+   console.log("request:",req.query);
+   const filters=parseJson(req.query.filters);
+   const page=parseJson(req.query.page);
+   let condition=[];
+   let where=[];
+   let data=[];
+   Object.keys(filters).forEach(key=>{
+     if(filters[key]!==''){
+      where.push(key);
+      condition.push('AND');
+      data.push(filters[key]);
+     }
+   })  
+   console.log("filters:",filters);
+   console.log("page:",page);  
+   const object=whereClauseBuilder(where,condition,data);
+   console.log(object);
+   
 }

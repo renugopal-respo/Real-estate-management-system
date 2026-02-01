@@ -14,5 +14,5 @@ router.get('/getRecentProperties',recents);
 router.get('/deleteProperties',deleteProperties);  
 router.get('/getPropertyForUpdate',getPropertyForUpdate);
 router.delete('/deletePropertyImage',deletePropertyImage);
-
+router.get('/getbookings',bookingList);
 export default router;
