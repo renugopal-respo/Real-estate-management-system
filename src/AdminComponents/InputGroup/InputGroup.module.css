@@ -1,5 +1,5 @@
 .container {
-  
+  min-width: 100vw;
   background: transparent;
   padding: 20px;
 }
@@ -25,6 +25,21 @@
   border-radius: 6px;
   font-size: 14px;
 }
+.select :global(.react-select__control) {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.select :global(.react-select__control--is-focused) {
+  border-color: #333;
+  box-shadow: 0 0 0 1px #333;
+}
+
+.select :global(.react-select__control:hover) {
+  border-color: #333;
+}
 
 .clearBtn {
   background: #dc3545;
@@ -35,9 +50,6 @@
   cursor: pointer;
   font-size: 14px;
   transition: background 0.3s ease;
-  min-width: 10rem;
-  max-width: 10rem;
-  align-self: center;
 }
 
 .clearBtn:hover {
@@ -48,25 +60,22 @@
 @media (max-width: 768px) {
   .container {
     padding: 10px;
-    width: 100%;
   }
 
   .filters {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    max-height: 10rem;  
+    max-height: 10rem;
     min-height: 10rem;
     row-gap: 0.8rem;
   }
 
   .filters button {
-    max-width: 100%;
     grid-column: span 2;
   }
-}
-@media (max-width:600px) {
-    .filters button {
-    max-width: 100%;
-    grid-column: span 2;
+
+  .input {
+    font-size: 13px;
+    padding: 6px;
   }
 }

@@ -1,59 +1,80 @@
-import React, { useState } from 'react';
-import styles from './InputGroup.module.css';
+import React from "react";
+import Select from "react-select";
+import styles from "./InputGroup.module.css";
 
-const InputGroup = ({ getFilters,title }) => {
-  const [filters, setFilters] = useState({
-    date: "",
-    location: "",
-    status: "",
-    propertyId: ""
-  });
-  const newTitle=title || " ";
+const InputGroup = ({ title, filters, setFilters, onClick }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFilters({ ...filters, [name]: value });
+    setFilters((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (name, selectedOption) => {
+    setFilters((prev) => ({
+      ...prev,
+      [name]: selectedOption ? selectedOption.value : "",
+    }));
   };
 
   const handleClick = (e) => {
     e.preventDefault();
-    getFilters(filters);
+    onClick();
   };
+
+  // Convert arrays into react-select option objects
+  const statusOptions = filters.status.map((s) => ({ label: s, value: s }));
+  const typeOptions = filters.type.map((t) => ({ label: t, value: t }));
 
   return (
     <div className={styles.container}>
-      <h3 className={styles.title}>Filter Properties</h3>
+      <h3 className={styles.title}>{title || "Filter Properties"}</h3>
 
       <div className={styles.filters}>
-        {Object.keys(filters).map((key) => (
-          key === "date" ? (
-            <input
-              key={key}
-              type="date"
-              className={styles.input}
-              name={key}
-              value={filters[key]}
-              onChange={handleChange}
-              placeholder={`Enter ${key}`}
-            />
-          ) : (
-            <input
-              key={key}
-              type="text"
-              className={styles.input}
-              name={key}
-              value={filters[key]}
-              onChange={handleChange}
-              placeholder={`Search by ${key}`}
-            />
-          )
-        ))}
+        {/* Date Input */}
+        <input
+          type="date"
+          className={styles.input}
+          name="date"
+          value={filters.date}
+          onChange={handleChange}
+          placeholder="Select date"
+        />
+
+        {/* Location Input */}
+        <input
+          type="text"
+          className={styles.input}
+          name="location"
+          value={filters.location}
+          onChange={handleChange}
+          placeholder="Search by location"
+        />
+
+        {/* Status Dropdown */}
+        <Select
+          className={styles.select}
+          name="status"
+          placeholder="Select status"
+          options={statusOptions}
+          value={statusOptions.find((opt) => opt.value === filters.status_name) || null}
+          onChange={(selected) => handleSelectChange("status_name", selected)}
+        />
+
+        {/* Type Dropdown */}
+        <Select
+          className={styles.select}
+          name="type"
+          placeholder="Select property type"
+          options={typeOptions}
+          value={typeOptions.find((opt) => opt.value === filters.type_name) || null}
+          onChange={(selected) => handleSelectChange("type_name", selected)}
+        />
 
         <button
           type="submit"
           className={styles.clearBtn}
           onClick={handleClick}
         >
-          submit
+          Submit
         </button>
       </div>
     </div>
