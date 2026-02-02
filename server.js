@@ -3,9 +3,12 @@ import { hashPassword } from './Middleware/PasswordHash.js';
 import db from './config/db.js';
 import userRoutes from './Routes/userRoute.js'
 import adminRoutes from './Routes/adminroutes.js'
-import cors from 'cors'
+import cors from 'cors';
+import session from 'express-session';
+import Lowdb, {initDB,saveDB} from './utils/Store.js';
 const app = express();
-let  count=0;
+await initDB();
+
 app.use(cors());
 app.use(express.json());
 console.log("hiii")

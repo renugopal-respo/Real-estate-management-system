@@ -1,4 +1,5 @@
 import db from "../config/db.js";
+import Lowdb, {saveDB,getCache,generateCacheKeyValue} from '../utils/Store.js'
 import { getDuplicateColumn } from "../utils/getDuplicateColumn.js";
 import { deleteImages } from "../utils/deleteImages.js";
 import { normalizeMultiFormData,parseJson } from "../utils/normalizeMultiFormData.js";
@@ -321,12 +322,13 @@ export const updateProperty = async (req, res) => {
 export const bookingList=async(req,res)=>{
    console.log("request:",req.query);
    const filters=parseJson(req.query.filters);
-   const {page,limit}=JSON.parse(req.query.page);
+   const page=JSON.parse(req.query.paginationDetails);
    let condition=[];
    let where=[];
    let data=[];
-   
-   let offset=(page-1)*Number(limit);
+   let newTotal;
+   let rows;
+   let offset=(page-1)*10;
    console.log("offset:",offset);
    
    try {
@@ -346,18 +348,24 @@ export const bookingList=async(req,res)=>{
    console.log("page:",page);
    const object=whereClauseBuilder(where,condition,data);
   
-      const newTotal=await getToatalPagesByStatus(object.whereClause,object.values);
+      newTotal=await getToatalPagesByStatus(object.whereClause,object.values);
       object.values.push(limit);
       object.values.push(offset);
       console.log(object);
-      const rows= await getAllPropertyVisits(object.whereClause,object.values)
+       rows= await getAllPropertyVisits(object.whereClause,object.values)
       console.log("rows:",rows);
    }
     else{ 
       console.log("else block")
-       const newTotal=await getCountAllFromPropertyVisits();     
+       newTotal=await getCountAllFromPropertyVisits();     
    }
- 
+     res.status(200).json({data:rows,
+      paginationDetails:{
+        page:page,
+        totalPages:newTotal
+      },
+      message:"succes"
+     })
    }catch (error) {
      console.log(error);
    }

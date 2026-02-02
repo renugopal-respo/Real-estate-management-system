@@ -29,7 +29,7 @@ export const whereClauseBuilder = (filters, conditions, data) => {
         parts.push(`ps.${status_name}=?`)
        } 
        else if(item==='visited_date'){
-        parts.push(`DATE(pv.${item})<=CURDATE()`)
+        parts.push(`DATE(pv.${item}) BETWEEN ? AND CURDATE()`)
        }   
   }    );
     values = data;

@@ -378,7 +378,7 @@ export const getAllPropertyVisits=async(whereClause,values)=>{
        const sql=`SELECT 
     pv.property_id,
     pt.type_name,
-    pl.city,
+    l.city,
     ps.status_name,
     pv.user_id,
     u.name,
@@ -389,7 +389,7 @@ export const getAllPropertyVisits=async(whereClause,values)=>{
 FROM property_visits pv
 JOIN properties p ON pv.property_id = p.property_id
 JOIN property_type pt ON p.type_id = pt.type_id
-JOIN locations pl ON p.location_id = pl.location_id 
+JOIN locations l ON p.location_id = l.location_id 
 JOIN property_status ps ON p.status_id = ps.status_id
 JOIN users u ON pv.user_id = u.user_id
 ${whereClause}
