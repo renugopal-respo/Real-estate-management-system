@@ -6,28 +6,34 @@ import axios from "axios";
 import { useState,useEffect } from "react";
 import { data } from "react-router-dom";
 const BookingList = () => {
-  const [page,setPage]=useState({page:0,limit:10});
+  const [page,setPage]=useState({page:1,limit:10});
   const[totalPages,setTotalPages]=useState(0);
   const[properties,setProperties]=useState([]);
-  const getEmptyState=()=>{
-    return {date:"",
-      location:"",
-      status_name:['Rent','Buy'],
-      type_name:['Apartment','Villa','Plot']};
-  }
-  const [filters, setFilters] = useState({
-  date: "",
-  location: "",
-  status: ['Rent','Buy'],
-  type:['Apartment','Villa','Plot']
-});
+  const getEmptyState=()=> {
+  return {
+    date: "",
+    location: "",
+    statusOptions: ["SCHEDULED", "COMPLETED", "CANCELED"],
+    typeOptions: ["Apartment", "Villa", "Plot"],
+    propertyStatusOptions: ["Rent", "Buy", "Sold Out"],
+
+    // selected values
+    status: "",
+    type: "",
+    propertyStatus: "",
+  };
+}
+  const [filters, setFilters] = useState(
+    getEmptyState
+);
  const fetchBookingList=async()=>{
   console.log("function Booking list called");
       const newFilters=
       {visited_date:filters.date,
         city:filters.location,
-        type_name:filters.type_name,
-        status_name:filters.status_name}
+        type_name:filters.type,
+        status_name:filters.propertyStatus,
+         propertyVisitStatus:filters.status}
         try {
           const res= await axios.get('http://localhost:5000/admin/getbookings',{
             params:{ filters:JSON.stringify(newFilters),
