@@ -118,7 +118,10 @@
 /* 📱 Responsive Layout */
 @media (max-width: 768px) {
   .container {
-    padding: 10px;
+    padding: 3rem;
+    width: 100%;
+    margin-bottom: 150px;
+    padding: 0px;
   }
 
   .filters {
@@ -132,7 +135,19 @@
   .filters button {
     grid-column: span 2;
   }
-
+  .noData{
+    position: relative;
+    top:10px;
+    margin-bottom: 0px;
+  }
+  .tableScrool {
+  overflow-x: scroll;
+  }
+  .table{
+    width: 100%;
+    margin-top: 2rem;
+    overflow-x: scroll;
+  }
   .table th,
   .table td {
     font-size: 13px;

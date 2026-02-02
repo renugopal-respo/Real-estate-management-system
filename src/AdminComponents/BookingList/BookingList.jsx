@@ -6,9 +6,10 @@ import axios from "axios";
 import { useState,useEffect } from "react";
 import { data } from "react-router-dom";
 const BookingList = () => {
-  const [page,setPage]=useState({page:1,limit:10});
+  const [page,setPage]=useState(1);
   const[totalPages,setTotalPages]=useState(0);
   const[properties,setProperties]=useState([]);
+  const[message,setMessage]=useState('');
   const getEmptyState=()=> {
   return {
     date: "",
@@ -34,13 +35,18 @@ const BookingList = () => {
         type_name:filters.type,
         status_name:filters.propertyStatus,
          propertyVisitStatus:filters.status}
+        
         try {
           const res= await axios.get('http://localhost:5000/admin/getbookings',{
             params:{ filters:JSON.stringify(newFilters),
-              page: JSON.stringify(page)
+              paginationDetails: JSON.stringify(page)
             }
           });
+          console.log(res.data);
+          const{data,message,paginationDetails}=res.data;
+          setProperties(data);
           
+          setTotalPages(paginationDetails.totalPages);
         } catch (error) {
            console.log(error.response.data);
         }
@@ -53,10 +59,8 @@ const BookingList = () => {
   const handleSubmit=()=>{
     console.log("Parent submit called");
     console.log(filters);
-    fetchBookingList();    
+    setPage(1);
   }
- 
-  
   return (
     <div> 
       <InputGroup 
@@ -64,8 +68,12 @@ const BookingList = () => {
        filters={filters}
        setFilters={setFilters}
        onClick={handleSubmit}
+       message={message}
     />
-    <Table input={[]}/>
+    <Table input={[{username:"john"}]}
+    page={page}
+    setPage={setPage}
+    totalPages={totalPages}/>
     </div>
   )
 }

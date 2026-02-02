@@ -25,22 +25,12 @@
   border-radius: 6px;
   font-size: 14px;
 }
-.select :global(.react-select__control) {
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  box-shadow: none;
-  transition: all 0.2s ease;
-}
-
-.select :global(.react-select__control--is-focused) {
-  border-color: #333;
-  box-shadow: 0 0 0 1px #333;
-}
-
-.select :global(.react-select__control:hover) {
-  border-color: #333;
-}
-
+.select :global(.react-select__control) { border: 1px solid #ccc; border-radius: 6px; font-size: 14px; min-height: 38px; /* same height as input */ box-shadow: none; transition: border-color 0.2s ease, box-shadow 0.2s ease; } 
+.select :global(.react-select__value-container) { padding: 0 8px; /* same horizontal padding as input */ }
+ .select :global(.react-select__input) { font-size: 14px; } 
+ .select :global(.react-select__placeholder) { font-size: 14px; color: #777; /* same placeholder style */ } /* Focus + Hover states identical to input */ 
+ .select :global(.react-select__control--is-focused), 
+ .select :global(.react-select__control:hover) { border-color: #333; box-shadow: 0 0 0 1px #333; }
 .clearBtn {
   background: #dc3545;
   color: white;
@@ -78,4 +68,10 @@
     font-size: 13px;
     padding: 6px;
   }
+  .select :global(.react-select__control), 
+  .select :global(.react-select__value-container), 
+  .select :global(.react-select__input), 
+  .select :global(.react-select__placeholder) 
+  { font-size: 40px; }
+  .select .react-select__placeholder { font-size: 2px; color: #777; }
 }
