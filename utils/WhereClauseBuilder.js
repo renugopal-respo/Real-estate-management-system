@@ -22,9 +22,15 @@ export const whereClauseBuilder = (filters, conditions, data) => {
        else if(item==='type_name'){
           parts.push(`pt.${item}=?`);
        }
-       else{
-         parts.push(`DATE(pv.${item})<=CURDATE()`);
-       }       
+       else if(item==='propertyVisitStatus'){
+         parts.push(`pv.status=?`);
+       }   
+       else if(item ==='status_name'){
+        parts.push(`ps.${status_name}=?`)
+       } 
+       else if(item==='visited_date'){
+        parts.push(`DATE(pv.${item})<=CURDATE()`)
+       }   
   }    );
     values = data;
 

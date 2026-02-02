@@ -374,7 +374,7 @@ export const updatePropertyTransaction = async (data) => {
     connection.release();
   }
 };
-export const getAllPropertyVisits=async(limit,offset,status)=>{
+export const getAllPropertyVisits=async(whereClause,values)=>{
        const sql=`SELECT 
     pv.property_id,
     pt.type_name,
@@ -388,14 +388,15 @@ export const getAllPropertyVisits=async(limit,offset,status)=>{
     pv.status
 FROM property_visits pv
 JOIN properties p ON pv.property_id = p.property_id
-JOIN property_types pt ON p.type_id = pt.type_id
+JOIN property_type pt ON p.type_id = pt.type_id
 JOIN locations pl ON p.location_id = pl.location_id 
 JOIN property_status ps ON p.status_id = ps.status_id
 JOIN users u ON pv.user_id = u.user_id
-WHERE (pv.status = ? OR ? = '')
+${whereClause}
 LIMIT ? OFFSET ?`;
   try {
-   const [rows]=await db.query(sql,[status,status,limit,offset]);
+   const [rows]=await db.query(sql,values);
+   console.log(rows);
            return rows;
         } catch (error) {
           console.log("Error in Getting property Visits");
@@ -412,8 +413,19 @@ export const getToatalPagesByStatus=async(whereClause,data)=>{
    `
    try {
     const [rows]=await db.query(sql,data);
-    console.log(rows);
+    return rows[0].total;
    } catch (error) {
       console.log(error);
+      throw error
    }
+}
+export const getCountAllFromPropertyVisits=async()=>{
+    const sql=` SELECT COUNT(*) as total FROM property_visits`;
+    try {
+      const[rows]=await db.query(sql);
+      return rows[0].total;
+    } catch (error) {
+       console.log("error in propertycisits count");
+       throw error;
+    }
 }

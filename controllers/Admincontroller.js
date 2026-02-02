@@ -23,7 +23,8 @@ updatePropertyDetails,
 updatePropertyTransaction,
 getTotalPage,
 getToatalPagesByStatus,
-getAllPropertyVisits}
+getAllPropertyVisits,
+getCountAllFromPropertyVisits}
   from "../Models/PropertyModel.js";
  import path from 'path';
 export const addProperties = async (req, res) => {
@@ -95,6 +96,8 @@ export const recents = async (req, res) => {
   let newdate = date;
   let newPinCode;
   let newTotal;
+  let whereClause=[];
+  let values=[];
   if (!date || date.trim() === "") {
     const d = new Date();
     d.setMonth(d.getMonth() - 1);
@@ -118,6 +121,7 @@ export const recents = async (req, res) => {
       newTotal=rows[0].total;
       console.log("totalPages:",newTotal);
     }
+   
     res.status(200).json({
       message: "Recent properties fetched successfully",
       count: rows.length,
@@ -317,11 +321,21 @@ export const updateProperty = async (req, res) => {
 export const bookingList=async(req,res)=>{
    console.log("request:",req.query);
    const filters=parseJson(req.query.filters);
-   const page=parseJson(req.query.page);
+   const {page,limit}=JSON.parse(req.query.page);
    let condition=[];
    let where=[];
    let data=[];
-   Object.keys(filters).forEach(key=>{
+   
+   let offset=(page-1)*Number(limit);
+   console.log("offset:",offset);
+   
+   try {
+    if(filters.visited_date!=='' || 
+      filters.city!=='' || 
+      filters.type_name!=='' ||
+      filters.status_name !=='' ||
+      filters. propertyVisitStatus!==''){
+         Object.keys(filters).forEach(key=>{
      if(filters[key]!==''){
       where.push(key);
       condition.push('AND');
@@ -329,13 +343,22 @@ export const bookingList=async(req,res)=>{
      }
    })  
    console.log("filters:",filters);
-   console.log("page:",page);  
+   console.log("page:",page);
    const object=whereClauseBuilder(where,condition,data);
-   console.log(object);
-   try {
-    await getToatalPagesByStatus(object.whereClause,object.values);
-   } catch (error) {
-    
+  
+      const newTotal=await getToatalPagesByStatus(object.whereClause,object.values);
+      object.values.push(limit);
+      object.values.push(offset);
+      console.log(object);
+      const rows= await getAllPropertyVisits(object.whereClause,object.values)
+      console.log("rows:",rows);
    }
-   
+    else{ 
+      console.log("else block")
+       const newTotal=await getCountAllFromPropertyVisits();     
+   }
+ 
+   }catch (error) {
+     console.log(error);
+   }
 }
