@@ -124,7 +124,7 @@ const AdminNavbar = () => {
               <ul className={styles.dropdownMenu}>
                 <li> 
                   <NavLink
-                    to='/'
+                    to='/admin/recentlysoldout'
                     className={({ isActive }) =>
                       isActive ? styles.activeLink : styles.navLink
                     }
@@ -157,8 +157,25 @@ const AdminNavbar = () => {
             </button>
             {activeDropdown === "staff" && (
               <ul className={styles.dropdownMenu}>
-                <li onClick={handleNavLinkClick}>Add Staff</li>
-                <li onClick={handleNavLinkClick}>Remove Staff</li>
+                <li>
+                  <NavLink to='/admin/addstaff'
+                   className={({ isActive }) =>
+                      isActive ? styles.activeLink : styles.navLink
+                    }
+                    onClick={handleNavLinkClick}
+                  >  Add Staff
+                  </NavLink> 
+                  </li>
+                
+                <li >  
+                   <NavLink to='/admin/removestaff'
+                   className={({ isActive }) =>
+                      isActive ? styles.activeLink : styles.navLink
+                    }
+                    onClick={handleNavLinkClick}
+                  >  Remove Staff
+                  </NavLink> 
+                </li>
               </ul>
             )}
           </li>

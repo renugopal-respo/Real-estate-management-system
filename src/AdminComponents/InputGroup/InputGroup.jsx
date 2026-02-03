@@ -2,7 +2,7 @@ import React from "react";
 import Select from "react-select";
 import styles from "./InputGroup.module.css";
 
-const InputGroup = ({ title, filters, setFilters, onClick }) => {
+const InputGroup = ({ title="Input Group", filters=[], setFilters, onClick }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -38,7 +38,7 @@ const propertyStatusOptions = filters.propertyStatusOptions.map(p => ({ label: p
           name="date"
           value={filters.date}
           onChange={handleChange}
-          placeholder="Select date"
+          placeholder="Select date (From)"
         />
 
         {/* Location Input */}

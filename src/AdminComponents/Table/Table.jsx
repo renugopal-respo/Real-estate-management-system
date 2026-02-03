@@ -33,10 +33,10 @@ const Table = ({ input ,page,setPage,totalPages}) => {
         </table>):(
           <p className={styles.noData}>No properties found</p>
         )}
-      </div>
+      </div>  
        <div className={styles.pagination}>
          {/* Previous Button */}
-         { 1 && (
+         { page>1 && (
            <button
              onClick={() => setPage(prev => (prev - 1))}
              className={styles.pageBtn}
@@ -50,7 +50,7 @@ const Table = ({ input ,page,setPage,totalPages}) => {
          </span>
        
          {/* Next Button */}
-         {1 && (
+         {totalPages>1&& (
            <button
              onClick={() => setPage(prev =>( prev + 1))}
              className={styles.pageBtn}

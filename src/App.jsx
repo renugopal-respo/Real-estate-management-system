@@ -14,7 +14,11 @@ import PropertyTable from "./AdminComponents/PropertyTable/PropertyTable";
 import RecentlyAdded from "./AdminComponents/RecentlyAdded/RecentlyAdded";
 import UpdateForm from "./AdminComponents/UpdateForm/UpdateForm";
 import BookingList from "./AdminComponents/BookingList/BookingList";
-// Layouts
+import AdminForm from "./AdminComponents/AdminForm/AdminForm";
+import AddStaff from "./AdminComponents/AddStaff/AddStaff";
+import ManagementSideLoginForm from "./AdminComponents/ManagementSideLoginForm/ManagementSideLoginForm";
+import RemoveStaff from "./AdminComponents/AddPropertyForm/RemoveStaff/RemoveStaff";
+import RecentlySoldOut from "./AdminComponents/RecentlySoldOut/RecentlySoldOut";
 import UserLayout from "./Components/UserLayout"
 import AdminLayout from "./Components/AdminLayout";
 
@@ -55,6 +59,10 @@ function App() {
           <Route path="/admin/recentlyadded" element={<RecentlyAdded/>}/>
           <Route path="/admin/update/" element={<UpdateForm/>}/>
           <Route path='/admin/bookinglist' element={<BookingList/>}/>
+          <Route path='/admin/addstaff'  element={<AddStaff/>}/>
+          <Route path='/admin/removestaff' element={<RemoveStaff/>}/>
+          <Route path='/admin/managementloginform' element={<ManagementSideLoginForm/>}/>
+          <Route path="/admin/recentlysoldout" element={<RecentlySoldOut/>}/>
           {/* Add more admin pages later */}
         </Route>
 

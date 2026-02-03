@@ -137,8 +137,8 @@
   }
   .noData{
     position: relative;
-    top:10px;
-    margin-bottom: 0px;
+    top:30px;
+   
   }
   .tableScrool {
   overflow-x: scroll;
