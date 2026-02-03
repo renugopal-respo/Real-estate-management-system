@@ -30,7 +30,10 @@ export const whereClauseBuilder = (filters, conditions, data) => {
        } 
        else if(item==='visited_date'){
         parts.push(`DATE(pv.${item}) BETWEEN ? AND CURDATE()`)
-       }   
+       }  
+       else if(item ==='propertySoldoutStatus') {
+        //parts.push(``)
+       }
   }    );
     values = data;
 

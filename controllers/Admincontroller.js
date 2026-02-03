@@ -5,7 +5,7 @@ import { deleteImages } from "../utils/deleteImages.js";
 import { normalizeMultiFormData,parseJson } from "../utils/normalizeMultiFormData.js";
 import {whereClauseBuilder} from '../utils/WhereClauseBuilder.js'
 import { getUserByEmail } from "../Models/Usermodel.js";
-import { addOwner } from "../Models/Usermodel.js";
+import { addOwner,addStaffs } from "../Models/Usermodel.js";
 import { recentlyAdded ,
   addProperty,
   deleteProperty,
@@ -369,4 +369,33 @@ export const bookingList=async(req,res)=>{
    }catch (error) {
      console.log(error);
    }
+}
+export const recentlySoldout=async(req,res)=>{
+  console.log("requset reached:",req.query);
+  const filters=JSON.parse(req.query.filters);
+  const page=JSON.parse(req.query.page);
+  console.log("Filters:",filters);
+  console.log("page:",page);
+  let where=[];
+  let values=[];
+ let conditions=[];
+ try {
+    if(filters.visited_date!=='' || 
+      filters.city!=='' || 
+      filters.type_name!=='' ||
+      filters.status_name !=='' ||
+      filters. propertyBookingStatus!==''){
+         Object.keys(filters).forEach(key=>{
+     if(filters[key]!==''){
+      where.push(key);
+      conditions.push('AND');
+      data.push(filters[key]);
+     }
+   })  
+   console.log();
+   console.log();
+ } 
+}catch (error) {
+  console.log(error);
+ }
 }

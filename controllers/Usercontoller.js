@@ -1,4 +1,4 @@
-import { getUserByEmail as modelGetUser, addUser as modelAddUser } from '../Models/Usermodel.js';
+import { getUserByEmail as modelGetUser, addUser as modelAddUser,addStaffs ,removeStaffs} from '../Models/Usermodel.js';
 import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
 import { generateToken } from "../utils/jwt.js";
 import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
@@ -85,3 +85,44 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "System failure" });
   }
 };
+export const addStaff=async(req,res)=>{
+   console.log(req.body);
+   const{email,password}=req.body;
+   try {
+    const hashedPassword=await hashPassword(password);
+     const userId=await addStaffs(email,hashedPassword);
+     res.status(200).json({staffId:userId,message:"Staff Added..."})
+   } catch (error) {
+    console.log(error);
+      if (error.code === "ER_DUP_ENTRY") {
+        const column=getDuplicateColumn(error);
+        if(column==='email'){
+            return res.status(400).
+            json({ message: "Email already exists ",
+                field:'email' });
+        }
+   }
+  }
+}
+export const removeStaff=async(req,res)=>{
+  console.log("requset reaches",req.body);
+  const {deleteBy,value}=req.body;
+  let whereClause;
+  if(deleteBy==='email'||value.includes('@')){
+     whereClause='WHERE email=?'
+  }
+  if(deleteBy==='userId'||typeof value===Number){
+    whereClause='WHERE user_id=?'
+  }
+  try {
+     const result=await removeStaffs( whereClause,value);
+     if(result>0){
+      res.status(200).json({message:'Staff Removed Succesfully'})
+     }
+     else{
+      res.status(400).json({message:"Staff Doesn't Exists, Invalid StaffId Or Email"})
+     }
+  } catch (error) {
+    console.log(error);
+  }
+}

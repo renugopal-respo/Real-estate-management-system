@@ -7,7 +7,7 @@ export const addUser = async (data, hashedPassword) => {
     VALUES (?, ?, ?, ?, ?, ?)
   `;
   try {
-    const [rows] = await db.query(sql, [
+    const [result] = await db.query(sql, [
       data.user_name,
       data.email,
       data.contact,
@@ -15,7 +15,7 @@ export const addUser = async (data, hashedPassword) => {
       data.user_role,
       "ACTIVE",
     ]);
-    return rows;
+    return result;
   } catch (error) {
     throw error;
   }
@@ -38,7 +38,7 @@ export const getUserByEmail = async (email) => {
 };
 export const addOwner = async (data) => {
   try {
-    const [rows] = await db.query(
+    const [result] = await db.query(
       `INSERT INTO users (name, email, phone, role, status)
        VALUES (?, ?, ?, ?, ?)`,
       [
@@ -51,9 +51,30 @@ export const addOwner = async (data) => {
     );
 
     // ✅ rows.insertId will contain the new owner's ID
-    return rows.insertId;
+    return result.insertId;
   } catch (error) {
     console.log("owner creation error:", error);
     throw error;
   }
 };
+export const addStaffs=async(email,password)=>{
+   try {
+     const sql=`INSERT INTO users(email,password_hash,role) 
+     VALUES(?,?,?)`
+     const [result]=await db.query(sql,[email,password,'STAFF']);
+     return result.insertId;
+   } catch (error) {
+     console.log("error in add staff");
+     throw error;
+   }
+}
+export const removeStaffs=async(whereClause,value)=>{
+  const sql=`DELETE FROM users ${whereClause}`;
+  try {
+    const [result]=await db.query(sql,value);
+    return result.affectedRows;
+  } catch (error) {
+    console.log("Error in Remove Staff");
+    throw error;
+  }
+}
