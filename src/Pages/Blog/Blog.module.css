@@ -54,6 +54,10 @@
   padding: 16px;
   background-color: #fff;
   border-top: 1px solid #ddd;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  box-shadow: 0 0 50px 10px rgb(234, 230, 230);
 }
 
 .pagination button {
@@ -76,6 +80,7 @@
 /* Small devices (phones) */
 @media (max-width: 600px) {
   .header {
+    width: 100%;
     font-size: 1.2rem;
     padding: 12px;
   }
@@ -91,10 +96,7 @@
     grid-template-columns: 1fr; /* one column */
     padding: 12px;
     gap: 16px;
-
-    /* 👇 Center cards */
-    justify-items: center;   /* horizontally centers grid children */
-    align-items: start;      /* keeps them top-aligned */
+    justify-items: center;   
   }
 
   .pagination button {

@@ -1,171 +1,214 @@
+/* ====== Wrapper ====== */
 .contactWrapper {
-  position: relative;
-  font-family: "Poppins", sans-serif;
-}
-
-/* ===== Base Layout ===== */
-.contactSection {
+  width: 100%;
+  min-height: 100vh;
+  padding: 40px 20px;
+  background: #f8fafc;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 4rem 2rem;
-  background-color: #f9f9f9;
-  min-height: 100vh;
-  transition: filter 0.3s ease;
+  box-sizing: border-box;
+  position: relative;
+  font-family: Arial, sans-serif;
 }
 
-/* Blur effect when success message is shown */
-.blurBackground {
-  filter: blur(6px);
-  pointer-events: none;
-}
-
-.contactContainer {
+/* ====== Contact Section ====== */
+.contactSection {
   background: #fff;
-  padding: 3rem 2.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
   width: 100%;
-  text-align: center;
+  max-width: 500px;
+  padding: 30px 25px;
+  transition: filter 0.3s ease;
+  z-index: 1;
 }
 
+.blurBackground {
+  filter: blur(4px);
+}
+
+/* ====== Container & Heading ====== */
 .contactContainer h2 {
-  font-size: 2rem;
-  color: #222;
-  margin-bottom: 0.5rem;
+  font-size: 24px;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #111827;
 }
 
 .contactContainer p {
-  color: #555;
-  margin-bottom: 2rem;
-  font-size: 0.95rem;
+  font-size: 14px;
+  margin-bottom: 25px;
+  text-align: center;
+  color: #4b5563;
 }
 
-/* ===== Form Styles ===== */
+/* ====== Form ====== */
 .contactForm {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 18px;
 }
 
 .formGroup {
-  text-align: left;
+  display: flex;
+  flex-direction: column;
 }
 
 .formGroup label {
-  display: block;
-  margin-bottom: 0.4rem;
+  font-size: 14px;
   font-weight: 500;
-  color: #333;
+  margin-bottom: 6px;
+  color: #374151;
 }
 
 .formGroup input {
-  width: 100%;
-  padding: 0.9rem;
-  border: 1px solid #000;
+  padding: 10px 14px;
   border-radius: 8px;
-  font-size: 1rem;
-  color: #222;
+  border: 1px solid #ccc;
   outline: none;
-  transition: border 0.3s ease, box-shadow 0.3s ease;
+  font-size: 14px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .formGroup input:focus {
-  border-color: #0078ff;
-  box-shadow: 0 0 5px rgba(0, 120, 255, 0.4);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
 }
 
-/* Submit Button */
+/* ====== Submit Button ====== */
 .submitBtn {
-  background-color: #25d366; /* WhatsApp green */
+  padding: 12px 20px;
+  background-color: #2563eb;
   color: #fff;
+  font-size: 16px;
+  font-weight: 500;
   border: none;
   border-radius: 8px;
-  padding: 0.9rem;
-  font-size: 1rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.25s ease;
 }
 
 .submitBtn:hover {
-  background-color: #1ebe5a;
+  background-color: #1e40af;
 }
 
-/* ===== Success Message Overlay ===== */
+/* ====== Success Overlay ====== */
 .successOverlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  backdrop-filter: blur(4px);
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0,0,0,0.45);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 999;
+  z-index: 9999;
 }
 
 .successBox {
   background: #fff;
-  padding: 2rem 3rem;
+  padding: 25px 30px;
   border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
   text-align: center;
-  animation: fadeIn 0.3s ease;
+  max-width: 400px;
+  width: 90%;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
 .successBox h3 {
-  color: #0078ff;
-  font-size: 1.6rem;
-  margin-bottom: 0.5rem;
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: #16a34a;
 }
 
 .successBox p {
-  color: #444;
-  margin-bottom: 1.2rem;
-  font-size: 1rem;
+  font-size: 14px;
+  margin-bottom: 20px;
+  color: #374151;
 }
 
 .closeBtn {
-  background: #0078ff;
+  padding: 10px 18px;
+  background-color: #2563eb;
   color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
   border: none;
-  border-radius: 6px;
-  padding: 0.7rem 1.5rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.25s ease;
 }
 
 .closeBtn:hover {
-  background: #005fcc;
+  background-color: #1e40af;
 }
 
-/* Animation for smooth pop-up */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
+/* ====== Responsive ====== */
 
-/* ===== Responsive ===== */
+/* Tablets (768px and below) */
 @media (max-width: 768px) {
-  .contactContainer {
-    padding: 2rem 1.5rem;
+  .contactSection {
+    padding: 25px 20px;
+  }
+
+  .contactContainer h2 {
+    font-size: 22px;
+  }
+
+  .submitBtn {
+    font-size: 15px;
+  }
+
+  .closeBtn {
+    font-size: 13px;
+  }
+}
+
+/* Small screens / Mobile (600px and below) */
+@media (max-width: 600px) {
+  .contactWrapper {
+    padding: 20px 12px;
+  }
+
+  .contactSection {
+    width: 100%;
+    padding: 20px 15px;
+  }
+
+  .contactContainer h2 {
+    font-size: 20px;
+  }
+
+  .contactContainer p {
+    font-size: 13px;
+  }
+
+  .formGroup input {
+    font-size: 13px;
+    padding: 9px 12px;
+  }
+
+  .submitBtn {
+    font-size: 14px;
+    padding: 10px 16px;
   }
 
   .successBox {
-    width: 90%;
-    padding: 2rem;
+    padding: 20px 18px;
   }
 
   .successBox h3 {
-    font-size: 1.4rem;
+    font-size: 18px;
+  }
+
+  .successBox p {
+    font-size: 13px;
+  }
+
+  .closeBtn {
+    font-size: 13px;
+    padding: 9px 14px;
   }
 }

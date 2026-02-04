@@ -1,60 +1,61 @@
-import React, { useContext, useEffect, useState } from "react";
-import Filtercontainer from "../../Components/FilterContainer/Filtercontainer";
-import styles from './Blog.module.css';
-import { PropertyContext } from "../../Contextapi/Propertycontext";
+import React, { useEffect, useState } from "react";
+import PropertyFilterGroup from "../../Components/FilterConTest/FilterContainerTest";
+import styles from "./Blog.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { nextPage, addProperties } from "../../Redux/Slicer";
+import { addProperties } from "../../Redux/Slicer";
 import InitialCard from "../../Components/Cardgroup/InitialCard/InitialCard";
 
 const Blog = () => {
-  const arr = useContext(PropertyContext);
-  const [filtered, setFiltered] = useState({});
-  const [initialrender, setInitialrender] = useState(false);
-  const page = useSelector(state => state.properties.page);
+  const [filtered, setFiltered] = useState({}); 
+  const [page, setPage] = useState(1);
+  const [limit] = useState(6); // per-page count
+  const [totalPages, setTotalPages] = useState(3); 
   const dispatch = useDispatch();
-  const properties = useSelector(state => state.properties.properties);
 
-  const handleClick = () => {
-    const data = { property_id: 1, type: 'villa' };
-    dispatch(addProperties({ data: [data] }));
-    if (arr.price !== "") {
-      setFiltered({ price: arr.price });
-    } else if (arr.propertyType !== "") {
-      setFiltered({ ...filtered, propertyType: arr.propertyType });
-    } else if (arr.location !== "") {
-      setFiltered({ ...filtered, location: arr.location });
-    }
-    console.log(properties);
-    
+  const properties = useSelector((state) => state.properties.properties);
+  console.log("Inside blog page");
+  
+  const handleFilterChange = (filterData) => {
+    setFiltered(filterData);
+    console.log("Received filter data:", filterData);
   };
-console.log(page);
-  useEffect(() => {
-    // initial render
-    console.log("heloo")
-  }, [initialrender]);
 
-  useEffect(()=>{
-    //pagination render
-  },[page]);
+  
+  useEffect(() => {
+    console.log(`Fetching data for page ${page} with filters:`, filtered);
+    
+  }, [page, filtered, dispatch]);
+
+  
+  const handleShowMore = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
 
   return (
     <div className={styles.page}>
-      
-
+    
       <div className={styles.filtercontainer}>
-        <Filtercontainer />
-        <button type="button" onClick={handleClick}>Click</button>
+        <PropertyFilterGroup onFilterChange={handleFilterChange} />
       </div>
 
+      
       <main className={styles.main}>
         <InitialCard />
-        <InitialCard/>
-        {/* Map through properties here */}
+        <InitialCard />
+        
       </main>
 
+      
       <div className={styles.pagination}>
-        
-        <button onClick={() => dispatch(nextPage())}>Show more</button>
+        {true ? (
+          <button onClick={handleShowMore} className={styles.showMoreBtn}>
+            Show More
+          </button>
+        ) : (
+          <p className={styles.endText}>You’ve reached the end</p>
+        )}
       </div>
     </div>
   );

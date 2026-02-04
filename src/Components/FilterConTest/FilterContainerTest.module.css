@@ -1,0 +1,176 @@
+/* ====== Main Container ====== */
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 20px;
+  padding: 20px;
+  background: #f8fafc;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding-right: 37px;
+  position: relative;
+}
+
+/* ====== Property Type Buttons ====== */
+.buttongroup {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+
+.buttongroup button {
+  flex: 1 1 auto;
+  min-width: 100px;
+  padding: 10px 16px;
+  border: 1.5px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  border-radius: 8px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.buttongroup button:hover {
+  background-color: #f0f0f0;
+}
+
+.isActive {
+  background-color: #2563eb;
+  color: white;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+.notActive {
+  background-color: #fff;
+}
+
+/* ====== Location Select ====== */
+.selectContainer {
+  flex: 1 1 280px;
+  min-width: 220px;
+  max-width: 100%;
+}
+
+/* React Select override */
+.react-select__control {
+  border-radius: 8px !important;
+  border: 1px solid #ccc !important;
+  min-height: 42px !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+
+.react-select__control--is-focused {
+  border-color: #2563eb !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
+}
+
+.react-select__menu {
+  border-radius: 8px !important;
+  overflow: hidden;
+}
+
+/* ====== Price Input ====== */
+.inputcontainer {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1 1 280px;
+  min-width: 220px;
+  max-width: 100%;
+}
+
+.inputcontainer input {
+  max-width: 100%;
+  padding: 10px 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  font-size: 15px;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+   
+}
+
+.inputcontainer input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3);
+}
+
+/* ====== Error Message ====== */
+.error {
+  color: #dc2626;
+  font-size: 13px;  
+  margin-top: 0px;
+}
+
+/* ====== Responsive Layout ====== */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .container {
+    
+  }
+
+  .buttongroup {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .selectContainer,
+  .inputcontainer {
+    width: 90%;
+  }
+  .inputcontainer input{
+    max-width: 100%;
+   }
+}
+
+/* Small screens (mobiles) */
+@media (max-width: 600px) {
+  .container {
+     min-height: 300px;
+     min-height: 300px;
+  }
+
+  .buttongroup {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .buttongroup button {
+    flex: 1 1 45%;
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+   .selectContainer{
+     max-height: 2rem;   
+   }
+   .inputcontainer{
+    max-height: 2rem;
+   }
+   .inputcontainer input{
+    max-width: 18.5rem;
+   }
+  .error {
+  color: #dc2626;
+  font-size: 12px;  
+  margin-top: 0px;
+  margin-bottom: 20px;
+  margin-left: 6px;
+}
+}
