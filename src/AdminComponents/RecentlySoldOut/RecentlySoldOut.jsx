@@ -11,9 +11,9 @@ const RecentlySoldOut = () => {
          return {
     date: "",
     location: "",
-    statusOptions: ["SOLDOUTS", "RENTED"],
+    statusOptions: ["SOLD", "RENTED"],
     typeOptions: ["Apartment", "Villa", "Plot"],
-    propertyStatusOptions: ["Rent", "Buy", "Sold Out"],
+    //propertyStatusOptions: ["Rent", "Buy"],
 
     // selected values
     status: "",
@@ -28,25 +28,32 @@ const RecentlySoldOut = () => {
     const[err,setErr]=useState(false);
     const[properties,setProperties]=useState([])
     const fetchProperties=async()=>{
+        console.log("fetch propertie runs");
          const newFilters=
       {
-        visited_date:filters.date,
+        created_at:filters.date,
         city:filters.location,
         type_name:filters.type,
         status_name:filters.propertyStatus,
         propertySoldoutStatus:filters.status
      }
+     setLoading(prev=>!prev);
      try {
         const res=await adminapi.get('/recentlySoldout',{
            params:{filters:JSON.stringify(newFilters),
             page:page
      }});
-        
+      
+        console.log(res.data);
+         setProperties(res.data.properties);
      } catch (error) {
        
      }
+     finally{
+      setLoading(prev=>!prev);
+     }
     }
-    const handleSubmit=async(formData)=>{
+    const handleSubmit=(formData)=>{
         fetchProperties();
         setPage(1);
     }
@@ -63,6 +70,7 @@ const RecentlySoldOut = () => {
     page={page}
     setPage={setPage}
     onClick={handleSubmit}/>
+    {loading && <LoadingCard message="Fetcing Details"/>}
     </div>
   )
 }

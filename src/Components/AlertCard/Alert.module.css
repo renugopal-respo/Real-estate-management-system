@@ -60,7 +60,7 @@
 /* Responsive */
 @media (max-width: 600px) {
   .card {
-    width: 80%;
+    width: 50vw;
     padding: 20px;
     height: 10rem;
   }

@@ -3,6 +3,7 @@ import { FaAngleDown } from 'react-icons/fa';
 import styles from './RemoveStaff.module.css';
 import { userapi } from '../../../ApiService/axios';
 import LoadingCard from '../../../Components/LoadingCard/LoadingCard';
+import AlertCard from '../../../Components/AlertCard/AlertCard';
 import axios from 'axios';
 const RemoveStaff = () => {
   const options = ['Remove by ID', 'Remove by Email'];
@@ -112,6 +113,7 @@ const RemoveStaff = () => {
         </div>
       )}
        {responseMsg && <p className={styles.response}>{responseMsg}</p>}
+       {responseMsg && <AlertCard message={responseMsg}/>}
        
     </div>
   );

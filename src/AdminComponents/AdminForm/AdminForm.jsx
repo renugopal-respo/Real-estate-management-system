@@ -11,7 +11,7 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
   const [error, setError] = useState("");
   const [inputType,setInputType]=useState(true);
   const[resMessage,setResMessage]=useState(responsemessage);
-  const navigate = useNavigate();
+  //const navigate = useNavigate();
 
   // 🔹 Handle input change (FIXED)
   const handleChange = (e) => {

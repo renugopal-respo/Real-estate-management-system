@@ -4,10 +4,11 @@ import App from './App.jsx'
 import {Provider} from 'react-redux'
 import Store from './Redux/Store.js'
 import TestComponents from './TestComponents.jsx'
+import ManagementSideLoginForm from './AdminComponents/ManagementSideLoginForm/ManagementSideLoginForm.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
 <Provider store={Store}>
- <App/>
+ <ManagementSideLoginForm/>
 </Provider>  
   </StrictMode>,
 )

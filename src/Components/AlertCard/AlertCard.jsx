@@ -18,7 +18,8 @@ const AlertCard = ({message='Error'}) => {
            onClick={handleClose}>
             close
             </button>
-         </div> }
+         </div> 
+         }
             
          </div> 
          

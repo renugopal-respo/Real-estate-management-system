@@ -52,18 +52,18 @@ function App() {
         </Route>
 
         {/* ====== ADMIN ROUTES ====== */}
+        <Route>   </Route>
         <Route path='/'element={<AdminLayout />}>
           <Route path="/admin" element={<h2 style={{textAlign:'center', marginTop:'2rem'}}>Welcome Admin Dashboard</h2>} />
           <Route path="/admin/addpropertyform" element={<AddPropertyForm />} />
           <Route path="/admin/propertytable" element={<PropertyTable/>}/>
           <Route path="/admin/recentlyadded" element={<RecentlyAdded/>}/>
           <Route path="/admin/update/" element={<UpdateForm/>}/>
-          <Route path='/admin/bookinglist' element={<BookingList/>}/>
-          <Route path='/admin/addstaff'  element={<AddStaff/>}/>
-          <Route path='/admin/removestaff' element={<RemoveStaff/>}/>
+          <Route path='/admin/bookinglist' element={<BookingList/>}/>        
           <Route path='/admin/managementloginform' element={<ManagementSideLoginForm/>}/>
           <Route path="/admin/recentlysoldout" element={<RecentlySoldOut/>}/>
-          {/* Add more admin pages later */}
+          <Route path='/admin/addstaff'  element={<AddStaff/>}/>
+          <Route path='/admin/removestaff' element={<RemoveStaff/>}/>
         </Route>
 
         {/* ====== AUTH ROUTES ====== */}
