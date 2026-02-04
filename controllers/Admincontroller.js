@@ -3,6 +3,7 @@ import Lowdb, {saveDB,getCache,generateCacheKeyValue} from '../utils/Store.js'
 import { getDuplicateColumn } from "../utils/getDuplicateColumn.js";
 import { deleteImages } from "../utils/deleteImages.js";
 import { normalizeMultiFormData,parseJson } from "../utils/normalizeMultiFormData.js";
+import { filterIsEmpty } from "../utils/checkFiltersIsEmpty.js";
 import {whereClauseBuilder} from '../utils/WhereClauseBuilder.js'
 import { getUserByEmail } from "../Models/Usermodel.js";
 import { addOwner,addStaffs } from "../Models/Usermodel.js";
@@ -25,7 +26,8 @@ updatePropertyTransaction,
 getTotalPage,
 getToatalPagesByStatus,
 getAllPropertyVisits,
-getCountAllFromPropertyVisits}
+getCountAllFromPropertyVisits,
+recentlySoldouts}
   from "../Models/PropertyModel.js";
  import path from 'path';
 export const addProperties = async (req, res) => {
@@ -378,24 +380,59 @@ export const recentlySoldout=async(req,res)=>{
   console.log("page:",page);
   let where=[];
   let values=[];
+  let wheredata=[]
  let conditions=[];
+ let totalPages=0;
+ let offset=(page-1)*10;
  try {
-    if(filters.visited_date!=='' || 
+    if(page===1 && !(filterIsEmpty(filters))){     
+       if(filters.visited_date!=='' || 
       filters.city!=='' || 
       filters.type_name!=='' ||
       filters.status_name !=='' ||
-      filters. propertyBookingStatus!==''){
+      filters. propertyVisitStatus!==''){
          Object.keys(filters).forEach(key=>{
      if(filters[key]!==''){
       where.push(key);
       conditions.push('AND');
-      data.push(filters[key]);
+      wheredata.push(filters[key]);
      }
    })  
-   console.log();
-   console.log();
- } 
+       const{whereClause,values}=whereClauseBuilder(where,conditions,wheredata);
+      console.log("values:",values);
+       console.log("whereClause:",whereClause);
+       totalPages=await getToatalPagesByStatus(whereClause,values);
+    }}
+
+    else{    
+      console.log("else block");
+       totalPages=await getTotalPage();
+
+    }
+    values.push(filters.propertySoldoutStatus,
+    filters.propertySoldoutStatus)
+    
+    const type=filters.type_name;
+    values.push(type,type);
+   
+    const location=filters.city;
+    values.push(location,location);
+
+    const date=filters.created_at;
+    values.push(date);
+    console.log(values);
+    const rows=await recentlySoldouts(values);
+    console.log(rows);
+    console.log(totalPages);
+    console.log(rows)
+    res.status(200).json({properties:rows,
+      paginationDetails:{
+        page:page,
+        totalPages:Math.ceil(totalPages/10)
+      }
+    })
 }catch (error) {
   console.log(error);
+  res.status(400).json("message:Probelm in sever...Try again later ")
  }
 }

@@ -10,3 +10,6 @@ import jwt from 'jsonwebtoken'
     console.log("token:",token);
    return token; 
 }
+export const generateRefreshToken = (user) => {
+  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+};

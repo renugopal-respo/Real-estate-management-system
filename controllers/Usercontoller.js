@@ -1,6 +1,6 @@
 import { getUserByEmail as modelGetUser, addUser as modelAddUser,addStaffs ,removeStaffs} from '../Models/Usermodel.js';
 import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
-import { generateToken } from "../utils/jwt.js";
+import { generateToken,generateRefreshToken } from "../utils/jwt.js";
 import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
 // Controller to create a user
 export const createUser = async (req, res) => {

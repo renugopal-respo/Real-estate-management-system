@@ -429,3 +429,33 @@ export const getCountAllFromPropertyVisits=async()=>{
        throw error;
     }
 }
+export const recentlySoldouts=async(data)=>{
+   const sql=`SELECT u.user_id,
+   u.name,
+   u.email,
+   p.property_id,
+   p.created_at,
+   ps.status_name,
+   p.price,
+   l.city,
+   l.pincode,
+   l.state
+   FROM properties p
+   JOIN locations l ON p.location_id=l.location_id
+   JOIN property_status ps ON p.status_id=ps.status_id
+   JOIN property_type pt ON p.type_id=pt.type_id
+   JOIN users u ON  p.user_id=u.user_id
+   WHERE (ps.status_name=? OR ?='')
+   AND (pt.type_name=? OR ?='')
+   AND (l.city=? OR ?='') 
+   AND ((p.created_at BETWEEN ? AND CURDATE()) OR (p.created_at>=CURDATE()))
+   `;
+   try {
+    const [rows]=await db.query(sql,data);
+    return rows;
+   } catch (error) {
+     console.log("Error in recently soldout model");
+     throw error;
+   }
+}   
+

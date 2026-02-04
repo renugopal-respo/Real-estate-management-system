@@ -13,8 +13,9 @@ export const whereClauseBuilder = (filters, conditions, data) => {
 
     let parts = [];
     filters.forEach((item, index) => 
-      { if(item==='status_name'){
-        parts.push(`ps.${item} = ?`)
+      { if(item==='status_name'
+        ||item ==='propertySoldoutStatus'){
+        parts.push(`ps.status_name = ?`)
        }
        else if(item==='city'){
           parts.push(`l.${item}=?`);
@@ -31,8 +32,8 @@ export const whereClauseBuilder = (filters, conditions, data) => {
        else if(item==='visited_date'){
         parts.push(`DATE(pv.${item}) BETWEEN ? AND CURDATE()`)
        }  
-       else if(item ==='propertySoldoutStatus') {
-        //parts.push(``)
+       else if(item==='created_at') {
+        parts.push(`DATE(p.${item}) BETWEEN ? AND CURDATE()`)
        }
   }    );
     values = data;
