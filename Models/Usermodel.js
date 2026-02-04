@@ -29,7 +29,8 @@ export const getUserByEmail = async (email) => {
   `;
   try {
     const [rows] = await db.query(sql, [email.toLowerCase()]);
-    console.log( "user id from user model:",rows[0].user_id)
+    
+    //console.log( "user id from user model:",rows[0].user_id)
     return rows;
   } catch (error) {
     console.log("sql message:",error.sql_message);

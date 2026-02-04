@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = "your_secret_key";
+const JWT_SECRET = "mySuperSecretKey123";
 
 export const verifyToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
@@ -9,14 +9,20 @@ export const verifyToken = (req, res, next) => {
     return res.status(401).json({ message: "Token missing" });
   }
 
-  // Usually token is sent as: "Bearer <token>"
+  
   const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    req.user = decoded; // attach user data to req
-    next(); // continue to next route
+    req.user = decoded; 
+    next(); 
   } catch (error) {
-    return res.status(403).json({ message: "Invalid or expired token" });
+    if (error.name === "TokenExpiredError") {
+      return res.status(401).json({ message: "Token expired" });
+    } else if (error.name === "JsonWebTokenError") {
+      return res.status(403).json({ message: "Invalid token" });
+    } else {
+      return res.status(500).json({ message: "Token verification failed" });
+    }
   }
 };

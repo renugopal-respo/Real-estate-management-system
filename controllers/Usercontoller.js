@@ -22,7 +22,15 @@ export const createUser = async (req, res) => {
       };
 
       const token = generateToken(user);
+      const refreshToken=generateRefreshToken(user);
       console.log(token);
+      console.log("refresh Token:",refreshToken);
+      res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
       return res.json({ token, message: "User created successfully ✅" });
     } else {
       return res.status(400).json({ message: "Failed to create user" });
@@ -85,6 +93,25 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "System failure" });
   }
 };
+export const refreshToken = async (req, res) => {
+  const refreshToken = req.cookies.refreshToken;
+  if (!refreshToken)
+    return res.status(401).json({ message: "No refresh token" });
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const newAccessToken = jwt.sign(
+      { user_id: decoded.user_id, email: decoded.email, role: decoded.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" }
+    );
+    res.json({ accessToken: newAccessToken });
+  } catch (err) {
+    console.error("Refresh error:", err);
+    res.status(403).json({ message: "Invalid or expired refresh token" });
+  }
+};
+
 export const addStaff=async(req,res)=>{
    console.log(req.body);
    const{email,password}=req.body;

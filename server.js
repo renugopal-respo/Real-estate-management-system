@@ -5,12 +5,16 @@ import userRoutes from './Routes/userRoute.js'
 import adminRoutes from './Routes/adminroutes.js'
 import cors from 'cors';
 import session from 'express-session';
+import cookieParser from "cookie-parser";
 import Lowdb, {initDB,saveDB} from './utils/Store.js';
 const app = express();
 await initDB();
-
-app.use(cors());
+app.use(cors({
+  origin: "http://localhost:5173",
+  credentials: true, // allow sending cookies
+}));
 app.use(express.json());
+app.use(cookieParser());
 console.log("hiii")
 // Middleware example
 app.use('/users',userRoutes);

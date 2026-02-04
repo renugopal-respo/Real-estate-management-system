@@ -11,5 +11,5 @@ import jwt from 'jsonwebtoken'
    return token; 
 }
 export const generateRefreshToken = (user) => {
-  return jwt.sign(user, process.env.REFRESH_TOKEN_SECRET, { expiresIn: "7d" });
+  return jwt.sign(user, JWT_SECRET, { expiresIn: "7d" });
 };
