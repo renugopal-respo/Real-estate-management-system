@@ -103,11 +103,21 @@ export const addProperty = async (imagePaths, data,ownerID) => {
     }
 
     // --- Insert images ---
+    
     for (const path of imagePaths) {
-      await connection.query(
+    const primray=path[0];
+    if(path!==primray){
+        await connection.query(
         `INSERT INTO property_images (property_id, image_url) VALUES (?, ?)`,
         [propertyID, path]
       );
+    }
+    else{
+      await connection.query(`INSERT INTO property_images
+        (property_id,image_url,is_primary)
+        VALUES(?,?,?)`,[propertyID,path,true]);
+    }
+      
     }
 
     await connection.commit();
@@ -457,5 +467,80 @@ export const recentlySoldouts=async(data)=>{
      console.log("Error in recently soldout model");
      throw error;
    }
-}   
-
+}  
+export const getPropertiesForCard=async(data)=>{
+  const sql=`SELECT 
+  p.property_id,
+  p.price,
+  pt.type_name,
+  ps.status_name,
+  l.city,
+  pi.image_url
+  FROM properties p
+  JOIN property_type pt ON p.type_id=pt.type_id
+  JOIN property_status ps ON p.status_id=ps.status_id
+  JOIN locations l ON p.location_id=l.location_id
+  LEFT JOIN property_images pi ON p.property_id=pi.property_id
+  WHERE (pt.type_name=? OR ?='')
+  AND (ps.status_name=? OR ?='')
+  AND (p.price<=? OR ?='')
+  AND (l.city=? OR ?='')
+  AND pi.is_primary=0
+  LIMIT ? OFFSET ?
+  `;
+ try {
+  const [rows]=await db.query(sql,data);
+  return rows;
+ } catch (error) {
+    console.log("Error in initialCard Fetch");
+    throw error;
+ }
+} 
+export const addFavorites=async(data)=>{
+   const sql=`INSERT INTO  favourites (user_id, property_id)
+    VALUES(?,?)`;
+    try {
+      const [result]=await db.query(sql,data);
+       return result.insertId;
+    } catch (error) {
+       console.log("error in add favorites");
+       throw error;
+    }
+}
+export const getFavourites = async (userId) => {
+  const sql = `
+    SELECT 
+      p.property_id,
+      p.price,
+      pt.type_name,
+      ps.status_name,
+      l.city,
+      pi.image_url
+    FROM favourites f
+    JOIN properties p ON f.property_id = p.property_id
+    JOIN property_type pt ON p.type_id = pt.type_id
+    JOIN property_status ps ON p.status_id = ps.status_id
+    JOIN locations l ON p.location_id = l.location_id
+    LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_primary = true
+    WHERE f.user_id = ?
+  `;
+  
+  try {
+    const [rows] = await db.query(sql, [userId]);
+    return rows;
+  } catch (error) {
+    console.log("Error in getFavourites:", error);
+    throw error;
+  }
+};
+export const removeFavorites=async(data)=>{
+  const sql=`DELETE FROM favourites 
+  WHERE user_id=? AND property_id=?`;
+  try {
+    const [result]=await db.query(sql,data);
+    return result.affectedRows;
+  } catch (error) {
+    console.log("Error in remove favurites");
+    throw error;
+  }
+}

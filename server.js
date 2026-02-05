@@ -3,23 +3,26 @@ import { hashPassword } from './Middleware/PasswordHash.js';
 import db from './config/db.js';
 import userRoutes from './Routes/userRoute.js'
 import adminRoutes from './Routes/adminroutes.js'
+import propertieRoutes from './Routes/propertyroutes.js'
 import cors from 'cors';
 import session from 'express-session';
 import cookieParser from "cookie-parser";
-import Lowdb, {initDB,saveDB} from './utils/Store.js';
+import Lowdb, {initDB} from './utils/Store.js';
 const app = express();
 await initDB();
 app.use(cors({
   origin: "http://localhost:5173",
-  credentials: true, // allow sending cookies
+  credentials: true, 
 }));
 app.use(express.json());
 app.use(cookieParser());
 console.log("hiii")
-// Middleware example
+//User Routes
 app.use('/users',userRoutes);
 //Admin Routes
 app.use('/admin',adminRoutes);
+//Property Routes
+app.use('/properties',propertieRoutes)
 //file Acces
 app.use('/uploads', express.static('uploads'));
 
