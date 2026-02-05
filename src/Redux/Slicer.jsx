@@ -13,19 +13,13 @@ const propertySlice = createSlice({
   },
   reducers: {
     addProperties: (state, action) => {
-      state.properties = [...state.properties, ...action.payload.data];
-      state.totalPage = action.payload.totalPage;
+      state.properties = [...state.properties,...action.payload];
+     console.log("Property addedd:",state.properties);
+     console.log("action payload:",action.payload);
     },
-
-    nextPage: (state) => {
-        state.page += 1;
-      
-    },
-
-    prevPage: (state) => {
-      if (state.page > 1) {
-        state.page -= 1;
-      }
+    
+    deleteProperties:(state)=>{
+      state.properties=[];
     },
 
     addToFavorites: (state, action) => {
@@ -38,14 +32,12 @@ const propertySlice = createSlice({
       );
     },
 
-    setViewedProperty: (state, action) => {
-      state.viewedProperty = action.payload.data.property_id;
-    },
   },
 });
 
 export const {
   addProperties,
+  deleteProperties,
   nextPage,
   prevPage,
   addToFavorites,

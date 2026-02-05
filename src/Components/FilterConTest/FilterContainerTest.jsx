@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import styles from "./FilterContainerTest.module.css";
 
-const PropertyFilterGroup = () => {
+const PropertyFilterGroup = ({onSubmit}) => {
   
   const [properties, setProperties] = useState([
     "ALL",
@@ -80,7 +80,7 @@ const PropertyFilterGroup = () => {
         setErrorMsg("Price Starts at 3000");
      }
   };
-
+ 
   
   const caseInsensitiveFilter = (option, inputValue) =>
     option.label.toLowerCase().includes(inputValue.toLowerCase());
@@ -93,7 +93,14 @@ const PropertyFilterGroup = () => {
       price,
     });
   }, [propertyType, location, price]);
-
+ 
+  const handleSearchClick=()=>{
+    onSubmit({
+      propertyType,
+      location,
+      price,
+    });
+  }
   return (
     <div className={styles.container}>
       {/* ==== Property Type Buttons ==== */}
@@ -139,6 +146,12 @@ const PropertyFilterGroup = () => {
         />
         {error && <p className={styles.error}>{errorMsg}</p>}
       </div>
+      <div className={styles.searchBtnContainer}>
+        <button styles={styles.searchBtn}
+        onClick={handleSearchClick}>
+          Search
+          </button>
+          </div>
     </div>
   );
 };

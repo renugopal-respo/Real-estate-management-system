@@ -1,30 +1,79 @@
 import React, { useEffect, useState } from "react";
+import { propertyapi } from "../../ApiService/axios";
 import PropertyFilterGroup from "../../Components/FilterConTest/FilterContainerTest";
 import styles from "./Blog.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addProperties } from "../../Redux/Slicer";
+import { addProperties, deleteProperties } from'../../Redux/Slicer.jsx';
 import InitialCard from "../../Components/Cardgroup/InitialCard/InitialCard";
-
+import LoadingCard from '../../Components/LoadingCard/LoadingCard'
+import AlertCard from '../../Components/AlertCard/AlertCard'
 const Blog = () => {
   const [filtered, setFiltered] = useState({}); 
   const [page, setPage] = useState(1);
   const [limit] = useState(6); // per-page count
   const [totalPages, setTotalPages] = useState(3); 
+  const[lodaing,setLoading]=useState(false);
+  const[error,setError]=useState(false);
+  let errorMessage;
+  let status='';
+  let type='';
   const dispatch = useDispatch();
 
   const properties = useSelector((state) => state.properties.properties);
-  console.log("Inside blog page");
-  
+  console.log("From redux:",properties);
+  const fetchProperties=async()=>{
+    setLoading(true);
+    
+    try {
+      if(filtered.propertyType==='ALL'){
+        type='';
+        status='';
+      }
+       if(filtered.propertyType==='BUY'
+        ||filtered.propertyType==='RENT'
+        ||filtered.propertyType==="SALE"){
+
+           status=filtered.propertyType;
+        }
+
+        else{
+          type=filtered.propertyType;
+        }
+      let filters={type:type,
+        status:status,
+        city:filtered.location,
+        price:filtered.price};
+      const res=await propertyapi.get('/getPropertiesForCard',{
+      params:{
+        filters:JSON.stringify(filters),
+        page:page
+      }
+    });
+   //console.log(res?.data?.properties);
+   const flatProperties = res.data.properties.map(item=>item);
+   console.log("faltted properties:",flatProperties);
+   dispatch(addProperties(flatProperties)); 
+
+    } catch (error) {
+       console.log(error);
+       setError(true);
+       errorMessage=error?.response?.data?.message;
+    }
+    finally{
+      setLoading(false);
+    }
+  }
   const handleFilterChange = (filterData) => {
     setFiltered(filterData);
+    setPage(1);
     console.log("Received filter data:", filterData);
+    //set page to 1 and update redux []
   };
 
   
   useEffect(() => {
-    console.log(`Fetching data for page ${page} with filters:`, filtered);
-    
-  }, [page, filtered, dispatch]);
+     fetchProperties();
+  }, [page]);
 
   
   const handleShowMore = () => {
@@ -37,12 +86,12 @@ const Blog = () => {
     <div className={styles.page}>
     
       <div className={styles.filtercontainer}>
-        <PropertyFilterGroup onFilterChange={handleFilterChange} />
+        <PropertyFilterGroup onSubmit={handleFilterChange} />
       </div>
 
       
       <main className={styles.main}>
-        <InitialCard />
+        <InitialCard properties={properties}/>
         <InitialCard />
         
       </main>
@@ -57,6 +106,8 @@ const Blog = () => {
           <p className={styles.endText}>You’ve reached the end</p>
         )}
       </div>
+      
+      {error && <AlertCard message={errorMessage}/>}
     </div>
   );
 };
