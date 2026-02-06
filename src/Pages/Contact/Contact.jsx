@@ -1,34 +1,41 @@
 import React, { useState } from "react";
 import styles from "./Contact.module.css";
-
+import { useLocation,useNavigate } from "react-router-dom";
 const Contact = () => {
   const [formData, setFormData] = useState({
     propertyId: "",
     name: "",
     mobile: "",
   });
-
+  const {state}=useLocation();
+  const navigate=useNavigate();
+  const id=state.propertyId ||'';
   const [isSubmit, setIsSubmit] = useState(false);
-
+  const [message,setMessage]=useState("")
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if(id!==''){
+       FormData.propertyId=id;
+    }
+    else{
+       console.log("PropertyId not found");
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const adminNumber = "919876543210"; // <-- Replace with Admin WhatsApp number
-    const message = `🏠 *New Property Inquiry*\n\n📋 Property ID: ${formData.propertyId}\n👤 Name: ${formData.name}\n📞 Mobile: ${formData.mobile}`;
+    const adminNumber = "919876543210";
+    const message = ` *New Property Inquiry*\n\n Property ID: ${formData.propertyId}\n Name: ${formData.name}\n Mobile: ${formData.mobile}`;
     const whatsappURL = `https://wa.me/${adminNumber}?text=${encodeURIComponent(message)}`;
-
     window.open(whatsappURL, "_blank");
-
-    setIsSubmit(true); // Show success message
-    setFormData({ propertyId: "", name: "", mobile: "" }); // Reset form
+    setIsSubmit(true);
+    setFormData({ propertyId: "", name: "", mobile: "" }); 
   };
 
   const handleClose = () => {
     setIsSubmit(false);
+    navigate(-1);
   };
 
   return (
@@ -44,7 +51,7 @@ const Contact = () => {
             <div className={styles.formGroup}>
               <label htmlFor="propertyId">Property ID</label>
               <input
-                type="text"
+                type="hidden"
                 id="propertyId"
                 name="propertyId"
                 placeholder="Enter property ID"
@@ -88,11 +95,11 @@ const Contact = () => {
         </div>
       </section>
 
-      {/* ✅ Success message overlay */}
+      
       {isSubmit && (
         <div className={styles.successOverlay}>
           <div className={styles.successBox}>
-            <h3>✅ Submitted Successfully!</h3>
+            <h3> Submitted Successfully!</h3>
             <p>Our team will contact you shortly.</p>
             <button onClick={handleClose} className={styles.closeBtn}>
               Close

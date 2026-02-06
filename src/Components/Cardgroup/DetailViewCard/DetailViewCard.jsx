@@ -18,13 +18,28 @@ import InitialCard from "../InitialCard/InitialCard";
 import { useLocation } from "react-router-dom";
 import { propertyapi } from "../../../ApiService/axios";
 import AlertCard from "../../AlertCard/AlertCard";
-
+import { useNavigate } from "react-router-dom";
 const DetailViewCard = () => {
   const { state } = useLocation();
   const { property = {} } = state || {};
   const [propertyData, setPropertyData] = useState(null);
   const [related, setRelated] = useState([]);
   const [alert, setAlert] = useState(false);
+  const [errorMessage,setErrorMesaage]=useState('');
+  const naviagte=useNavigate();
+  const handleContact = () => {
+  
+  const phone = propertyData.owner_phone.replace(/\D/g, "");
+  const pageUrl = window.location.href;
+  const message = `Hello ${propertyData.owner_name}:
+  propertyId${propertyData.property_id}
+   I’m interested in your ${propertyData.type_name} for 
+   ${propertyData.status_name} in ${propertyData.city}. 
+   Here's the link: ${pageUrl}`
+  const encodedMessage = encodeURIComponent(message);
+  const whatsappUrl = `https://wa.me/${phone}?text=${encodedMessage}`;
+  window.open(whatsappUrl, "_blank");
+};
 
   useEffect(() => {
     if (property?.property_id) fetchPropertyDetails();
@@ -42,6 +57,7 @@ const DetailViewCard = () => {
       setRelated(relatedProperties || []);
     } catch (error) {
       console.error("Error fetching details:", error);
+      setErrorMesaage(error?.response?.data?.message);
       setAlert(true);
     }
   };
@@ -85,11 +101,11 @@ const DetailViewCard = () => {
       <p><b>Status:</b> {propertyData.status_name}</p>
         <p><b>Price:</b> ₹{propertyData.price}</p>
         <p><b>City:</b> {propertyData.city}</p>
-        <p><b>Type:</b> {type_name}</p>
-        
+        <p><b>Type:</b> {type_name}</p>   
         <p><b>Facing:</b> {propertyData.facing}</p>
-        <p><b>Area:</b> {propertyData.area_sqft} sqft</p>
-        <p><b>Owner:</b> {propertyData.owner_name} ({propertyData.owner_phone})</p>
+        <p><b>BedRooms:</b> {propertyData.bedromms}</p>
+        <p><b>BathRooms:</b> {propertyData.bathromms}</p>
+        <p><b>Area:</b> {propertyData.area_sqft} sqft</p>        
       </div>
 
     
@@ -106,6 +122,12 @@ const DetailViewCard = () => {
             <span>{amenity}</span>
           </div>
         ))}
+         <div className={styles.description}>
+         <textarea name="" id="" 
+         style={{backgroundColor:"transparent",width:"100%"}}>
+          {propertyData?.description}
+         </textarea>
+       </div>
       </div>
 
     
@@ -122,11 +144,14 @@ const DetailViewCard = () => {
 
       
       <div className={styles.buttoncontainer}>
-        <button>Save</button>
-        <button>Cancel</button>
+        <button onClick={handleContact}>Contact </button>
+        <button 
+        onClick={()=>naviagte('/contact',{state:{ propertyId:propertyData.property_id}})}>
+          Book Visit
+          </button>
       </div>
-
-      {alert && <AlertCard />}
+      
+      {alert && <AlertCard message={errorMessage} />}
     </main>
   );
 };
