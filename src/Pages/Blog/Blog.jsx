@@ -3,7 +3,7 @@ import { propertyapi } from "../../ApiService/axios";
 import PropertyFilterGroup from "../../Components/FilterConTest/FilterContainerTest";
 import styles from "./Blog.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { addProperties, deleteProperties } from'../../Redux/Slicer.jsx';
+import { addProperties, addToFavorites, deleteProperties } from'../../Redux/Slicer.jsx';
 import InitialCard from "../../Components/Cardgroup/InitialCard/InitialCard";
 import LoadingCard from '../../Components/LoadingCard/LoadingCard'
 import AlertCard from '../../Components/AlertCard/AlertCard'
@@ -51,9 +51,11 @@ const Blog = () => {
     });
    //console.log(res?.data?.properties);
    const flatProperties = res.data.properties.map(item=>item);
+   const favorites=res?.data?.favorites || [];
    console.log("faltted properties:",flatProperties);
+   console.log("Favorites:",favorites);
    dispatch(addProperties(flatProperties)); 
-
+   dispatch(addToFavorites(favorites));
     } catch (error) {
        console.log(error);
        setError(true);
@@ -91,7 +93,7 @@ const Blog = () => {
 
       
       <main className={styles.main}>
-        <InitialCard properties={properties}/>
+        <InitialCard />
         <InitialCard />
         
       </main>

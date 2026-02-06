@@ -1,5 +1,6 @@
 import React from "react";
-import {jwtDecode} from "jwt-decode";
+
+import { jwtDecode } from "jwt-decode";
 export const setToken=(token)=>{
     localStorage.setItem("token",token);
 }
@@ -21,22 +22,24 @@ export const IsLoggedIn=()=>{
         return null;
     }
 }
-export const JwtDecode=()=>{
-    const token=localStorage.getItem("token");
-    if (token) {
+export const getDecodedToken = () => {
+  const token = localStorage.getItem("token");
+
+  if (!token || typeof token !== "string" || token.trim() === "") {
+    console.warn("No valid token found in localStorage");
+    return null;
+  }
+
   try {
     const decoded = jwtDecode(token);
     console.log("Decoded JWT:", decoded);
-     return decoded;
+    return decoded;
   } catch (error) {
-    console.error("Invalid token", error);
-  }
-}
-else{
-    console.log("Token doenot found");
+    console.error("Invalid token:", error);
     return null;
-}
-}
+  }
+};
+
 /*axios.get("/protected", {
   headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 });*/

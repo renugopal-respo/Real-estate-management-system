@@ -21,17 +21,23 @@ const propertySlice = createSlice({
     deleteProperties:(state)=>{
       state.properties=[];
     },
-
+     
+    getPropertyById:(state,action)=>{
+      const property=state.properties.filter(item=>item.id===action.payload);
+      return property;
+    },
     addToFavorites: (state, action) => {
-      state.favorites = [...state.favorites, action.payload.data];
+      state.favorites = [...state.favorites, action.payload];
     },
 
     removeFromFavorites: (state, action) => {
       state.favorites = state.favorites.filter(
-        (item) => item.property_id !== action.payload.data.property_id
+        (item) => item.property_id !== action.payload
       );
     },
-
+    removeAllFavorites:(state,action)=>{
+      state.favorites=[];
+    }
   },
 });
 
@@ -42,6 +48,7 @@ export const {
   prevPage,
   addToFavorites,
   removeFromFavorites,
+  removeAllFavorites,
   setViewedProperty,
 } = propertySlice.actions;
 

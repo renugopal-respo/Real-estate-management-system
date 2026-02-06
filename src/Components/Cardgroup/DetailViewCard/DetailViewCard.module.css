@@ -97,6 +97,8 @@
   border-top: 1px solid #ddd;
   margin-top: 1rem;
   border-radius: 0 0 12px 12px;
+  
+
 }
 
 .relatedProperties h3 {
@@ -110,7 +112,7 @@
 .relatedGrid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1rem;
+  gap: 2rem;
 }
 .buttoncontainer {
   position: relative;
@@ -123,6 +125,19 @@
   z-index: 1000;
   justify-items: center;
   width: 80%;
+}
+.bhk {
+ display: flex;
+  justify-content: flex-start;
+}
+
+.bhk p {
+  margin: 0px;
+}
+
+.bhk p:hover {
+  background: #0078ff;
+  color: #fff;
 }
 
 /* Default button style for desktop/tablet */
