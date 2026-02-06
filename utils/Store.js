@@ -20,12 +20,14 @@ const adapter = new JSONFile(file);
 
 //  Initialize with defaults
 const Lowdb = new Low(adapter, {bookingListFilterCache:{},
-    propertyFilterCache:{} });
+    propertyFilterCache:[] });
 
 export async function initDB() {
   await Lowdb.read();
   Lowdb.data ||= { bookingListFilterCache:{},
-    propertyFilterCache:{}
+    propertyFilterCache:[]
+
+
   };
 }
 

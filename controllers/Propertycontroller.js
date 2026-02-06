@@ -2,8 +2,11 @@ import { json } from "express";
 import { getPropertiesForCard,
     addFavorites,
     getFavourites,
-    removeFavorites
+    removeFavorites,
+    getPropertyDetails,
+    getRelatedProperties
  } from "../Models/PropertyModel.js";
+import { getCache,saveDB } from "../utils/Store.js";
 
 export const getPropertyForCard = async (req, res) => {
   try {
@@ -23,6 +26,7 @@ export const getPropertyForCard = async (req, res) => {
     const location = filters.city || "";
     let status=filters.status|| "";
     const numericPrice = price ? Number(price) : "";
+    const userId=filters?.user_id ? Number(filters.user_id) : "";
 
     if(type==='ALL'){
         type='';
@@ -41,13 +45,45 @@ export const getPropertyForCard = async (req, res) => {
      console.log("Final Data Array:", data);
 
        try {
-        const rows=await getPropertiesForCard(data);
+        if(userId===''){
+            const rows=await getPropertiesForCard(data);
         console.log(rows);
-         res.status(200).json({
+        return res.status(200).json({
       message: "Property Fethced Succesfully",
       properties:rows,
       pagination:{page:page}
     });
+        }
+        else{
+            const[properties,favorites]=await Promise.all([
+                getPropertiesForCard(data),
+                getFavourites(userId)
+            ]);
+            if(favorites.length>0){
+                let favs={};
+                properties.forEach(element=>{
+                    const values=Object.values(element);
+                    favorites.forEach(fav=>{
+                        if(values.includes(fav.property_id)){
+                            favs.push(favs.property_id);
+                        }
+                    })
+                });
+                return res.status(200).json({
+                message: "Property Fethced Succesfully",
+                properties:rows,
+                favorites,favs,
+                pagination:{page:page}
+    });
+            }
+            else{
+                return res.status(200).json({
+                message: "Property Fethced Succesfully",
+                properties:rows,
+                pagination:{page:page}
+            })
+        }
+        }    
        } catch (error) {
         console.log(error);
        }
@@ -155,3 +191,90 @@ export const removeFromFavorites=async(req,res)=>{
     }
     
 }
+export const getPropertiesDetails = async (req, res) => {
+  console.log("Request received:", req.query);
+   const data=getCache();
+   let cachedData=[];
+  try {
+
+    if (!req.query.property) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing 'property' parameter in request.",
+      });
+    }
+
+    let property;
+    try {
+      property = JSON.parse(req.query.property);
+    } catch (parseError) {
+      console.error("Invalid JSON format for 'property':", parseError);
+      return res.status(400).json({
+        success: false,
+        message: "Invalid JSON format for 'property' parameter.",
+      });
+    }
+
+
+    if (!property.property_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing 'property_id' in property data.",
+      });
+    }
+    for (const item of data.propertyFilterCache) {
+  if (item.propertyId === property.property_id) {
+    console.log("Cache hit:", item);
+    cachedData = item.data;
+    break; 
+  }
+}
+
+     if(cachedData.length>0){
+        console.log("Data send from cahec block")
+          const properties=await getRelatedProperties(property.city,
+            property.type_name,
+            property.status_name,
+            property.property_id);
+
+        return res.status(200).json({
+         success: true,
+        message: "Property details fetched successfully.",
+       data: cachedData,
+        relatedProperties:properties
+    });
+     }
+    const result =await getPropertyDetails(property.property_id);
+    const properties=await getRelatedProperties(property.city,
+        property.type_name,
+        property.status_name,
+        property.property_id);
+       
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: `No property found with ID ${property.property_id}.`,
+        
+      });
+    }
+      
+    data.propertyFilterCache.push({propertyId:property.property_id,data:result});
+    await saveDB();
+    return res.status(200).json({
+      success: true,
+      message: "Property details fetched successfully.",
+      data: result,
+      relatedProperties:properties
+    });
+   
+  } catch (error) {
+    
+    console.error("Error in getPropertiesDetails:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
+      error: error.message,
+    });
+  }
+};

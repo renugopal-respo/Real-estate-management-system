@@ -544,3 +544,106 @@ export const removeFavorites=async(data)=>{
     throw error;
   }
 }
+
+export const getPropertyDetails = async (propertyId) => {
+  try {
+    const [propertyRows] = await db.query(
+      `
+      SELECT 
+        p.property_id,
+        p.title,
+        p.price,
+        p.description,
+        p.addressline,
+        p.bedromms,
+        p.bathromms,
+        p.area_sqft,
+        p.land_area,
+        p.land_unit,
+        p.road_acces,
+        p.facing,
+        p.created_at,
+        u.name AS owner_name,
+        u.phone AS owner_phone,
+        u.email AS owner_email,
+        l.city,
+        l.state,
+        l.country,
+        ps.status_name,
+        pt.type_name
+      FROM properties p
+      JOIN users u ON p.user_id = u.user_id
+      JOIN locations l ON p.location_id = l.location_id
+      JOIN property_status ps ON p.status_id = ps.status_id
+      JOIN property_type pt ON p.type_id = pt.type_id
+      WHERE p.property_id = ?
+      `,
+      [propertyId]
+    );
+
+    if (propertyRows.length === 0) {
+      return null;
+    }
+
+    const [images] = await db.query(
+      `SELECT image_url, is_primary FROM property_images WHERE property_id = ?`,
+      [propertyId]
+    );
+
+    const [amenities] = await db.query(
+      `SELECT a.amenties_name
+       FROM amenties a
+       JOIN property_with_amenties pa ON a.amenties_id = pa.amenties_id
+       WHERE pa.property_id = ?`,
+      [propertyId]
+    );
+
+    return {
+      ...propertyRows[0],
+      images,
+      amenities: amenities.map((a) => a.amenties_name),
+    };
+  } catch (error) {
+    console.error("Error fetching property details:", error);
+    throw error;
+  }
+};
+
+export const getRelatedProperties = async (city, type_name, status_name, excludeId) => {
+  try {
+    const [rows] = await db.query(
+      `
+      SELECT 
+        p.property_id,
+        p.price,
+        p.title,
+        p.addressline,
+        p.description,
+        p.bedromms,
+        p.bathromms,
+        p.area_sqft,
+        l.city,
+        pt.type_name,
+        ps.status_name,
+        (SELECT image_url FROM property_images WHERE property_id = p.property_id LIMIT 1) AS image_url
+      FROM properties p
+      JOIN locations l ON p.location_id = l.location_id
+      JOIN property_type pt ON p.type_id = pt.type_id
+      JOIN property_status ps ON p.status_id = ps.status_id
+      WHERE l.city = ? 
+        OR pt.type_name = ?
+        OR ps.status_name = ?
+        OR p.property_id != ?
+      ORDER BY p.created_at DESC
+      LIMIT 6
+      `,
+      [city, type_name, status_name, excludeId]
+    );
+
+    return rows;
+  } catch (error) {
+    console.error(" Error fetching related properties:", error);
+    throw error;
+  }
+};
+

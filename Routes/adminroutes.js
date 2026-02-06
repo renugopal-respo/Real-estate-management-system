@@ -7,7 +7,7 @@ import { addProperties,
 deletePropertyImage,
 updateProperty,
 bookingList,
-recentlySoldout
+recentlySoldout,
 } from '../controllers/Admincontroller.js';
 const router=express.Router();
 router.get('/getRecentProperties',recents); 

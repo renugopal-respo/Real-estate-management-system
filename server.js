@@ -8,6 +8,9 @@ import cors from 'cors';
 import session from 'express-session';
 import cookieParser from "cookie-parser";
 import Lowdb, {initDB} from './utils/Store.js';
+import { verifyToken } from './Middleware/VerifyJwt.js';
+import { Authorization } from './Middleware/Authorization.js';
+
 const app = express();
 await initDB();
 app.use(cors({
@@ -18,9 +21,9 @@ app.use(express.json());
 app.use(cookieParser());
 console.log("hiii")
 //User Routes
-app.use('/users',userRoutes);
+app.use('/users',verifyToken,userRoutes);
 //Admin Routes
-app.use('/admin',adminRoutes);
+app.use('/admin',verifyToken,Authorization,adminRoutes);
 //Property Routes
 app.use('/properties',propertieRoutes)
 //file Acces
