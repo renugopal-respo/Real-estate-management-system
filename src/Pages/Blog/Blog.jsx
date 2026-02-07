@@ -49,8 +49,8 @@ const Blog = () => {
         page:page
       }
     });
-   //console.log(res?.data?.properties);
-   const flatProperties = res.data.properties.map(item=>item);
+   console.log(res?.data?.properties);
+   const flatProperties = res?.data?.properties.map(item=>item);
    const favorites=res?.data?.favorites || [];
    console.log("faltted properties:",flatProperties);
    console.log("Favorites:",favorites);
@@ -69,7 +69,7 @@ const Blog = () => {
     setFiltered(filterData);
     setPage(1);
     console.log("Received filter data:", filterData);
-    //set page to 1 and update redux []
+    
   };
 
   

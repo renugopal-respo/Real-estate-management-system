@@ -138,9 +138,10 @@
 .bhk p:hover {
   background: #0078ff;
   color: #fff;
+  cursor: pointer;
 }
 
-/* Default button style for desktop/tablet */
+
 .buttoncontainer button {
   width: 150px;
   padding: 0.8rem 1.5rem;

@@ -4,12 +4,8 @@ const propertySlice = createSlice({
   name: "properties",
   initialState: {
     properties: [],
-    subscribedProperty: [],
     viewedProperty: 0,
     favorites: [],
-    page: 1,
-    totalPage: 1,
-    loading: false,
   },
   reducers: {
     addProperties: (state, action) => {
@@ -39,6 +35,7 @@ const propertySlice = createSlice({
       state.favorites=[];
     }
   },
+  
 });
 
 export const {

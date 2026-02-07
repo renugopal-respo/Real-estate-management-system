@@ -12,25 +12,24 @@ const LoginForm = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  // 🔹 Handle input change (FIXED)
+  
   const handleChange = (e) => {
-    const { name, value } = e.target; // ✅ correct fields
+    const { name, value } = e.target; 
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
 
-  // 🔹 Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // clear previous error
+    setError(""); 
 
-    // 🔸 Simple empty validation
+
     if (!credentials.email || !credentials.password) {
       setError("Email and password are required");
       return;
     }
 
     try {
-      // 🔹 Use POST (not GET) for login
+      
       const res = await axios.post("http://localhost:5000/users/loginUser", {
         user: credentials,
       });

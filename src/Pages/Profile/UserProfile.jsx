@@ -1,28 +1,37 @@
 import React, { useEffect, useState } from "react";
 import styles from "./UserProfile.module.css";
 import PropertyCard from "../../Components/Cardgroup/InitialCard/InitialCard";
- // Assume user ID stored in localStorage
 import axios from "axios";
-
+import { getDecodedToken } from "../../utils/Token.js";
+import { Navigate, useNavigate } from "react-router-dom";
 const UserProfile = () => {
   const [user, setUser] = useState({ username: "", role: "" });
   const [favorites, setFavorites] = useState([]);
-
- /* useEffect(() => {
-    // Fetch user info (example API)
+  const navigate=useNavigate();
+  useEffect(() => {
     const fetchUser = async () => {
-      const userId = getUser("userid"); // from localStorage
+      const token=getDecodedToken();
+      if(!token){
+        console.log("Token not Found")
+        navigate('/loginform');
+      }
+      const{id,email}=token;
       try {
-        const res = await axios.get(`http://localhost:5000/users/${userId}`);
+        const res = await axios.get(`http://localhost:5000/users/getUserProfile`,{
+         params: {
+          user_id:id,
+          email:email
+         }
+        });
         setUser({ username: res.data.name, role: res.data.role });
-        setFavorites(res.data.favorites || []); // array of favorite properties
+        setFavorites(res.data.favorites || []);
       } catch (err) {
         console.error("Failed to fetch user data", err);
       }
     };
     fetchUser();
   }, []);
-  */
+  
 
   return (
     <div className={styles.page}>

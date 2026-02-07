@@ -9,8 +9,8 @@ const ProtectedRoute = () => {
     if(token){
         const decoded=jwtDecode(token);
         const{user_role}=decoded;
-        if(user_role.toLowerCase()==="staff".toLowerCase()||
-        user_role.toLowerCase()==='admin'.toLowerCase()){
+        if(user_role.toLowerCase()==="staff"||
+        user_role.toLowerCase()==='admin'){
            return <Outlet/>
         }
         else{

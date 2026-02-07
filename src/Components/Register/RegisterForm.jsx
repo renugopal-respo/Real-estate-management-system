@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./Registerform.module.css";
 import axios from "axios";
-import { setToken } from "../../utils/Token";
+import { setToken } from "../../utils/Token.js";
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     user_name: "",

@@ -42,7 +42,12 @@ build/
 
 # Uploads folder (images, files)
 uploads/
-
+Models/
+Contollers/
+MiddleWare/
+Routes/
+config/
+server.js
 # dependencies
 /node_modules
 
