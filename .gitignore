@@ -24,6 +24,7 @@ dist-ssr
 *.sw?
 # Node.js dependencies
 node_modules/
+vite.config.js
 
 # Logs
 logs/
