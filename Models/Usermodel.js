@@ -79,3 +79,12 @@ export const removeStaffs=async(whereClause,value)=>{
     throw error;
   }
 }
+export const deleteUser=async(email)=>{
+  try {
+    const [result]=await db.query("DELETE FROM users WHERE email=?",email);
+    console.log(result);
+  } catch (error) {
+    console.log("Error in delete User");
+    throw error;
+  }
+}

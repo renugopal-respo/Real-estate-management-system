@@ -1,8 +1,8 @@
-import { getUserByEmail as modelGetUser, addUser as modelAddUser,addStaffs ,removeStaffs} from '../Models/Usermodel.js';
+import { getUserByEmail as modelGetUser, addUser as modelAddUser,addStaffs ,removeStaffs,deleteUser, getUserByEmail} from '../Models/Usermodel.js';
 import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
 import { generateToken,generateRefreshToken } from "../utils/jwt.js";
 import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
-// Controller to create a user
+import {getFavourites} from '../Models/PropertyModel.js'
 export const createUser = async (req, res) => {
   const { password, email, user_role } = req.body.user;
   console.log(req.body.user);
@@ -21,17 +21,21 @@ export const createUser = async (req, res) => {
         role: user_role,
       };
 
-      const token = generateToken(user);
-      const refreshToken=generateRefreshToken(user);
-      console.log(token);
+      const accessToken = generateToken(user);
+      const refreshToken=generateRefreshToken(user);    
       console.log("refresh Token:",refreshToken);
       res.cookie("refreshToken", refreshToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", 
+      httpOnly: true, 
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
-      return res.json({ token, message: "User created successfully ✅" });
+
+    res.cookie("accessToken", accessToken, {
+      httpOnly: true, 
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
+      return res.json({ token:accessToken, message: "User created successfully " });
     } else {
       return res.status(400).json({ message: "Failed to create user" });
     }
@@ -52,15 +56,14 @@ export const createUser = async (req, res) => {
         }
       
     } else if (error.code === "ER_BAD_NULL_ERROR") {
-      return res.status(400).json({ message: "Required field is missing ❌" ,field:"null"});
+      return res.status(400).json({ message: "Required field is missing " ,field:"null"});
     } else {
       return res.status(500).json({ message: "Database error, please try again later" });
     }
   }
+  
   }
 
-
-// Controller for login / get user
 export const loginUser = async (req, res) => {
   const { email, password } = req.body.user;
   console.log("requset body:",req.body);
@@ -86,7 +89,16 @@ export const loginUser = async (req, res) => {
     };
 
     const token = generateToken(user);
-    return res.json({ token, message: "Login successful ✅" });
+    const refreshToken=generateRefreshToken(user);
+      console.log(token);
+      console.log("refresh Token:",refreshToken);
+      res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", 
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
+    return res.json({ token, message: "Login successful " });
 
   } catch (error) {
     console.log(error);
@@ -152,4 +164,34 @@ export const removeStaff=async(req,res)=>{
   } catch (error) {
     console.log(error);
   }
+}
+export const getUserProfile=async(req,res)=>{
+  console.log("Requst reached:",req.query)
+  const user_id=Number(req?.query?.user_id);
+  const email=req.query.email;
+
+  if(!user_id || !email){
+      return res.status(400).
+      json({message:"Email and user id both required"});
+    }
+
+  try {
+    const [users,favourites]= await Promise.all([
+      getUserByEmail(email),
+      getFavourites(user_id)   
+    ]);
+    console.log(users.length);
+     return res.status(200).
+    json({succes:true,
+      name:users?.name,
+      role:users?.role,
+      favorites:favourites
+    })
+  } catch (error) {
+    console.log("error in getUserProfile",error);
+    return res.status(400).
+    json({message:"please try again later..."})
+
+  }
+ 
 }

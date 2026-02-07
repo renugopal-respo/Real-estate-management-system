@@ -3,12 +3,15 @@ import { createUser,
     loginUser,
     addStaff,
     removeStaff ,
-    refreshToken} from '../controllers/Usercontoller.js';
+    refreshToken,
+getUserProfile} from '../controllers/Usercontoller.js';
     import { Authorization,roleBasedAuthorization } from '../Middleware/Authorization.js';
+    import { verifyToken } from '../Middleware/VerifyJwt.js';
 const router = express.Router();
-router.post('/createUser',createUser);
+router.post('/createUser',verifyToken,createUser);
 router.post('/loginUser',loginUser);
-router.post('/addStaff',addStaff);
-router.delete('/removeStaff',removeStaff);
+router.post('/addStaff',verifyToken,Authorization,addStaff);
 router.post('/refreshToken',refreshToken);
+router.delete('/removeStaff',Authorization,removeStaff);
+router.get('/getUserProfile',getUserProfile)
 export default router;
