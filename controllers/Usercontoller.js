@@ -24,6 +24,7 @@ export const createUser = async (req, res) => {
       const accessToken = generateToken(user);
       const refreshToken=generateRefreshToken(user);    
       console.log("refresh Token:",refreshToken);
+
       res.cookie("refreshToken", refreshToken, {
       httpOnly: true, 
       sameSite: "Strict",
@@ -33,7 +34,7 @@ export const createUser = async (req, res) => {
     res.cookie("accessToken", accessToken, {
       httpOnly: true, 
       sameSite: "Strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, 
+      maxAge:  24 * 60 * 60 * 1000, 
     });
       return res.json({ token:accessToken, message: "User created successfully " });
     } else {
@@ -83,7 +84,7 @@ export const loginUser = async (req, res) => {
     } 
 
     const user = {
-      user_id: userFromDb.user_id,
+      id: userFromDb.user_id,
       email: userFromDb.email,
       role: userFromDb.role,
     };
@@ -92,12 +93,14 @@ export const loginUser = async (req, res) => {
     const refreshToken=generateRefreshToken(user);
       console.log(token);
       console.log("refresh Token:",refreshToken);
+
       res.cookie("refreshToken", refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production", 
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
+
     return res.json({ token, message: "Login successful " });
 
   } catch (error) {
@@ -105,8 +108,10 @@ export const loginUser = async (req, res) => {
     return res.status(500).json({ message: "System failure" });
   }
 };
+
 export const refreshToken = async (req, res) => {
   const refreshToken = req.cookies.refreshToken;
+  console.log("refresh token call");
   if (!refreshToken)
     return res.status(401).json({ message: "No refresh token" });
 
@@ -167,10 +172,10 @@ export const removeStaff=async(req,res)=>{
 }
 export const getUserProfile=async(req,res)=>{
   console.log("Requst reached:",req.query)
-  const user_id=Number(req?.query?.user_id);
-  const email=req.query.email;
+  const {id,email}=req.user
+  console.log(req.user);
 
-  if(!user_id || !email){
+  if(!id && !email){
       return res.status(400).
       json({message:"Email and user id both required"});
     }
@@ -178,13 +183,15 @@ export const getUserProfile=async(req,res)=>{
   try {
     const [users,favourites]= await Promise.all([
       getUserByEmail(email),
-      getFavourites(user_id)   
+      getFavourites(id)   
     ]);
     console.log(users.length);
+    console.log(users);
+    console.log("favorites:",favourites);
      return res.status(200).
     json({succes:true,
-      name:users?.name,
-      role:users?.role,
+      name:users[0].name,
+      role:users[0].role,
       favorites:favourites
     })
   } catch (error) {

@@ -6,7 +6,7 @@ export const JWT_SECRET = "mySuperSecretKey123";
    const token= jwt.sign(
       { id: user.id, user_role: user.role, email: user.email },
       JWT_SECRET,
-      { expiresIn: "1h" } // token expires in 1 hour
+      { expiresIn: "10h" } 
     );
     console.log("token:",token);
    return token; 

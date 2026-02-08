@@ -25,7 +25,7 @@ app.use('/users',verifyToken,userRoutes);
 //Admin Routes
 app.use('/admin',verifyToken,Authorization,adminRoutes);
 //Property Routes
-app.use('/properties',propertieRoutes)
+app.use('/properties',verifyToken,propertieRoutes)
 //file Acces
 app.use('/uploads', express.static('uploads'));
 // A simple route to test

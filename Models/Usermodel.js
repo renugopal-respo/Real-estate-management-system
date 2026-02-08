@@ -24,7 +24,7 @@ export const addUser = async (data, hashedPassword) => {
 //  Get a user
 export const getUserByEmail = async (email) => {
   const sql = `
-    SELECT role,email,user_id,password_hash FROM users 
+    SELECT name,role,email,user_id,password_hash FROM users 
     WHERE LOWER(email) =?
   `;
   try {
