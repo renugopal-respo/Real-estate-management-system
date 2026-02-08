@@ -9,7 +9,7 @@ import UpdateForm from "../AdminComponents/UpdateForm/UpdateForm";
 import BookingList from "../AdminComponents/BookingList/BookingList";
 import ManagementSideLoginForm from "../AdminComponents/ManagementSideLoginForm/ManagementSideLoginForm";
 import RecentlySoldOut from "../AdminComponents/RecentlySoldOut/RecentlySoldOut";
-import AddStaff from "../AdminComponents/AddStaff/AddStaff.jsx";
+import AddStaff from "../AdminComponents/AddStaff/Addstaff.jsx";
 import RemoveStaff from "../AdminComponents/AddPropertyForm/RemoveStaff/RemoveStaff.jsx";
 import ProtectedRoute from "../Components/ProtectedRoutes/ProtectedRoute.jsx";
 
