@@ -9,9 +9,11 @@ const propertySlice = createSlice({
   },
   reducers: {
     addProperties: (state, action) => {
+      
       state.properties = [...state.properties,...action.payload];
      console.log("Property addedd:",state.properties);
      console.log("action payload:",action.payload);
+     console.log(state.properties.length);
     },
     
     deleteProperties:(state)=>{
@@ -22,16 +24,26 @@ const propertySlice = createSlice({
       const property=state.properties.filter(item=>item.id===action.payload);
       return property;
     },
-    addToFavorites: (state, action) => {
-      state.favorites = [...state.favorites, action.payload];
-    },
+   addToFavorites: (state, action) => {
+  console.log("new Favorite added:", action.payload);
+  
+  if (Array.isArray(action.payload)) {
+  
+    state.favorites = [...action.payload];
+  } else {
+  
+    state.favorites = [...state.favorites, action.payload];
+  }
+},
+
 
     removeFromFavorites: (state, action) => {
       state.favorites = state.favorites.filter(
         (item) => item.property_id !== action.payload
       );
     },
-    removeAllFavorites:(state,action)=>{
+    removeAllFavorites:(state)=>{
+      console.log("Favrite list is set to empty");
       state.favorites=[];
     }
   },

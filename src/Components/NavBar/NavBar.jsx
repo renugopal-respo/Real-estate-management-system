@@ -90,7 +90,7 @@ const NavBar = () => {
           About
         </NavLink>
         <NavLink
-          to="/contact"
+          to="/contactformforaddproperty"
           className={({ isActive }) =>
             isActive ? styles.activeLink : styles.link
           }
@@ -107,6 +107,14 @@ const NavBar = () => {
         >
           Profile
         </NavLink>
+         <NavLink
+          to="/loginform"
+          end
+          className={({ isActive }) =>
+            isActive ? styles.activeLink : styles.link
+          }
+          onClick={closeMenu}
+        >Login</NavLink>
       </div>
     </nav>
   );

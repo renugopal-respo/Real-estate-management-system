@@ -1,26 +1,33 @@
-import { Outlet,useNavigate } from "react-router-dom";
-import { getToken,JwtDecode } from "../../utils/Token";
-import React from 'react'
-import { jwtDecode } from "jwt-decode";
+import React from "react";
+import { Outlet, Navigate } from "react-router-dom";
+import { getToken, getDecodedToken } from "../../utils/Token";
 
 const ProtectedRoute = () => {
-    const token=getToken;  
-    const navigate=useNavigate();
-    if(token){
-        const decoded=jwtDecode(token);
-        const{user_role}=decoded;
-        if(user_role.toLowerCase()==="staff"||
-        user_role.toLowerCase()==='admin'){
-           return <Outlet/>
-        }
-        else{
-            navigate('/admin/managementloginform');
-        }       
-    }
-    
-  return (
-    <div>ProtectedRoute</div>
-  )
-}
+  const token = getToken();
 
-export default ProtectedRoute
+  if (!token) {
+    
+    return <Navigate to="/admin/managementloginform" replace />;
+  }
+
+  try {
+    const decoded = getDecodedToken();
+    const { user_role } = decoded || {};
+
+    if (
+      user_role?.toLowerCase() === "staff" ||
+      user_role?.toLowerCase() === "admin"
+    ) {
+      
+      return <Outlet />;
+    } else {
+      
+      return <Navigate to="/admin/managementloginform" replace />;
+    }
+  } catch (err) {
+    console.error("Invalid token:", err);
+    return <Navigate to="/admin/managementloginform" replace />;
+  }
+};
+
+export default ProtectedRoute;

@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import styles from "./Registerform.module.css";
 import axios from "axios";
 import { setToken } from "../../utils/Token.js";
+import { useNavigate } from "react-router-dom";
+import { FaEyeSlash, FaEye } from "react-icons/fa";   // 👈 import icons
+
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
     user_name: "",
@@ -10,16 +13,23 @@ const RegisterForm = () => {
     password: "",
     contact: "",
     age: "",
-    user_role:'CUSTOMER'
+    user_role: "CUSTOMER",
   });
 
   const [formErrors, setFormErrors] = useState({});
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+  const [inputType, setInputType] = useState(true);   // 👈 toggle state
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     setFormErrors({ ...formErrors, [e.target.name]: "" });
+  };
+
+  const handleVisibility = (e) => {
+    e.preventDefault();
+    setInputType((prev) => !prev);
   };
 
   const handleSubmit = async (e) => {
@@ -28,7 +38,6 @@ const RegisterForm = () => {
     setSuccess("");
 
     const errors = {};
-
     try {
       if (!formData.user_name) errors.name = "Name is required.";
       if (!formData.email) errors.email = "Email is required.";
@@ -56,38 +65,33 @@ const RegisterForm = () => {
       }
 
       setSuccess("Validation successful — user data is ready!");
-      console.log("Validated data:", formData);
-       const res= await axios.post('http://localhost:5000/users/createUser',  
-         {user:formData}
-      )
-      console.log(res.message);
+      const res = await axios.post("http://localhost:5000/users/createUser", {
+        user: formData,
+      });
+
       setSuccess(res.data.message);
-      console.log(res);
-      console.log(res.data)
-      console.log("token",res.data.token)
       setFormData({
         user_name: "",
         email: "",
         password: "",
         contact: "",
         age: "",
-        user_role:"CUSTOMER"
+        user_role: "CUSTOMER",
       });
-      const token=res.data.token;
+
+      const token = res.data.token;
       setToken(token);
-      } catch (error) { 
-        
-        const errors = {};
-         if (error.response && error.response.data) {
-           const { field, message } = error.response.data;
-            errors[field] = message; 
-            console.log(field);
-            console.log(error.response.data);
-          } 
-          
-            else {
-               errors.general = "Something went wrong. Please try again."; } 
-               setFormErrors(errors);
+      navigate("/mm");
+    } catch (error) {
+      const errors = {};
+      if (error.response && error.response.data) {
+        const { field, message } = error.response.data;
+        errors[field] = message;
+        setSuccess(message);
+      } else {
+        errors.general = "Something went wrong. Please try again.";
+      }
+      setFormErrors(errors);
     } finally {
       setLoading(false);
     }
@@ -102,7 +106,7 @@ const RegisterForm = () => {
 
         {/* Name */}
         <div className={styles.inputGroup}>
-          <label>Name</label>
+          <label>Name :</label>
           <input
             type="text"
             name="user_name"
@@ -110,14 +114,12 @@ const RegisterForm = () => {
             onChange={handleChange}
             className={`${styles.input} ${formErrors.name ? styles.errorBorder : ""}`}
           />
-          <div className={styles.errorWrapper}>
-            {formErrors.name && <p className={styles.fieldError}>{formErrors.name}</p>}
-          </div>
+          {formErrors.name && <p className={styles.fieldError}>{formErrors.name}</p>}
         </div>
 
         {/* Email */}
         <div className={styles.inputGroup}>
-          <label>Email</label>
+          <label>Email :</label>
           <input
             type="email"
             name="email"
@@ -125,29 +127,32 @@ const RegisterForm = () => {
             onChange={handleChange}
             className={`${styles.input} ${formErrors.email ? styles.errorBorder : ""}`}
           />
-          <div className={styles.errorWrapper}>
-            {formErrors.email && <p className={styles.fieldError}>{formErrors.email}</p>}
-          </div>
+          {formErrors.email && <p className={styles.fieldError}>{formErrors.email}</p>}
         </div>
 
-        {/* Password */}
-        <div className={styles.inputGroup}>
-          <label>Password</label>
+        {/* Password with visibility toggle */}
+        <div className={styles.input2}>
+          <label>Password :</label>
           <input
-            type="password"
+            type={inputType ? "password" : "text"}
             name="password"
             value={formData.password}
             onChange={handleChange}
             className={`${styles.input} ${formErrors.password ? styles.errorBorder : ""}`}
           />
-          <div className={styles.errorWrapper}>
-            {formErrors.password && <p className={styles.fieldError}>{formErrors.password}</p>}
-          </div>
+          <button
+            className={styles.passwordVisibilityBtn}
+            onClick={handleVisibility}
+            type="button"
+          >
+            {inputType ? <FaEyeSlash /> : <FaEye />}
+          </button>
+          {formErrors.password && <p className={styles.fieldError}>{formErrors.password}</p>}
         </div>
 
         {/* Contact */}
         <div className={styles.inputGroup}>
-          <label>Contact</label>
+          <label>Contact :</label>
           <input
             type="text"
             name="contact"
@@ -155,14 +160,12 @@ const RegisterForm = () => {
             onChange={handleChange}
             className={`${styles.input} ${formErrors.contact ? styles.errorBorder : ""}`}
           />
-          <div className={styles.errorWrapper}>
-            {formErrors.contact && <p className={styles.fieldError}>{formErrors.contact}</p>}
-          </div>
+          {formErrors.contact && <p className={styles.fieldError}>{formErrors.contact}</p>}
         </div>
 
         {/* Age */}
         <div className={styles.inputGroup}>
-          <label>Age</label>
+          <label>Age :</label>
           <input
             type="number"
             name="age"
@@ -170,23 +173,19 @@ const RegisterForm = () => {
             onChange={handleChange}
             className={`${styles.input} ${formErrors.age ? styles.errorBorder : ""}`}
           />
-          <div className={styles.errorWrapper}>
-            {formErrors.age && <p className={styles.fieldError}>{formErrors.age}</p>}
-          </div>
+          {formErrors.age && <p className={styles.fieldError}>{formErrors.age}</p>}
         </div>
 
         <button type="submit" className={styles.button} disabled={loading}>
           {loading ? "Validating..." : "Register"}
         </button>
 
-        <div>
-          <p>
-            Already have an account?{" "}
-            <span>
-              <Link to="/LoginForm">Login</Link>
-            </span>
-          </p>
-        </div>
+        <p>
+          Already have an account?{" "}
+          <span>
+            <Link to="/LoginForm">Login</Link>
+          </span>
+        </p>
       </form>
     </div>
   );

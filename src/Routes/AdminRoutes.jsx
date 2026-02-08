@@ -11,32 +11,37 @@ import ManagementSideLoginForm from "../AdminComponents/ManagementSideLoginForm/
 import RecentlySoldOut from "../AdminComponents/RecentlySoldOut/RecentlySoldOut";
 import AddStaff from "../AdminComponents/AddStaff/AddStaff";
 import RemoveStaff from "../AdminComponents/AddPropertyForm/RemoveStaff/RemoveStaff";
+import ProtectedRoute from "../Components/ProtectedRoutes/ProtectedRoute";
 
-const AdminRoutes = () => {
-  return (
-    <Route path="/" element={<AdminLayout />}>
-      <Route
-        path="/admin"
-        element={
-          <h2 style={{ textAlign: "center", marginTop: "2rem" }}>
-            Welcome Admin Dashboard
-          </h2>
-        }
-      />
-      <Route path="/admin/addpropertyform" element={<AddPropertyForm />} />
-      <Route path="/admin/propertytable" element={<PropertyTable />} />
-      <Route path="/admin/recentlyadded" element={<RecentlyAdded />} />
-      <Route path="/admin/update" element={<UpdateForm />} />
-      <Route path="/admin/bookinglist" element={<BookingList />} />
-      <Route
-        path="/admin/managementloginform"
-        element={<ManagementSideLoginForm />}
-      />
-      <Route path="/admin/recentlysoldout" element={<RecentlySoldOut />} />
-      <Route path="/admin/addstaff" element={<AddStaff />} />
-      <Route path="/admin/removestaff" element={<RemoveStaff />} />
+const AdminRoutes = () => (
+  <>
+    <Route
+      path="/admin/managementloginform"
+      element={<ManagementSideLoginForm />}
+    />
+
+  
+    <Route path="/admin" element={<ProtectedRoute />}>
+      <Route element={<AdminLayout />}>
+        <Route
+          index
+          element={
+            <h2 style={{ textAlign: "center", marginTop: "2rem" }}>
+              Welcome Admin Dashboard
+            </h2>
+          }
+        />
+        <Route path="addpropertyform" element={<AddPropertyForm />} />
+        <Route path="propertytable" element={<PropertyTable />} />
+        <Route path="recentlyadded" element={<RecentlyAdded />} />
+        <Route path="update" element={<UpdateForm />} />
+        <Route path="bookinglist" element={<BookingList />} />
+        <Route path="recentlysoldout" element={<RecentlySoldOut />} />
+        <Route path="addstaff" element={<AddStaff />} />
+        <Route path="removestaff" element={<RemoveStaff />} />
+      </Route>
     </Route>
-  );
-};
+  </>
+);
 
 export default AdminRoutes;

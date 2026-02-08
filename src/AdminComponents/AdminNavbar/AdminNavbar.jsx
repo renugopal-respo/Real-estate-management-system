@@ -29,7 +29,7 @@ const AdminNavbar = () => {
     setActiveDropdown(null);
   };
 
-  // ✅ Detect click outside the navbar
+  
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (navRef.current && !navRef.current.contains(event.target)) {
@@ -46,24 +46,24 @@ const AdminNavbar = () => {
 
   return (
     <nav className={styles.navbar} ref={navRef}>
-      {/* Logo */}
+      
       <div className={styles.leftSection}>
         <h2 className={styles.logo}>Admin Panel</h2>
       </div>
 
-      {/* Hamburger (Mobile Only) */}
+      
       <div className={styles.hamburger} onClick={handleHamburgerToggle}>
         {menuOpen ? <FaTimes /> : <FaBars />}
       </div>
 
-      {/* Center Section - Nav Links */}
+      
       <div
         className={`${styles.centerSection} ${
           menuOpen ? styles.activeMenu : ""
         }`}
       >
         <ul className={styles.navLinks}>
-          {/* Dashboard */}
+          
           <li>
             <NavLink
               
@@ -75,7 +75,7 @@ const AdminNavbar = () => {
             </NavLink>
           </li>
 
-          {/* Properties Dropdown */}
+      
           <li className={styles.dropdown}>
             <button
               className={styles.navButton}

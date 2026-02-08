@@ -1,22 +1,28 @@
+/* Global reset for box sizing */
+* {
+  box-sizing: border-box;
+}
+
 .container {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 4rem 2rem;
-  background-color: #f9f9f9;
   font-family: "Poppins", sans-serif;
   min-height: 100vh;
 }
 
 .form {
-  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   padding: 3rem 2.5rem;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   width: 100%;
   max-width: 450px;
   text-align: center;
-  position:fixed;
+  position: fixed;
   bottom: 8rem;
 }
 
@@ -40,20 +46,29 @@
 .input2 {
   margin-bottom: 1.2rem;
   text-align: left;
+  max-width: 100%;
 }
-.input2{
+
+.input2 {
   position: relative;
 }
-.passwordVisibilityBtn{
+
+
+.passwordVisibilityBtn {
   position: absolute;
-  right: 0.1rem;
-  bottom: 0.3rem;
+  right: 0.6rem;
+  bottom: 2px;
+  transform: translateY(-50%);
   background-color: transparent;
-  transition: color 2s ;
- }
- .passwordVisibilityBtn:hover{
-    color: black;   
- }
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.passwordVisibilityBtn:hover {
+  color: black;
+}
+
 label {
   display: block;
   font-weight: 500;
@@ -96,7 +111,7 @@ label {
   background-color: #005fcc;
 }
 
-/* Text and Links */
+
 p {
   color: #555;
   margin-top: 1rem;
@@ -113,18 +128,20 @@ p span a:hover {
   text-decoration: underline;
 }
 
-/* Responsive layout */
+
 @media (max-width: 768px) {
-    .container{
-        display: flex;
-        flex-direction: column;
-        min-height: 100vh;
-        justify-content: center;
-        padding-bottom: 0px;
-    }
+  .container {
+    flex-direction: column;
+    min-height: 100vh;
+    justify-content: center;
+    padding-bottom: 0;
+  }
+
   .form {
+    width: 90%;
     padding: 2rem 1.5rem;
     position: relative;
+    bottom: auto;
   }
 
   .title {
@@ -132,16 +149,14 @@ p span a:hover {
   }
 
   .input {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
+    height: 2.6rem;
   }
- .input2{
-  position: relative;
- }
- .passwordVisibilityBtn{
-  position: absolute;
-  right: 0.5rem;
-  bottom: 0.6rem;
- }
+
+  .passwordVisibilityBtn {
+    right: 0.5rem;
+  }
+
   .button {
     font-size: 0.95rem;
   }

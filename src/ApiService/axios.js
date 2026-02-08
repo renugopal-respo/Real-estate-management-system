@@ -52,17 +52,17 @@ userapi.interceptors.request.use(async (config) => {
     } catch (error) {
       console.warn("Failed to refresh token:", error);
       localStorage.removeItem("token");
-      window.location.href = "/admin/managementloginform";
+      window.location.href = "/loginform";
     }
   }
 
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers.authorization = `Bearer ${token}`;
   }
   return config;
 });
 
-// ====== Response Interceptor (optional) ======
+
 userapi.interceptors.response.use(
   (response) => response,
   (error) => {

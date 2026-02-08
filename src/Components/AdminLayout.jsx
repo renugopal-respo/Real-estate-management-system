@@ -6,7 +6,7 @@ const AdminLayout = () => {
   return (
     <>
       <AdminNavbar />
-      <Outlet /> {/* Renders nested admin routes here */}
+      <Outlet /> 
     </>
   );
 };

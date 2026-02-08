@@ -13,22 +13,22 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
   const[resMessage,setResMessage]=useState(responsemessage);
   //const navigate = useNavigate();
 
-  // 🔹 Handle input change (FIXED)
+  
   const handleChange = (e) => {
     const { name, value } = e.target; //  correct fields
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
-  //password visibilty
+  
   const handleVisibility=(e)=>{
     e.preventDefault();
       setInputType(prev=>!prev);
   }
-  //  Handle form submit
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // clear previous error
+    setError(""); 
 
-    // Simple empty validation
+  
     if (!credentials.email || !credentials.password) {
       setError("Email and password are required");
       return;
@@ -40,6 +40,7 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
   useEffect(()=>{
     setResMessage(responsemessage)
   },[responsemessage]);
+  
   return (
     <div className={styles.container}>
       <form className={styles.form} onSubmit={handleSubmit}>
@@ -50,7 +51,7 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
          {(resMessage && <p className={styles.error}>{resMessage}</p>    
         )}
         <div className={styles.input1}>
-          <label>Email</label>
+          <label>Email :</label>
           <input
             type="email"
             name="email"
@@ -61,7 +62,7 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
         </div>
 
         <div className={styles.input2}>
-          <label>Password</label>
+          <label>Password :</label>
           <input
             type={inputType ? 'password': 'text'}
             name="password"
@@ -76,7 +77,7 @@ const AdminForm = ({formTitle,onSubmit,responsemessage}) => {
         </div>
 
         <button className={styles.button}>
-          Add
+          Submit
         </button>
 
         <div>

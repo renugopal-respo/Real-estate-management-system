@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styles from "./form.module.css";
 import axios from "axios";
 import { setToken, getToken } from "../../utils/Token";
-
+import {FaEye,FaEyeSlash} from 'react-icons/fa';
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
     email: "",
@@ -11,12 +11,17 @@ const LoginForm = () => {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-
+  const [inputType,setInputType]=useState(true);
   
   const handleChange = (e) => {
     const { name, value } = e.target; 
     setCredentials((prev) => ({ ...prev, [name]: value }));
   };
+
+   const handleVisibility=(e)=>{
+    e.preventDefault();
+      setInputType(prev=>!prev);
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,9 +40,9 @@ const LoginForm = () => {
       });
 
       setToken(res.data.token);
-      navigate("/"); // redirect after successful login
+      navigate("/"); 
     } catch (error) {
-      console.log("axios error", error);
+      console.log("axios error", error.response);
       if (error.response && error.response.data) {
         const { message } = error.response.data;
         setError(message);
@@ -55,7 +60,7 @@ const LoginForm = () => {
         {error && <p className={styles.error}>{error}</p>}
 
         <div className={styles.input1}>
-          <label>Email</label>
+          <label>Email :</label>
           <input
             type="email"
             name="email"
@@ -66,14 +71,18 @@ const LoginForm = () => {
         </div>
 
         <div className={styles.input2}>
-          <label>Password</label>
+          <label>Password :</label>
           <input
-            type="password"
+            type={inputType ? 'password': 'text'}
             name="password"
             value={credentials.password}
             onChange={handleChange}
             className={styles.input}
           />
+           <button className={styles.passwordVisibilityBtn }
+                    onClick={handleVisibility} >
+                   {inputType ?<FaEyeSlash/>:<FaEye/>}
+                    </button>
         </div>
 
         <button type="submit" className={styles.button}>

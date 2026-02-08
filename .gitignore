@@ -22,15 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-# Node.js dependencies
-node_modules/
-vite.config.js
 
+node_modules/
+
+vite.config.js
+ter
 # Logs
 logs/
 *.log
 
-# Environment variables
 .env
 
 # OS files
@@ -48,9 +48,9 @@ Contollers/
 MiddleWare/
 Routes/
 config/
+public/
 server.js
 # dependencies
-/node_modules
 
 # build output
 /build

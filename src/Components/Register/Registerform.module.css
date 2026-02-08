@@ -52,7 +52,25 @@
   text-align: left;
 }
 
-/* Labels */
+.input2 {
+  position: relative;
+}
+
+.passwordVisibilityBtn {
+  position: absolute;
+  right: 0.6rem;
+  top: 70%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.passwordVisibilityBtn:hover {
+  color: black;
+}
+
 label {
   display: block;
   font-weight: 500;
@@ -142,6 +160,7 @@ p span a:hover {
 @media (max-width: 768px) {
   .form {
     padding: 2rem 1.5rem;
+    background-color: transparent;
   }
 
   .title {
@@ -155,4 +174,14 @@ p span a:hover {
   .button {
     font-size: 0.95rem;
   }
+  .passwordVisibilityBtn {
+  position: absolute;
+  right: 0.6rem;
+  top:70%;
+  transform: translateY(-50%);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
 }

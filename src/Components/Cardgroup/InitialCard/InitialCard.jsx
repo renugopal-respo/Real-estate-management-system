@@ -2,58 +2,76 @@ import React, { useState } from "react";
 import styles from "./InitialCard.module.css";
 import { FaArrowRight, FaHeart, FaRegHeart, FaShareAlt } from "react-icons/fa";
 import { normalizeImageURL } from "../../../utils/normalizeImagePath";
-import { getDecodedToken } from "../../../utils/Token.js";
 import { propertyapi } from "../../../ApiService/axios.js";
 import { useNavigate } from "react-router-dom";
 import AlertCard from "../../AlertCard/AlertCard.jsx";
 import { useSelector, useDispatch } from "react-redux";
-import { addToFavorites, removeFromFavorites,removeAllFavorites } from "../../../Redux/Slicer.jsx"
+import { addToFavorites, removeFromFavorites } from "../../../Redux/Slicer.jsx";
 
-const InitialCard = ({related=[]}) => {
+const InitialCard = ({ related = [] }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+
   let properties = useSelector((state) => state.properties.properties);
   const favorites = useSelector((state) => state.properties.favorites);
-  if(related.length>0){
-    properties=related;
+
+  
+  if (related.length > 0) {
+    properties = related;
   }
+
   const [alert, setAlert] = useState(false);
 
+  
   const handleFavoriteClick = async (property) => {
-    const decoded = getDecodedToken || "";
-    const userId = decoded?.user_id;
-
-    if (!userId) {      
-      navigate("/loginform");
-      return;
-    }
-
     try {
-      if(favorites.includes(property.property_id)){
-        const res=await propertyapi.delete('/removeFromFavorites',{
-          data:{user_id:userId,
-            property_id:property.property_id
-          }
-        })
-        const{propertyId}=res.data.propertyId;
-        dispatch(removeFromFavorites(propertyId));
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setAlert(true);
+        return;
+      }
 
-      }
-      else{
-         const res = await propertyapi.get("/addToFavorites", {
-        params: { user_id: userId, property_id: property.property_id },
-      });
-      const{favorites}=res.data.favorites;
-       dispatch(removeAllFavorites())
-       dispatch(addToFavorites(favorites)) 
-      }
+    
+      const isFavorite = favorites.some(
+        (fav) => fav.property_id === property.property_id
+      );
+
+      if (isFavorite) {
+        // --- REMOVE FAVORITE ---
+        const res = await propertyapi.delete("/removeFromFavorites", {
+          data: { propertyId: property.property_id },
+          headers: { authorization: `Bearer ${token}` },
+        });
+
+        dispatch(removeFromFavorites(property.property_id));
+        console.log("Removed from favorites:", res.data);
+      } else {
         
-    }catch(error){
-       console.log("error:",error?.response);
+        const res = await propertyapi.get("/addToFavourites", {
+          params: { property_id: property.property_id },
+          headers: { authorization: `Bearer ${token}` },
+        });
+
+        const { propertyId } = res.data;
+
+        const addedProperty = properties.find(
+          (item) => item.property_id === propertyId
+        );
+
+        if (addedProperty) {
+          dispatch(addToFavorites(addedProperty));
+          console.log("Added to favorites:", addedProperty);
+        }
+      }
+    } catch (error) {
+      console.error("Error in handleFavoriteClick:", error.response);
     }
   };
 
+  // -----------------------------
+  // 📤 Handle Share
+  // -----------------------------
   const handleShareClick = (item) => {
     if (navigator.share) {
       navigator.share({
@@ -65,11 +83,17 @@ const InitialCard = ({related=[]}) => {
       alert("Sharing is not supported on this browser");
     }
   };
-  const handleDetailsClick=(property)=>{
-    navigate(`/detailview`,{state:
-     { property:property}
-    });
-  }
+
+  // -----------------------------
+  // 📄 Handle Details Click
+  // -----------------------------
+  const handleDetailsClick = (property) => {
+    navigate(`/detailview`, { state: { property } });
+  };
+
+  // -----------------------------
+  // 🎨 Render UI
+  // -----------------------------
   return (
     <div className={styles.container}>
       {properties.map((item, index) => {
@@ -92,8 +116,10 @@ const InitialCard = ({related=[]}) => {
             </div>
 
             <div className={styles.cardbuttoncontainer}>
-              <button className={styles.cardbutton} 
-              onClick={()=>handleDetailsClick(item)}>
+              <button
+                className={styles.cardbutton}
+                onClick={() => handleDetailsClick(item)}
+              >
                 See Details <FaArrowRight />
               </button>
 
@@ -107,7 +133,7 @@ const InitialCard = ({related=[]}) => {
 
                 <button
                   className={styles.fav}
-                  onClick={() => handleFavoriteClick(item,index)}
+                  onClick={() => handleFavoriteClick(item)}
                 >
                   {isFavorite ? (
                     <FaHeart className={styles.FaHeartFilled} />
