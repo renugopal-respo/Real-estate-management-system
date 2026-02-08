@@ -10,8 +10,8 @@ import BookingList from "../AdminComponents/BookingList/BookingList";
 import ManagementSideLoginForm from "../AdminComponents/ManagementSideLoginForm/ManagementSideLoginForm";
 import RecentlySoldOut from "../AdminComponents/RecentlySoldOut/RecentlySoldOut";
 import AddStaff from "../AdminComponents/AddStaff/AddStaff.jsx";
-import RemoveStaff from "../AdminComponents/AddPropertyForm/RemoveStaff/RemoveStaff";
-import ProtectedRoute from "../Components/ProtectedRoutes/ProtectedRoute";
+import RemoveStaff from "../AdminComponents/AddPropertyForm/RemoveStaff/RemoveStaff.jsx";
+import ProtectedRoute from "../Components/ProtectedRoutes/ProtectedRoute.jsx";
 
 const AdminRoutes = () => (
   <>
