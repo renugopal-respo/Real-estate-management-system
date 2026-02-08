@@ -10,7 +10,8 @@ import Contact from "../Pages/Contact/Contact";
 import ContactForm from "../Components/ContactFormForAddProperty/ContactForm";
 import UserProfile from "../Pages/Profile/UserProfile";
 import DetailViewCard from "../Components/Cardgroup/DetailViewCard/DetailViewCard";
-
+import LoginForm from "../Components/Form/LoginForm";
+import RegisterForm from "../Components/Register/RegisterForm";
 const UserRoutes = () => {
   return (
     <Route element={<UserLayout />}>
@@ -41,6 +42,13 @@ const UserRoutes = () => {
       <Route 
       path="/contactformforaddproperty" 
       element={<ContactForm/>}
+      />
+      <Route
+      path="/loginform"
+      element={<LoginForm/>}
+      />
+      <Route path="/registerform"
+      element={<RegisterForm/>}
       />
     </Route>
   );

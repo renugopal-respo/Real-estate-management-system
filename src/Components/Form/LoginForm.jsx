@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./form.module.css";
 import axios from "axios";
-import { setToken, getToken } from "../../utils/Token";
+import { setToken, getToken, getDecodedToken } from "../../utils/Token.js";
 import {FaEye,FaEyeSlash} from 'react-icons/fa';
+
 const LoginForm = () => {
   const [credentials, setCredentials] = useState({
     email: "",
@@ -40,7 +41,15 @@ const LoginForm = () => {
       });
 
       setToken(res.data.token);
-      navigate("/"); 
+      const decodedToken=getDecodedToken();
+      const {user_role}=decodedToken;
+
+      if(user_role==='admin'){
+         navigate('/admin');
+      }
+      else{
+        navigate('/')
+      }
     } catch (error) {
       console.log("axios error", error.response);
       if (error.response && error.response.data) {
@@ -93,7 +102,7 @@ const LoginForm = () => {
           <p>
             Don’t have an account?{" "}
             <span>
-              <Link to="/RegisterForm">Register</Link>
+              <Link to="/registerform">Register</Link>
             </span>
           </p>
         </div>

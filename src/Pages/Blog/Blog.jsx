@@ -7,14 +7,15 @@ import { addProperties, addToFavorites, deleteProperties,removeAllFavorites } fr
 import InitialCard from "../../Components/Cardgroup/InitialCard/InitialCard";
 import LoadingCard from '../../Components/LoadingCard/LoadingCard'
 import AlertCard from '../../Components/AlertCard/AlertCard'
+import { Navigate } from "react-router-dom";
 const Blog = () => {
   const [filtered, setFiltered] = useState({}); 
   const [page, setPage] = useState(1);
-  const [limit] = useState(6); // per-page count
+  const [limit] = useState(6);
   const [totalPages, setTotalPages] = useState(3); 
   const[lodaing,setLoading]=useState(false);
   const[error,setError]=useState(false);
-  let errorMessage;
+  const [errorMessage,setErrorMessage]=useState("");
   let status='';
   let type='';
   const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Blog = () => {
       },
        headers:
         { authorization: `Bearer ${localStorage.getItem("token")}` },
-      
+          withCredentials:true
     });
    console.log(res?.data?.properties);
    const flatProperties = res?.data?.properties.map(item=>item);
@@ -63,7 +64,16 @@ const Blog = () => {
     } catch (error) {
        console.log(error);
        setError(true);
-       errorMessage=error?.response?.data?.message;
+       
+       const{message,status}=error?.response?.data;
+       if(status===401){
+         setErrorMessage(message);
+
+        // setTimeout(()=>{
+          // return <Navigate to='/loginform'/>
+         //},5000);
+       }
+       console.log(error.response);
     }
     finally{
       setLoading(false);
@@ -71,7 +81,7 @@ const Blog = () => {
   }
   const handleFilterChange = (filterData) => {
     setFiltered(filterData);
-    setPage(1);
+    fetchProperties();
     console.log("Received filter data:", filterData);
     
   };
@@ -98,7 +108,7 @@ const Blog = () => {
       
       <main className={styles.main}>
         <InitialCard />
-        <InitialCard />
+        
         
       </main>
 

@@ -39,7 +39,7 @@ export const propertyapi = axios.create({
 });
 userapi.interceptors.request.use(async (config) => {
   let token = localStorage.getItem("token");
-
+  console.log("call for refersh token");
   if (isTokenExpired(token)) {
     try {
       const res = await axios.post(

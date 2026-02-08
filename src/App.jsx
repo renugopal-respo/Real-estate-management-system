@@ -6,7 +6,7 @@ import AdminRoutes from "./Routes/AdminRoutes";
 import ProtectedRoute from "./Components/ProtectedRoutes/ProtectedRoute";
 import RegisterForm from "./Components/Register/RegisterForm";
 import LoginForm from "./Components/Form/LoginForm";
-
+import "./ApiService/axios.js";
 function App() {
   return (
     <BrowserRouter>
@@ -16,8 +16,8 @@ function App() {
 
         {  AdminRoutes()}
 
-        <Route path="/registerform" element={<RegisterForm />} />
-        <Route path="/loginform" element={<LoginForm />} />
+       {/* <Route path="/registerform" element={<RegisterForm />} />
+        <Route path="/loginform" element={<LoginForm />} />*/}
       </Routes>
     </BrowserRouter>
   );
