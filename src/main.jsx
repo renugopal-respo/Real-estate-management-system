@@ -9,9 +9,9 @@ import ManagementSideLoginForm from './AdminComponents/ManagementSideLoginForm/M
 createRoot(document.getElementById('root')).render(
   <StrictMode>
 <Provider store={Store}>
-<PropertyContextProvider>
+
    <App/>
-</PropertyContextProvider>
+
 
 </Provider>  
   </StrictMode>,

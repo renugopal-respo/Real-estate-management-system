@@ -24,6 +24,7 @@ const propertySlice = createSlice({
       const property=state.properties.filter(item=>item.id===action.payload);
       return property;
     },
+
    addToFavorites: (state, action) => {
   console.log("new Favorite added:", action.payload);
   
@@ -36,12 +37,12 @@ const propertySlice = createSlice({
   }
 },
 
-
     removeFromFavorites: (state, action) => {
       state.favorites = state.favorites.filter(
         (item) => item.property_id !== action.payload
       );
     },
+    
     removeAllFavorites:(state)=>{
       console.log("Favrite list is set to empty");
       state.favorites=[];

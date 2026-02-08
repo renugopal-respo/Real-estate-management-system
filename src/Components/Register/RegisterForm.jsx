@@ -4,7 +4,7 @@ import styles from "./Registerform.module.css";
 import axios from "axios";
 import { setToken } from "../../utils/Token.js";
 import { useNavigate } from "react-router-dom";
-import { FaEyeSlash, FaEye } from "react-icons/fa";   // 👈 import icons
+import { FaEyeSlash, FaEye } from "react-icons/fa";   
 
 const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -19,7 +19,7 @@ const RegisterForm = () => {
   const [formErrors, setFormErrors] = useState({});
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-  const [inputType, setInputType] = useState(true);   // 👈 toggle state
+  const [inputType, setInputType] = useState(true);  
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -81,7 +81,7 @@ const RegisterForm = () => {
 
       const token = res.data.token;
       setToken(token);
-      navigate("/mm");
+      navigate("/");
     } catch (error) {
       const errors = {};
       if (error.response && error.response.data) {
@@ -117,7 +117,7 @@ const RegisterForm = () => {
           {formErrors.name && <p className={styles.fieldError}>{formErrors.name}</p>}
         </div>
 
-        {/* Email */}
+        
         <div className={styles.inputGroup}>
           <label>Email :</label>
           <input
@@ -130,7 +130,7 @@ const RegisterForm = () => {
           {formErrors.email && <p className={styles.fieldError}>{formErrors.email}</p>}
         </div>
 
-        {/* Password with visibility toggle */}
+        
         <div className={styles.input2}>
           <label>Password :</label>
           <input
@@ -150,7 +150,7 @@ const RegisterForm = () => {
           {formErrors.password && <p className={styles.fieldError}>{formErrors.password}</p>}
         </div>
 
-        {/* Contact */}
+        
         <div className={styles.inputGroup}>
           <label>Contact :</label>
           <input
@@ -163,7 +163,7 @@ const RegisterForm = () => {
           {formErrors.contact && <p className={styles.fieldError}>{formErrors.contact}</p>}
         </div>
 
-        {/* Age */}
+        
         <div className={styles.inputGroup}>
           <label>Age :</label>
           <input
