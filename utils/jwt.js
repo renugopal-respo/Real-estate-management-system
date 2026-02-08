@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import { getUserByEmail } from '../Models/Usermodel.js';
-export const JWT_SECRET = "mySuperSecretKey123";
+import { JWT_SECRET } from '../config/JwtKeys.js';
  export const generateToken =(user)=> {
     
    const token= jwt.sign(
