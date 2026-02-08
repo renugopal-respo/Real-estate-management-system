@@ -17,7 +17,8 @@ build/
 
 # Uploaded files (user images, docs, etc.)
 uploads/
-
+data/
+config/
 # Database dumps
 *.sql
 *.sqlite

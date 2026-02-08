@@ -377,7 +377,7 @@ export const updatePropertyTransaction = async (data) => {
 
     return true;
   } catch (error) {
-    console.error("❌ Transaction failed:", error);
+    console.error("Transaction failed:", error);
     await connection.rollback();
     throw error;
   } finally {
@@ -521,8 +521,8 @@ export const getFavourites = async (userId) => {
     JOIN property_type pt ON p.type_id = pt.type_id
     JOIN property_status ps ON p.status_id = ps.status_id
     JOIN locations l ON p.location_id = l.location_id
-    LEFT JOIN property_images pi ON p.property_id = pi.property_id AND pi.is_primary = true
-    WHERE f.user_id = ?
+    LEFT JOIN property_images pi ON p.property_id = pi.property_id 
+    WHERE f.user_id = ? AND  (pi.is_primary =0 || pi.is_primary=true)
   `;
   
   try {

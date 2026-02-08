@@ -94,12 +94,15 @@ export const getPropertyForCard = async (req, res) => {
   }
 };
 export const addToFavourites=async(req,res)=>{
-     const{user_id,property_id}=req.query;
-     const userId=  Number(user_id) || '';
+     const{property_id}=req.query;
+     const{id}=req?.user;
+     let userId=id; 
      const propertId=Number(property_id)|| '';
+    console.log(req.user);
      console.log("Requset reached:",req.query);
      console.log("userID:",userId);
      console.log("Property_id:",propertId)
+
      try {
         if(userId==='' || propertId===''){
         return res.status(400)
@@ -107,10 +110,10 @@ export const addToFavourites=async(req,res)=>{
      }
         const result=await addFavorites([userId,propertId]);
         
-            const favorites=await getFavourites(userId);
+           // const favorites=await getFavourites(userId);
             res.status(200).
-            json({favorites:favorites,
-                useerId:userId,
+            json({propertyId:propertId,
+                userId:userId,
                 message:"Added to Favorites",
             });
         
@@ -131,7 +134,8 @@ export const addToFavourites=async(req,res)=>{
      }
 }
 export const getUsersFavourites=async(req,res)=>{
-    const {userId}=req.query;
+    const{id}=req?.user;
+    let userId=id;
     const user_id=Number(userId)||'';
     try {
     if(userId===''){
@@ -145,7 +149,7 @@ export const getUsersFavourites=async(req,res)=>{
     }
     res.status(200)
     .json({favorites:rows,
-           useerId:userId,                
+           userId:userId,                
            message:"Added to Favorites",
             });
     } catch (error) {
@@ -156,11 +160,13 @@ export const getUsersFavourites=async(req,res)=>{
    
 }
 export const removeFromFavorites=async(req,res)=>{
-    const{userId,propertyId}=req.body;
-    console.log("Request reahed:",userId,"  ",propertyId);
-    const user_id=Number(userId)||'';
+    const{propertyId}=req.body;
+    const{id}=req?.user;
     const property_id=Number(propertyId)||'';
-    if(user_id===''){
+    console.log("Request reahed:",id,"  ",propertyId);
+   
+   
+    if(id===''){
       return res.status(400).
       json({message:"Please Login..."});
     }
@@ -169,7 +175,7 @@ export const removeFromFavorites=async(req,res)=>{
       json({message:"Invalid Property Id "});
     }
     try {
-        const data=[user_id,property_id];
+        const data=[id,property_id];
         const result=await removeFavorites(data);
         if(result>0){
             console.log("Property removed Successfully");

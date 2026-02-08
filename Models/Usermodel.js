@@ -24,7 +24,7 @@ export const addUser = async (data, hashedPassword) => {
 //  Get a user
 export const getUserByEmail = async (email) => {
   const sql = `
-    SELECT role,email,user_id,password_hash FROM users 
+    SELECT name,role,email,user_id,password_hash FROM users 
     WHERE LOWER(email) =?
   `;
   try {
@@ -76,6 +76,15 @@ export const removeStaffs=async(whereClause,value)=>{
     return result.affectedRows;
   } catch (error) {
     console.log("Error in Remove Staff");
+    throw error;
+  }
+}
+export const deleteUser=async(email)=>{
+  try {
+    const [result]=await db.query("DELETE FROM users WHERE email=?",email);
+    console.log(result);
+  } catch (error) {
+    console.log("Error in delete User");
     throw error;
   }
 }

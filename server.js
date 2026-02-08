@@ -25,14 +25,10 @@ app.use('/users',verifyToken,userRoutes);
 //Admin Routes
 app.use('/admin',verifyToken,Authorization,adminRoutes);
 //Property Routes
-app.use('/properties',propertieRoutes)
+app.use('/properties',verifyToken,propertieRoutes)
 //file Acces
 app.use('/uploads', express.static('uploads'));
-
 // A simple route to test
-app.get('/', (req, res) => {
-  res.send('Password hash logged in console ✅');
-});
 
 app.listen(5000, () => {
   console.log('Server is running on port 5000');
