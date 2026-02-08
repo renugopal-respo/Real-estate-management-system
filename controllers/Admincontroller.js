@@ -95,7 +95,7 @@ export const recents = async (req, res) => {
 
    const offset = (parseInt(page) - 1) * limitNum;
 
-  // calculate fallback date (default: one month ago)
+  
   let newdate = date;
   let newPinCode;
   let newTotal;
