@@ -3,6 +3,7 @@ import { hashPassword, isPasswordValid } from "../Middleware/PasswordHash.js";
 import { generateToken,generateRefreshToken } from "../utils/jwt.js";
 import { getDuplicateColumn } from '../utils/getDuplicateColumn.js';
 import {getFavourites} from '../Models/PropertyModel.js'
+import { JWT_SECRET } from '../config/JwtKeys.js';
 export const createUser = async (req, res) => {
   const { password, email, user_role } = req.body.user;
   console.log(req.body.user);
@@ -22,19 +23,20 @@ export const createUser = async (req, res) => {
       };
 
       const accessToken = generateToken(user);
-      const refreshToken=generateRefreshToken(user);    
-      console.log("refresh Token:",refreshToken);
+     
 
-      res.cookie("refreshToken", refreshToken, {
+    /*   const refreshToken=generateRefreshToken(user);    
+         console.log("refresh Token:",refreshToken);
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true, 
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
-    });
+    }); */
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true, 
       sameSite: "Strict",
-      maxAge:  24 * 60 * 60 * 1000, 
+      maxAge: 7* 24 * 60 * 60 * 1000, 
     });
       return res.json({ token:accessToken, message: "User created successfully " });
     } else {
@@ -90,18 +92,22 @@ export const loginUser = async (req, res) => {
     };
 
     const token = generateToken(user);
-    return res.json({ token, message: "Login successful " });
-    const refreshToken=generateRefreshToken(user);
       console.log(token);
-      console.log("refresh Token:",refreshToken);
-
-      res.cookie("refreshToken", refreshToken, {
+      res.cookie("accessToken", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production", 
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
+     /*
+      const refreshToken=generateRefreshToken(user);
+      console.log("refresh Token:",refreshToken);
+      res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
+   */
     return res.json({ token, message: "Login successful " });
 
   } catch (error) {
@@ -117,11 +123,11 @@ export const refreshToken = async (req, res) => {
     return res.status(401).json({ message: "No refresh token" });
 
   try {
-    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const decoded = jwt.verify(refreshToken,JWT_SECRET );
     const newAccessToken = jwt.sign(
       { user_id: decoded.user_id, email: decoded.email, role: decoded.role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      JWT_SECRET,
+      { expiresIn: "10h" }
     );
     res.json({ accessToken: newAccessToken });
   } catch (err) {

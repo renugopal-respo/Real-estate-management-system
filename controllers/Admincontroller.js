@@ -88,14 +88,11 @@ export const addProperties = async (req, res) => {
 
 export const recents = async (req, res) => {
   console.log("Request received:", req.query);
-  let total;
-  const { page, limit = 10, date, location = "", pincode = "",totalPages } = req.query;
   
+  const { page, limit = 10, date, location = "", pincode = "",totalPages ,status,type} = req.query;
    const limitNum = parseInt(limit, 10) || 10;
-
    const offset = (parseInt(page) - 1) * limitNum;
-
-  
+  let total;
   let newdate = date;
   let newPinCode;
   let newTotal;
@@ -113,11 +110,11 @@ export const recents = async (req, res) => {
   else{
     newPinCode=pincode;
   }
-  
+ 
   console.log("Computed date:",newdate);
   
   try {
-    const rows = await recentlyAdded(limitNum, offset, newdate, location, newPinCode);
+    const rows = await recentlyAdded(limitNum, offset, newdate, location, newPinCode,status,type);
     console.log(rows);
     if(parseInt(totalPages)===0||totalPages===''){
       const rows=await getTotalPage();
@@ -166,7 +163,7 @@ export const deleteProperties = async (req, res) => {
     if(response>0){
            return res
       .status(200)
-      .json({ message: "Property Deleted Successfully",propertyId:property_id});
+      .json({ message: "Property Deleted Successfully",propertyId:newProperty_Id});
     }     
   } catch (error) {
     console.log(error);    
@@ -232,6 +229,7 @@ export const updateProperty = async (req, res) => {
     const propertyId = parseInt(body.propertyId);
     const files = req.files || [];
     const imagePaths = files.map((f) => f.path);
+    
     let filterAmenties=[];
     let propertyWithImages=[];
     
@@ -249,7 +247,7 @@ export const updateProperty = async (req, res) => {
     const locationId = loc[0]?.location_id || 0;
     const statusId = st[0]?.status_id || 0;
 
-    // ✅ Build set clause dynamically
+    // set clause
     const setClause = [];
     const filteredData = [];
     let userDetails=[];
@@ -299,10 +297,15 @@ export const updateProperty = async (req, res) => {
            }
     })
     });
-
-    imagePaths.forEach(items=>{
+   /* if(imagePaths.length===1){
+       propertyWithImages.push(propertyId,imagePaths[0]);
+    }*/
+    
+       imagePaths.forEach(items=>{
        propertyWithImages.push([propertyId,items]);
-    })   
+    });   
+    
+   
     console.log("Immages:",propertyWithImages);
     console.log("Filetr:",filterAmenties);
     const response=await updatePropertyTransaction({setClause,
@@ -319,6 +322,8 @@ export const updateProperty = async (req, res) => {
     }
   }catch(error){
       console.log(error);
+      res.status(400).
+      json({message:"Issue on PropertyUpdate... Please try agin Later"})
   }
 }
 export const bookingList=async(req,res)=>{
@@ -435,4 +440,7 @@ export const recentlySoldout=async(req,res)=>{
   console.log(error);
   res.status(400).json("message:Probelm in sever...Try again later ")
  }
+}
+export const handleBooking=async(req,res)=>{
+
 }

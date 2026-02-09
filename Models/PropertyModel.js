@@ -183,7 +183,7 @@ export const getAllAmenties=async()=>{
 }
 
 
-export const recentlyAdded = async (limit, offset, date, location, pincode,totalPages) => {
+export const recentlyAdded = async (limit, offset, date, location, pincode,status,type) => {
   const sql = `
     SELECT 
       u.name,
@@ -202,12 +202,14 @@ export const recentlyAdded = async (limit, offset, date, location, pincode,total
     JOIN property_status ps ON p.status_id = ps.status_id
     JOIN property_type pt ON p.type_id = pt.type_id
     WHERE DATE(p.created_at)BETWEEN ? AND CURDATE()
-    AND (LOWER(l.city)=? OR ?=' ') 
-    AND (l.pincode=LOWER(?) OR LOWER(?)=' ')
+    AND (LOWER(l.city)=LOWER(?) OR ?='') 
+    AND (l.pincode=? OR ?='')
+    AND (LOWER(ps.status_name)=LOWER(?) OR ?='')
+    AND (pt.type_name=LOWER(?) OR ?='')
     ORDER BY p.created_at DESC
     LIMIT ? OFFSET ?
   `;
-  const [rows] = await db.query(sql, [date,location.toLowerCase(),location.toLowerCase(), pincode, pincode,limit, offset]);
+  const [rows] = await db.query(sql, [date,location.toLowerCase(),location.toLowerCase(), pincode, pincode,status,status,type,type,limit, offset]);
   
   return rows;
 };
