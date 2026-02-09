@@ -2245,6 +2245,86 @@
           "petFriendly"
         ]
       }
+    },
+    {
+      "propertyId": 1015,
+      "data": {
+        "property_id": 1015,
+        "title": null,
+        "price": "222222.00",
+        "description": "Beatutiful Palace",
+        "addressline": "Chennai",
+        "bedromms": 4,
+        "bathromms": 0,
+        "area_sqft": 197,
+        "land_area": null,
+        "land_unit": "SQFT",
+        "road_acces": 1,
+        "facing": "NORTH",
+        "created_at": "2026-02-09T09:01:56.000Z",
+        "owner_name": "Renu Gopal",
+        "owner_phone": "9090909010",
+        "owner_email": "owner1@gmail.com",
+        "city": "Madurai",
+        "state": "TAMILNADU",
+        "country": "INDIA",
+        "status_name": "Rent",
+        "type_name": "Apartment",
+        "images": [
+          {
+            "image_url": "uploads\\1770627716512.jpg",
+            "is_primary": 0
+          }
+        ],
+        "amenities": [
+          "Gym",
+          "wifi",
+          "furnished",
+          "petFriendly",
+          "2BHK",
+          "3BHK"
+        ]
+      }
+    },
+    {
+      "propertyId": 1015,
+      "data": {
+        "property_id": 1015,
+        "title": null,
+        "price": "222222.00",
+        "description": "Beatutiful Palace",
+        "addressline": "Chennai",
+        "bedromms": 4,
+        "bathromms": 0,
+        "area_sqft": 197,
+        "land_area": null,
+        "land_unit": "SQFT",
+        "road_acces": 1,
+        "facing": "NORTH",
+        "created_at": "2026-02-09T09:01:56.000Z",
+        "owner_name": "Renu Gopal",
+        "owner_phone": "9090909010",
+        "owner_email": "owner1@gmail.com",
+        "city": "Madurai",
+        "state": "TAMILNADU",
+        "country": "INDIA",
+        "status_name": "Rent",
+        "type_name": "Apartment",
+        "images": [
+          {
+            "image_url": "uploads\\1770627716512.jpg",
+            "is_primary": 0
+          }
+        ],
+        "amenities": [
+          "Gym",
+          "wifi",
+          "furnished",
+          "petFriendly",
+          "2BHK",
+          "3BHK"
+        ]
+      }
     }
   ]
 }
