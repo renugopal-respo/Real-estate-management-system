@@ -23,14 +23,15 @@ export const createUser = async (req, res) => {
       };
 
       const accessToken = generateToken(user);
-      const refreshToken=generateRefreshToken(user);    
-      console.log("refresh Token:",refreshToken);
+     
 
-      res.cookie("refreshToken", refreshToken, {
+    /*   const refreshToken=generateRefreshToken(user);    
+         console.log("refresh Token:",refreshToken);
+    res.cookie("refreshToken", refreshToken, {
       httpOnly: true, 
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
-    });
+    }); */
 
     res.cookie("accessToken", accessToken, {
       httpOnly: true, 
@@ -91,16 +92,22 @@ export const loginUser = async (req, res) => {
     };
 
     const token = generateToken(user);
-    const refreshToken=generateRefreshToken(user);
       console.log(token);
-      console.log("refresh Token:",refreshToken);
-
-      res.cookie("accessToken", refreshToken, {
+      res.cookie("accessToken", token, {
       httpOnly: true,
       sameSite: "Strict",
       maxAge: 7 * 24 * 60 * 60 * 1000, 
     });
 
+     /*
+      const refreshToken=generateRefreshToken(user);
+      console.log("refresh Token:",refreshToken);
+      res.cookie("refreshToken", refreshToken, {
+      httpOnly: true,
+      sameSite: "Strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, 
+    });
+   */
     return res.json({ token, message: "Login successful " });
 
   } catch (error) {

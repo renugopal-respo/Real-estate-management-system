@@ -4,16 +4,17 @@ import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../config/JwtKeys.js";
 
 export const verifyToken = async(req, res, next) => {  
-
+ const loginRoutes=['loginuser','createuser'];
  console.log("Request reached verification stage");
   //const authHeader = req?.headers?.authorization;
   const url=req.url.replace('/','').toLowerCase();
   const accessToken=req?.cookies?.accessToken;
+  
   console.log("Url:",url);
   console.log("full url:",req.url);
   console.log("cookies:",accessToken);
 
-  if(['loginuser','createuser'].includes(url)){
+  if(loginRoutes.includes(url)){
     console.log("login routes skipped");
     return next();
   }
@@ -40,7 +41,7 @@ export const verifyToken = async(req, res, next) => {
 
     else if (error.name === "JsonWebTokenError") {
       console.log("Invalid token")
-      return res.status(403).json({ message: "Invalid token" });
+      return res.status(401).json({ message: "Invalid token" });
     } 
 
     else {

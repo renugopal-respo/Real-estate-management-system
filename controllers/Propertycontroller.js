@@ -26,7 +26,7 @@ export const getPropertyForCard = async (req, res) => {
     const location = filters.city || "";
     let status=filters.status|| "";
     const numericPrice = price ? Number(price) : "";
-    const userId=filters?.user_id ? Number(filters.user_id) : "";
+    const userId=req?.user?.id || "";
 
     if(type==='ALL'){
         type='';
@@ -59,8 +59,14 @@ export const getPropertyForCard = async (req, res) => {
                 getPropertiesForCard(data),
                 getFavourites(userId)
             ]);
+            if(properties.length===0){
+               return res.status(200).json({
+                properties:properties,
+                message:"No Propertyy Found"
+               })
+            }
             if(favorites.length>0){
-                let favs={};
+                let favs=[];
                 properties.forEach(element=>{
                     const values=Object.values(element);
                     favorites.forEach(fav=>{
@@ -71,7 +77,7 @@ export const getPropertyForCard = async (req, res) => {
                 });
                 return res.status(200).json({
                 message: "Property Fethced Succesfully",
-                properties:rows,
+                properties:properties,
                 favorites,favs,
                 pagination:{page:page}
     });
@@ -79,7 +85,7 @@ export const getPropertyForCard = async (req, res) => {
             else{
                 return res.status(200).json({
                 message: "Property Fethced Succesfully",
-                properties:rows,
+                properties:properties,
                 pagination:{page:page}
             })
         }
