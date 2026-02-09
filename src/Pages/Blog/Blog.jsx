@@ -8,6 +8,7 @@ import InitialCard from "../../Components/Cardgroup/InitialCard/InitialCard";
 import LoadingCard from '../../Components/LoadingCard/LoadingCard'
 import AlertCard from '../../Components/AlertCard/AlertCard'
 import { Navigate } from "react-router-dom";
+
 const Blog = () => {
   const [filtered, setFiltered] = useState({}); 
   const [page, setPage] = useState(1);
@@ -16,15 +17,17 @@ const Blog = () => {
   const[lodaing,setLoading]=useState(false);
   const[error,setError]=useState(false);
   const [errorMessage,setErrorMessage]=useState("");
-  let status='';
-  let type='';
+  const [filterPage,setFilterPage]=useState(false);
+ 
   const dispatch = useDispatch();
 
   const properties = useSelector((state) => state.properties.properties);
   console.log("From redux:",properties);
+
   const fetchProperties=async()=>{
     setLoading(true);
-    
+     let status='';
+     let type='';
     try {
       if(filtered.propertyType==='ALL'){
         type='';
@@ -63,33 +66,35 @@ const Blog = () => {
    dispatch(addToFavorites(favorites));
     } catch (error) {
        console.log(error);
-       setError(true);
-       
+       setError(true);    
        const{message,status}=error?.response?.data;
        if(status===401){
          setErrorMessage(message);
 
-        // setTimeout(()=>{
-          // return <Navigate to='/loginform'/>
-         //},5000);
+         setTimeout(()=>{
+           return <Navigate to='/loginform'/>
+         },50000);
        }
+       setErrorMessage(message);
        console.log(error.response);
     }
     finally{
       setLoading(false);
     }
   }
+
   const handleFilterChange = (filterData) => {
     setFiltered(filterData);
-    fetchProperties();
+    dispatch(deleteProperties());
+    setPage(1);
+    setFilterPage((prev)=>!prev);
     console.log("Received filter data:", filterData);
     
   };
-
-  
+ 
   useEffect(() => {
      fetchProperties();
-  }, [page]);
+  }, [page,filterPage]);
 
   
   const handleShowMore = () => {
@@ -107,9 +112,7 @@ const Blog = () => {
 
       
       <main className={styles.main}>
-        <InitialCard />
-        
-        
+        <InitialCard />            
       </main>
 
       

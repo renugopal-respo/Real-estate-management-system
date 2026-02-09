@@ -1,7 +1,7 @@
 import React, { useState,useRef } from "react";
 import axios from "axios";
 import styles from "../AddPropertyForm/AddPropertyForm.module.css";
-
+import Select from 'react-select'
 const AddPropertyForm = () => {
   const fileInputRef = useRef(null);
   const [emptyState,setEmptyState]=useState({
@@ -195,13 +195,31 @@ const AddPropertyForm = () => {
 
             <div className={styles.field}>
               <label>Location</label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleChange}
-                required
-              />
+             
+               <Select
+    className={styles.input}
+    options={[
+      { value: "Chennai", label: "Chennai" },
+      { value: "Coimbatore", label: "Coimbatore" },
+      { value: "Madurai", label: "Madurai" },
+      { value: "Trichy", label: "Trichy" },
+      { value: "Salem", label: "Salem" },
+      { value: "Erode", label: "Erode" },
+      { value: "Tirunelveli", label: "Tirunelveli" },
+      { value: "Vellore", label: "Vellore" },
+      { value: "Nagercoil", label: "Nagercoil" },
+    ]}
+    value={formData.location ? { value: formData.location, label: formData.location } : null}
+    onChange={(selectedOption) =>
+      setFormData((prev) => ({
+        ...prev,
+        location: selectedOption ? selectedOption.value : "",
+      }))
+    }
+    placeholder="Select Location..."
+    isClearable
+  />
+
             </div>
 
             <div className={styles.field}>

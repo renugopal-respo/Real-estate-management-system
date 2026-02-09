@@ -147,7 +147,7 @@ const AdminNavbar = () => {
             )}
           </li>
 
-          {/* Staff Dropdown */}
+          
           <li className={styles.dropdown}>
             <button
               className={styles.navButton}
@@ -180,21 +180,29 @@ const AdminNavbar = () => {
             )}
           </li>
 
-          {/* Users */}
+  
           <li>
             <button className={styles.navButton} onClick={handleNavLinkClick}>
               Users
             </button>
           </li>
 
-          {/* Search (Mobile Only) */}
+        
           <li className={styles.mobileSearch}>
             <button className={styles.searchBtn} onClick={handleSearchClick}>
               <FaSearch /> Search
             </button>
           </li>
 
-          {/* Logout (Mobile Only) */}
+          <li className={styles.mobileLogin}>
+  <button
+    onClick={() => navigate('/admin/managementloginform')}
+    className={styles.logintBtn}
+  >
+    Login
+  </button>
+</li>
+
           <li className={styles.mobileLogout}>
             <button className={styles.logoutBtn} onClick={handleNavLinkClick}>
               Logout
@@ -203,11 +211,13 @@ const AdminNavbar = () => {
         </ul>
       </div>
 
-      {/* Right Section (Desktop) */}
+      
       <div className={styles.rightSection}>
         <button className={styles.searchBtn} onClick={handleSearchClick}>
           <FaSearch /> Search
         </button>
+        <button onClick={()=>navigate('/managementloginform')}
+          className={styles.logintBtn}> Login</button>
         <button className={styles.logoutBtn}>Logout</button>
       </div>
     </nav>

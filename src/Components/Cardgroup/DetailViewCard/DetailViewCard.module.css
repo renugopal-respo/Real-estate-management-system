@@ -83,14 +83,14 @@
  
 }
 
-/* Text info */
+
 .watersource,
 .parking,
 .sqft {
   font-size: 0.95rem;
   color: #555;
 }
-/* Related Properties Section */
+
 .relatedProperties {
   padding: 2rem 1rem;
   background:#f0f2f5 ;
@@ -169,16 +169,43 @@
   bottom: -80px; /* slide slightly down when hiding */
   pointer-events: none;
 }
-/* Mobile Responsive */
+/* Container for title + favorite button */
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* title on left, heart on right */
+  margin-bottom: 8px;
+}
+
+/* Favorite button (heart) */
+.favoriteButton {
+  background: transparent;   
+  border: none;              
+  cursor: pointer;          
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: transform 0.2s ease;
+}
+
+.favoriteButton:hover {
+  transform: scale(1.2);    
+}
+
+.favoriteButton svg {
+  pointer-events: none;      
+}
+
 @media (max-width: 768px) {
   .imgflex {
-    height: 15rem; /* smaller height for mobile */
+    height: 15rem; 
   }
 
   .imgflex img {
     width: 18rem;
     height: 100%;
-    object-fit: cover; /* ensures no space even on mobile */
+    object-fit: cover; 
   }
 
   .amenities {

@@ -39,6 +39,10 @@ const AdminRoutes = () => (
         <Route path="recentlysoldout" element={<RecentlySoldOut />} />
         <Route path="addstaff" element={<AddStaff />} />
         <Route path="removestaff" element={<RemoveStaff />} />
+        <Route
+      path="managementloginform"
+      element={<ManagementSideLoginForm />}
+    />
       </Route>
     </Route>
   </>

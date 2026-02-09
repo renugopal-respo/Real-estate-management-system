@@ -17,6 +17,7 @@ const propertySlice = createSlice({
     },
     
     deleteProperties:(state)=>{
+      console.log(" All properties deleted")
       state.properties=[];
     },
      

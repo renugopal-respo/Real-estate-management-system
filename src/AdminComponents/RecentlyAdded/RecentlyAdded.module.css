@@ -28,6 +28,7 @@
   font-size: 14px;
 }
 
+
 .clearBtn {
   background: #dc3545;
   color: white;
@@ -123,16 +124,33 @@
 
   .filters {
     display: grid;
-    grid-template-columns: repeat(2,1fr);
-    max-height: 10rem;  
-    min-height: 10rem;
-    row-gap: 0.8rem;
-    
-    
+    grid-template-columns: 1fr 1fr;
+    gap: 0.8rem;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
   }
- .filters button{
-   grid-column: span 2;
- }
+
+  /* make all filter items take full width inside their grid cell */
+  .filters > * {
+    width: 100%;
+  }
+
+  /* make the React Select boxes match input sizing */
+  .filters :global(.css-13cymwt-control), 
+  .filters :global(.css-t3ipsp-control) {
+    min-height: 38px;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+
+  /* button spans full width */
+  .filters button {
+    grid-column: span 2;
+    width: 100%;
+  }
+
+  /* reduce padding and font size for table */
   .table th,
   .table td {
     font-size: 13px;

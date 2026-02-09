@@ -3,6 +3,7 @@ import axios from 'axios';
 import styles from './RecentlyAdded.module.css';
 import { useNavigate } from 'react-router-dom';
 import { FaHome } from 'react-icons/fa';
+import Select from 'react-select'
 const RecentlyAdded = ({path}) => {
   const [properties, setProperties] = useState([]);
   const [errors, setErrors] = useState(false);
@@ -12,12 +13,14 @@ const RecentlyAdded = ({path}) => {
     date: "",
     location: "",
     pincode: "",
-    status:""
+    status:"",
+    type:""
   });
   const [page, setPage] = useState(1);
+  const [filterPage,setFilterPage]=useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const date=false;
-  const limit = 10; // rows per page
+  const limit = 10; 
  console.log("path:",path);
  console.log("date statte:",date);
   const fetchProperties = async () => {
@@ -28,7 +31,7 @@ const RecentlyAdded = ({path}) => {
       });
       const newData = res.data.data || [];  
       console.log(res.data);
-      setProperties(newData); // append instead of replace
+      setProperties(newData);
       setTotalPages(res.data.pagination.totalPages || 1);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -37,7 +40,7 @@ const RecentlyAdded = ({path}) => {
 
   useEffect(() => {
     fetchProperties();
-  }, [page]);
+  }, [page,filterPage]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -45,9 +48,8 @@ const RecentlyAdded = ({path}) => {
   };
 
   const handleSubmit = () => {
-       
-    fetchProperties();
-    setFilters({ date: "", location: "", pincode: "" });
+    setFilterPage((prev)=>!prev);
+   // setFilters({ date: "", location: "", pincode: "" });
     setPage(1);   
   };
 
@@ -57,7 +59,7 @@ const RecentlyAdded = ({path}) => {
         params: { property_id: e.target.value, 
           properties:JSON.stringify(properties) }
       });
-      //setProperties(res.data.properties);
+      console.log(res.data);
       setErrorMsg(res.data.message);
       const updatedProperty=properties.filter(prop=>prop.property_id!==res.data.propertyId);
       setProperties(updatedProperty);
@@ -82,43 +84,98 @@ const RecentlyAdded = ({path}) => {
       {errors && <h1>{errmessage}</h1>}
       <h2 className={styles.title}><span style={{position:"relative", right:"0.4rem"}}><FaHome/></span> Property Details</h2>
 
-      {/* Filters */}
-      <div className={styles.filters}>
-        <input
-          type="date"
-          name="date"
-          value={filters.date}
-          onChange={handleFilterChange}
-          className={styles.input}
-        />
-        <input
-          type="text"
-          name="location"
-          placeholder="Search by location"
-          value={filters.location}
-          onChange={handleFilterChange}
-          className={styles.input}
-        />
-        <input
-          type="text"
-          name="pincode"
-          placeholder="Search by pincode"
-          value={filters.pincode}
-          onChange={handleFilterChange}
-          className={styles.input}
-        />
-         <input
-          type="text"
-          name="status"
-          placeholder="Search by status"
-          value={filters.status}
-          onChange={handleFilterChange}
-          className={styles.input}
-        />
-        <button className={styles.clearBtn} onClick={handleSubmit}>
-          Submit
-        </button>
-      </div>
+      
+     <div className={styles.filters}>
+
+  <input
+    type="date"
+    name="date"
+    value={filters.date}
+    onChange={handleFilterChange}
+    className={styles.input}
+  />
+
+  {/* 🔹 Location dropdown (React Select) */}
+  <Select
+    className={styles.input}
+    options={[
+      { value: "Chennai", label: "Chennai" },
+      { value: "Coimbatore", label: "Coimbatore" },
+      { value: "Madurai", label: "Madurai" },
+      { value: "Trichy", label: "Trichy" },
+      { value: "Salem", label: "Salem" },
+      { value: "Erode", label: "Erode" },
+      { value: "Tirunelveli", label: "Tirunelveli" },
+      { value: "Vellore", label: "Vellore" },
+      { value: "Nagercoil", label: "Nagercoil" },
+    ]}
+    value={filters.location ? { value: filters.location, label: filters.location } : null}
+    onChange={(selectedOption) =>
+      setFilters((prev) => ({
+        ...prev,
+        location: selectedOption ? selectedOption.value : "",
+      }))
+    }
+    placeholder="Select Location..."
+    isClearable
+  />
+
+  
+  <Select
+    className={styles.input}
+    options={[
+      { value: "Buy", label: "Buy" },
+      { value: "Rent", label: "Rent" },
+      { value: "Sale", label: "Sale" },
+    ]}
+    value={filters.status ? { value: filters.status, label: filters.status } : null}
+    onChange={(selectedOption) =>
+      setFilters((prev) => ({
+        ...prev,
+        status: selectedOption ? selectedOption.value : "",
+      }))
+    }
+    placeholder="Select Status..."
+    isClearable
+  />
+
+  
+  <Select
+    className={styles.input}
+    options={[
+      { value: "Apartment", label: "Apartment" },
+      { value: "Villa", label: "Villa" },
+      { value: "PG", label: "PG" },
+      { value: "Plot", label: "Plot" },
+      { value: "Commercial", label: "Commercial" },
+    ]}
+    value={filters.type ? { value: filters.type, label: filters.type } : null}
+    onChange={(selectedOption) =>
+      setFilters((prev) => ({
+        ...prev,
+        type: selectedOption ? selectedOption.value : "",
+      }))
+    }
+    placeholder="Select Type..."
+    isClearable
+  />
+
+  
+  <input
+    type="text"
+    name="pincode"
+    placeholder="Search by pincode"
+    value={filters.pincode}
+    onChange={handleFilterChange}
+    className={styles.input}
+  />
+
+  
+  <button className={styles.clearBtn} onClick={handleSubmit}>
+    Apply Filters
+  </button>
+</div>
+
 
       {/* Property Table */}
       <div className={styles.tableScrool}>

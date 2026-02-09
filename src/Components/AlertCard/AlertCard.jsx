@@ -12,7 +12,8 @@ const AlertCard = ({message='Error'}) => {
       { close && 
        <div className={styles.card}>
            <div className={styles.icon} aria-label="Loading">
-            <FaExclamationCircle style={{fontSize:'2rem' ,color:"rgba(198, 0, 0, 0.95)"}}/></div>
+            <FaExclamationCircle style={{fontSize:'2rem' ,color:"rgba(198, 0, 0, 0.95)"}}/>
+            </div>
            <div className={styles.message}>{message}</div>
            <button className={styles.closeBtn} 
            onClick={handleClose}>

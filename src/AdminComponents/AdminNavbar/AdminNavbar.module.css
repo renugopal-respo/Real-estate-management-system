@@ -154,7 +154,16 @@
 .logoutBtn:hover {
   background: #c53030;
 }
-
+.logintBtn{
+  background: blue;
+  border: none;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background 0.3s ease;
+}
 /* Animation */
 @keyframes fadeIn {
   from {
@@ -264,6 +273,15 @@
 
   .mobileLogout .logoutBtn {
     width: 100%;
+    justify-content: center;
+  }
+  .mobileLogin{
+    display: block;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  .mobileLogin .logintBtn{
+      width: 100%;
     justify-content: center;
   }
 }

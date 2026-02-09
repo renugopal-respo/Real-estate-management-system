@@ -176,10 +176,11 @@ const UpdateForm = () => {
       newdata.append("propertyId", propertyId);
 
       Object.entries(formData).forEach(([key, value]) => {
-        if (key === "amenities") newdata.append("amenities", JSON.stringify(newAmenties));
-        else if (key === "images") value.forEach((img) => newdata.append("images", img));
-        else newdata.append(key, value);
-      });
+  if (key === "amenities") newdata.append("amenities", JSON.stringify(newAmenties));
+  else if (key === "newImages") value.forEach((img) => newdata.append("images", img));
+  else if (key !== "images") newdata.append(key, value);
+});
+
 
       await axios.put(`http://localhost:5000/admin/updateProperty/`, newdata);
 

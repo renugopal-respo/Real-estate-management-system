@@ -7,7 +7,7 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
-        {/* Brand Section */}
+        
         <div className={styles.footerBrand}>
           <h3>RealEstateHub</h3>
           <p>
@@ -16,24 +16,20 @@ const Footer = () => {
           </p>
         </div>
 
-        {/* Navigation Links */}
+        
         <div className={styles.footerLinks}>
           <h4>Quick Links</h4>
           <NavLink to="/" className={({ isActive }) => (isActive ? styles.activeLink : "")}>
             Home
           </NavLink>
-          <NavLink to="/properties" className={({ isActive }) => (isActive ? styles.activeLink : "")}>
+          <NavLink to="/blog" className={({ isActive }) => (isActive ? styles.activeLink : "")}>
             Properties
           </NavLink>
-          <NavLink to="/agents" className={({ isActive }) => (isActive ? styles.activeLink : "")}>
-            Agents
-          </NavLink>
-          <NavLink to="/contact" className={({ isActive }) => (isActive ? styles.activeLink : "")}>
-            Contact
-          </NavLink>
+         
+         
         </div>
 
-        {/* Social Media */}
+       
         <div className={styles.footerSocial}>
           <h4>Follow Us</h4>
           <div className={styles.socialIcons}>
@@ -53,7 +49,6 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Copyright */}
       <div className={styles.footerBottom}>
         <p>© 2026 RealEstateHub. All rights reserved.</p>
       </div>

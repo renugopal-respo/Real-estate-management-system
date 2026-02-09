@@ -11,8 +11,7 @@ import { addToFavorites, removeFromFavorites } from "../../../Redux/Slicer.jsx";
 const InitialCard = ({ related = [] }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-
+  const[message,setMessage]=useState("");
   let properties = useSelector((state) => state.properties.properties);
   const favorites = useSelector((state) => state.properties.favorites);
 
@@ -28,7 +27,7 @@ const InitialCard = ({ related = [] }) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
-        setAlert(true);
+        navigate('/loginform');
         return;
       }
 
@@ -38,7 +37,7 @@ const InitialCard = ({ related = [] }) => {
       );
 
       if (isFavorite) {
-        // --- REMOVE FAVORITE ---
+        
         const res = await propertyapi.delete("/removeFromFavorites", {
           data: { propertyId: property.property_id },
           headers: { authorization: `Bearer ${token}` },
@@ -69,9 +68,7 @@ const InitialCard = ({ related = [] }) => {
     }
   };
 
-  // -----------------------------
-  // 📤 Handle Share
-  // -----------------------------
+  
   const handleShareClick = (item) => {
     if (navigator.share) {
       navigator.share({
@@ -84,18 +81,16 @@ const InitialCard = ({ related = [] }) => {
     }
   };
 
-  // -----------------------------
-  // 📄 Handle Details Click
-  // -----------------------------
+ 
   const handleDetailsClick = (property) => {
     navigate(`/detailview`, { state: { property } });
   };
 
-  // -----------------------------
-  // 🎨 Render UI
-  // -----------------------------
+ 
   return (
     <div className={styles.container}>
+      {properties.length===0 && 
+       <p> No Properties Found...</p>}
       {properties.map((item, index) => {
         const isFavorite = favorites.some(
           (fav) => fav.property_id === item.property_id
@@ -146,7 +141,7 @@ const InitialCard = ({ related = [] }) => {
           </div>
         );
       })}
-      {alert && <AlertCard />}
+      {alert && <AlertCard message={message} />}
     </div>
   );
 };

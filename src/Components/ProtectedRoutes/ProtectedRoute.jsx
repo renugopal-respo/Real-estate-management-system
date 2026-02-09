@@ -4,7 +4,7 @@ import { getToken, getDecodedToken } from "../../utils/Token";
 
 const ProtectedRoute = () => {
   const token = getToken();
-
+  console.log("Inside a protected Route");
   if (!token) {
     
     return <Navigate to="/admin/managementloginform" replace />;
