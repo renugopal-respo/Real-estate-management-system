@@ -8,7 +8,7 @@ import {
   FaFan,
   FaUsers,
   FaHeart,
-  FaRegHeart, // 🟢 added icons
+  FaRegHeart, 
 } from "react-icons/fa";
 import {
   MdSecurity,
@@ -33,7 +33,7 @@ const DetailViewCard = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const favorites = useSelector((state) => state.properties.favorites); // 🟢 favorites from redux
+  const favorites = useSelector((state) => state.properties.favorites); 
 
   const handleContact = () => {
     const phone = propertyData.owner_phone.replace(/\D/g, "");
@@ -68,7 +68,7 @@ const DetailViewCard = () => {
     }
   };
 
-  // 🟢 Favorite logic
+  
   const handleFavoriteClick = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -115,7 +115,7 @@ const DetailViewCard = () => {
 
   const isFavorite = favorites.some(
     (fav) => fav.property_id === propertyData.property_id
-  ); // 🟢 check favorite state
+  ); 
 
   return (
     <main className={styles.container}>
@@ -132,7 +132,7 @@ const DetailViewCard = () => {
       <div className={styles.details}>
         <div className={styles.headerRow}>
           <h2>{propertyData.title}</h2>
-          {/* 🟢 Favorite button */}
+          
           <button
             onClick={handleFavoriteClick}
             className={styles.favoriteButton}
@@ -206,7 +206,9 @@ const DetailViewCard = () => {
       </section>
 
       <div className={styles.buttoncontainer}>
-        <button onClick={handleContact}>Contact</button>
+        <button 
+        className={styles.contactBtn}
+        onClick={handleContact}>Contact</button>
         <button
           onClick={() =>
             navigate("/contact", { state: { propertyId: propertyData.property_id } })
